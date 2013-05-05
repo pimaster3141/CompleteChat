@@ -83,7 +83,11 @@ public class ConnectionHandler implements Runnable
     {
     	for(ChatRoom c : connectedRooms)
     		c.removeUser(this.username);
-    	users.remove(this.username);
+    	users.remove(this);
     	return;
+    }
+    
+    public void updateQueue(String info) {
+        outputBuffer.add(info);
     }
 }
