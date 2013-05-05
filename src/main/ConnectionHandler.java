@@ -35,8 +35,9 @@ public class ConnectionHandler implements Runnable {
         Pattern p = Pattern.compile("connect \\p{Graph}+");
         Matcher m = p.matcher(input);
         if (!m.matches())
-            throw new IOException("Client input not in the format 'connect [username]'");
-        this.username = input.substring(input.indexOf(' ')+1);
+            throw new IOException(
+                    "Client input not in the format 'connect [username]'");
+        this.username = input.substring(input.indexOf(' ') + 1);
 
         if (this.users.contains(username)) {
             out.println("username already taken");
@@ -78,15 +79,15 @@ public class ConnectionHandler implements Runnable {
         if (command.equals("disconnect")) {
 
         } else if (command.equals("make")) {
-            
-        } else if(command.equals("join")) {
-            
-        } else if(command.equals("exit")) {
-            
-        } else if(command.equals("message")) {
-            int secondSpaceIndex = input.indexOf(' ', spaceIndex+1);
-            String chatroom = input.substring(spaceIndex+1, secondSpaceIndex);
-            String message = input.substring(secondSpaceIndex+1);
+
+        } else if (command.equals("join")) {
+
+        } else if (command.equals("exit")) {
+
+        } else if (command.equals("message")) {
+            int secondSpaceIndex = input.indexOf(' ', spaceIndex + 1);
+            String chatroom = input.substring(spaceIndex + 1, secondSpaceIndex);
+            String message = input.substring(secondSpaceIndex + 1);
         }
     }
 
@@ -97,27 +98,15 @@ public class ConnectionHandler implements Runnable {
         out.println(input);
         return;
     }
-<<<<<<< HEAD
 
     public void removeAllConnections() {
         for (ChatRoom c : connectedRooms)
             c.removeUser(this.username);
-        users.remove(this.username);
+        users.remove(this);
         return;
     }
 
-=======
-    
-    public void removeAllConnections()
-    {
-    	for(ChatRoom c : connectedRooms)
-    		c.removeUser(this.username);
-    	users.remove(this);
-    	return;
-    }
-    
     public void updateQueue(String info) {
         outputBuffer.add(info);
     }
->>>>>>> 3ea3b9774b8724aa0a44672047707c6a302d1c25
 }
