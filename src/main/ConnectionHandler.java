@@ -97,6 +97,7 @@ public class ConnectionHandler implements Runnable {
         out.println(input);
         return;
     }
+<<<<<<< HEAD
 
     public void removeAllConnections() {
         for (ChatRoom c : connectedRooms)
@@ -105,4 +106,18 @@ public class ConnectionHandler implements Runnable {
         return;
     }
 
+=======
+    
+    public void removeAllConnections()
+    {
+    	for(ChatRoom c : connectedRooms)
+    		c.removeUser(this.username);
+    	users.remove(this);
+    	return;
+    }
+    
+    public void updateQueue(String info) {
+        outputBuffer.add(info);
+    }
+>>>>>>> 3ea3b9774b8724aa0a44672047707c6a302d1c25
 }
