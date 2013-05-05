@@ -46,7 +46,7 @@ public class ChatRoom implements Runnable
 	
 	public void cleanup()
 	{
-		rooms.remove(name);
+		rooms.remove(this);
 		//TODO
 	}
 }
