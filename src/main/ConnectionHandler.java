@@ -14,8 +14,8 @@ import java.util.regex.*;
 public class ConnectionHandler implements Runnable {
     public final String username;
     private final Socket socket;
-    private static RoomList rooms;
-    private static UserList users;
+    private static RoomList rooms; // List of rooms in server
+    private static UserList users; // List of users in server
     private List<ChatRoom> connectedRooms;
     private BufferedReader in;
     private PrintWriter out;
@@ -67,28 +67,45 @@ public class ConnectionHandler implements Runnable {
         }
     }
 
-    public void parseInput(String input) {
+    public String parseInput(String input) {
         String regex = "(((disconnect)|(make)|(join)|(exit)) "
-                + "\\p{Graph}*)|" + "(message \\p{Graph}* \\p{Print}*)";
+                + "\\p{Graph}+)|" + "(message \\p{Graph}+ \\p{Print}+)";
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(input);
         if (!m.matches())
-            return; // Should not occur
+            return ""; // Should not occur assuming client input is correct
         int spaceIndex = input.indexOf(' ');
         String command = input.substring(0, spaceIndex);
         if (command.equals("disconnect")) {
-
-        } else if (command.equals("make")) {
-
-        } else if (command.equals("join")) {
-
-        } else if (command.equals("exit")) {
-
+            removeAllConnections();
+            return "disconnect";
+        } else if (command.equals("make") || command.equals("join")
+                || command.equals("exit")) {
+            String roomName = input.substring(spaceIndex + 1);
+            if (command.equals("make")) {
+                try {
+                    ChatRoom newChatRoom = new ChatRoom(roomName, rooms, this);
+                    // Constructor above automatically adds the ChatRoom to the
+                    // list of chat rooms of the server
+                    connectedRooms.add(newChatRoom);
+                    newChatRoom.addUser(this);
+                    return "make room success";
+                } catch (IOException roomAlreadyTaken) {
+                    return "Room name already taken";
+                }
+            } else if (command.equals("join")) {
+                if (rooms.contains(roomName)) {
+                    // TODO Add user to the room
+                } else {
+                    return "Room name does not exist";
+                }
+            }
         } else if (command.equals("message")) {
             int secondSpaceIndex = input.indexOf(' ', spaceIndex + 1);
             String chatroom = input.substring(spaceIndex + 1, secondSpaceIndex);
             String message = input.substring(secondSpaceIndex + 1);
         }
+        return "";
     }
 
     public void parseOutput(String input) {
