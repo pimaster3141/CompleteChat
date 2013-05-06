@@ -29,6 +29,7 @@ public class ChatRoom implements Runnable
 			if(messageBuffer.peek() != null)
 			{
 			//TODO: do stuff
+			    
 			}
 		}
 		cleanup();
@@ -39,7 +40,7 @@ public class ChatRoom implements Runnable
 		//TODO
 	}
 	
-	public void removeUser(String User)
+	public void removeUser(ConnectionHandler connection)
 	{
 		//TODO
 	}
