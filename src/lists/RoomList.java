@@ -19,8 +19,8 @@ public class RoomList {
 
     public void add(ChatRoom room) throws IOException {
         // TODO: check if room exists, concurrency, add room
-        if(this.contains(room.name))
-        	throw new IOException();
+        if (this.contains(room.name))
+            throw new IOException();
         rooms.put(room.name, room);
         users.informAll(getRooms());
         return;

@@ -17,8 +17,8 @@ public abstract class UserList {
 
     public void add(ConnectionHandler connection) throws IOException {
         // TODO: no need for concurrency - single threaded here.
-        if(this.contains(connection.username))
-        	throw new IOException();
+        if (this.contains(connection.username))
+            throw new IOException();
         users.put(connection.username, connection);
         informAll(getList());
         return;
@@ -37,15 +37,15 @@ public abstract class UserList {
     }
 
     private String getList() {
-    	String output = "";
-        for (String usersString : users.keySet()) 
-        	output = output + usersString + " ";
-        return output.substring(0, output.length()-1);
+        StringBuilder output = new StringBuilder("");
+        for (String usersString : users.keySet())
+            output.append(usersString + " ");
+        return output.substring(0, output.length() - 1);
     }
-    
+
     public int size() {
         return users.size();
     }
-    
+
     public abstract void informAll(String message);
 }
