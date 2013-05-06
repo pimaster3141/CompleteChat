@@ -7,7 +7,7 @@ import java.util.Map;
 public class UserList {
     // Contains a Map of usernames to the appropriate ConnectionHandler
     // For the server to use in general
-    public Map<String, ConnectionHandler> users;
+    private Map<String, ConnectionHandler> users;
     private final String command;
 
     public UserList() {
@@ -53,5 +53,9 @@ public class UserList {
         for (ConnectionHandler user : users.values()) {
             user.updateQueue(message);
         }
+    }
+    
+    public int size() {
+        return users.size();
     }
 }
