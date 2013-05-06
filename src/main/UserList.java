@@ -6,21 +6,31 @@ import java.util.Map;
 
 public class UserList {
     // Contains a Map of usernames to the appropriate ConnectionHandler
-    public Map<String, ConnectionHandler> users;
+    // For the server to use in general
+    private Map<String, ConnectionHandler> users;
+    private final String command;
 
     public UserList() {
         users = new HashMap<String, ConnectionHandler>();
+        command = "serverUserList ";
+    }
+    
+    public UserList(String chatroom) {
+        users = new HashMap<String, ConnectionHandler>();
+        command = "chatroomUserList " + chatroom + " ";
     }
 
     public void add(ConnectionHandler connection) throws IOException {
         // TODO: no need for concurrency - single threaded here.
         users.put(connection.username, connection);
+        informAll(getList());
         return;
     }
 
     public void remove(ConnectionHandler connection) {
         // TODO: handle atomicity condition, inform all of change
         users.remove(connection.username);
+        informAll(getList());
         return;
     }
 
@@ -29,13 +39,23 @@ public class UserList {
         return users.containsKey(userName);
     }
 
-    public String getUsers() {
+    private String getList() {
         // TODO
-        StringBuilder userList = new StringBuilder();
+        StringBuilder userList = new StringBuilder(command);
         for (String usersString : users.keySet()) {
             userList.append(usersString + ' ');
         }
         userList.deleteCharAt(userList.length() - 1);
         return userList.toString();
+    }
+    
+    public void informAll(String message) {
+        for (ConnectionHandler user : users.values()) {
+            user.updateQueue(message);
+        }
+    }
+    
+    public int size() {
+        return users.size();
     }
 }

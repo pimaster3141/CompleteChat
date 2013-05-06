@@ -118,7 +118,7 @@ public class ConnectionHandler implements Runnable {
 
     public void removeAllConnections() {
         for (ChatRoom c : connectedRooms)
-            c.removeUser(this.username);
+            c.removeUser(this);
         users.remove(this);
         return;
     }
