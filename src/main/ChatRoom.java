@@ -6,52 +6,6 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-<<<<<<< HEAD
-public class ChatRoom implements Runnable
-{
-	public final String name;
-	private static RoomList rooms;
-	private Map<String, ConnectionHandler> connectedClients;
-	private Queue<String> messageBuffer = new ConcurrentLinkedQueue<String>();
-	
-	public ChatRoom(String name, RoomList rooms, ConnectionHandler connection) throws IOException
-	{
-		this.name = name;
-		this.rooms = rooms;
-		this.connectedClients = new HashMap<String, ConnectionHandler>();
-		connectedClients.put(connection.username, connection);
-		rooms.add(this);
-	}
-	
-	public void run()
-	{
-		while(connectedClients.size() > 0)
-		{
-			if(messageBuffer.peek() != null)
-			{
-			//TODO: do stuff
-			    
-			}
-		}
-		cleanup();
-	}
-	
-	public void addUser(ConnectionHandler connection)
-	{
-		//TODO
-	}
-	
-	public void removeUser(ConnectionHandler connection)
-	{
-		//TODO
-	}
-	
-	public void cleanup()
-	{
-		rooms.remove(this);
-		//TODO
-	}
-=======
 public class ChatRoom implements Runnable {
     public final String name;
     private static RoomList rooms;
@@ -88,5 +42,4 @@ public class ChatRoom implements Runnable {
         rooms.remove(this);
         // TODO
     }
->>>>>>> 3d23ba6f086f865208dbbabc90ee0dbc9e50d8c8
 }

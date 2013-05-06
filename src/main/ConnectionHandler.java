@@ -98,22 +98,12 @@ public class ConnectionHandler implements Runnable {
         out.println(input);
         return;
     }
-<<<<<<< HEAD
-    
-    public void removeAllConnections()
-    {
-    	for(ChatRoom c : connectedRooms)
-    		c.removeUser(this);
-    	users.remove(this);
-    	return;
-=======
 
     public void removeAllConnections() {
         for (ChatRoom c : connectedRooms)
             c.removeUser(this.username);
         users.remove(this);
         return;
->>>>>>> 3d23ba6f086f865208dbbabc90ee0dbc9e50d8c8
     }
 
     public void updateQueue(String info) {
