@@ -193,8 +193,8 @@ public class ConnectionHandler implements Runnable {
     public void removeAllConnections() {
     	System.out.println("Client: " + username + " - " + "Removing from all connected rooms");
     	
-        for (String c : connectedRooms.keySet())
-            this.connectedRooms.remove(c).removeUser(this);
+        for (ChatRoom c : connectedRooms.values())
+        	c.removeUser(this);
         System.out.println("Client: " + username + " - " + "Removing from server listing");
         users.remove(this);
         return;
