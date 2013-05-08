@@ -96,7 +96,25 @@ public class ConnectionHandler implements Runnable {
                 }
             } else if (command.equals("join")) {
                 if (rooms.contains(roomName)) {
-                    // TODO Add user to the room
+                    try {
+                        ChatRoom roomToJoin = rooms.getRoomFromName(roomName);
+                        roomToJoin.addUser(this);
+                        connectedRooms.add(roomToJoin);
+                        return "user added";
+                    } catch (IOException e) {
+                        return "User already in user list";
+                    }
+                } else {
+                    return "Room name does not exist";
+                }
+            } else if (command.equals("exit")) {
+                if (rooms.contains(roomName)) {
+                    ChatRoom roomToExit = rooms.getRoomFromName(roomName);
+                    roomToExit.removeUser(this);
+                    while(connectedRooms.contains(roomToExit)) {
+                        connectedRooms.remove(roomToExit);
+                    }
+                    return "user removed from room";
                 } else {
                     return "Room name does not exist";
                 }
@@ -105,6 +123,8 @@ public class ConnectionHandler implements Runnable {
             int secondSpaceIndex = input.indexOf(' ', spaceIndex + 1);
             String chatroom = input.substring(spaceIndex + 1, secondSpaceIndex);
             String message = input.substring(secondSpaceIndex + 1);
+            // TODO Need to add implementation to add messages into the chat room
+            // buffer.
         }
         return "";
     }

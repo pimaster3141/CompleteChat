@@ -36,6 +36,10 @@ public class RoomList {
     public boolean contains(String name) {
         return rooms.containsKey(name);
     }
+    
+    public ChatRoom getRoomFromName(String roomName) {
+        return rooms.get(roomName);
+    }
 
     private String getRooms() {
         // TODO
