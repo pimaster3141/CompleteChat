@@ -18,7 +18,7 @@ public abstract class UserList {
     public void add(ConnectionHandler connection) throws IOException {
         // TODO: no need for concurrency - single threaded here.
         if (this.contains(connection.username))
-            throw new IOException();
+            throw new IOException("Username Already Exists");
         users.put(connection.username, connection);
         informAll(getList());
         return;
@@ -37,6 +37,8 @@ public abstract class UserList {
     }
 
     private String getList() {
+    	if(size() <= 0)
+    		return "";
         StringBuilder output = new StringBuilder("");
         for (String usersString : users.keySet())
             output.append(usersString + " ");

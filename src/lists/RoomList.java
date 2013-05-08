@@ -9,12 +9,10 @@ import server.ChatRoom;
 public class RoomList {
     private ServerUserList users;
     private final Map<String, ChatRoom> rooms;
-    private final String command;
 
     public RoomList(ServerUserList users) {
         this.users = users;
         this.rooms = new HashMap<String, ChatRoom>();
-        this.command = "serverRoomList ";
     }
 
     public void add(ChatRoom room) throws IOException {
@@ -43,7 +41,7 @@ public class RoomList {
 
     private String getRooms() {
         // TODO
-        StringBuilder roomList = new StringBuilder(command);
+        StringBuilder roomList = new StringBuilder("RoomList ");
         for (String roomsString : rooms.keySet()) {
             roomList.append(roomsString + ' ');
         }

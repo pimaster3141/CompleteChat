@@ -12,7 +12,7 @@ public class ChatUserList extends UserList {
     }
 
     public void informAll(String message) {
-        message = "chatRoomUserList " + this.name + message;
+        message = "chatRoomUserList " + this.name + " " + message;
         for (ConnectionHandler user : super.users.values())
             user.updateQueue(message);
     }
