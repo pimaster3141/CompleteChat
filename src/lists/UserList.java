@@ -15,30 +15,31 @@ public abstract class UserList {
         users = new HashMap<String, ConnectionHandler>();
     }
 
-    public synchronized void add(ConnectionHandler connection) throws IOException {
-        // TODO: no need for concurrency - single threaded here.
-        if (this.contains(connection.username))
-            throw new IOException("Username Already Exists");
-        users.put(connection.username, connection);
-        informAll(getList());
-        return;
+    public void add(ConnectionHandler connection) throws IOException {
+        synchronized (users) {
+            if (this.contains(connection.username))
+                throw new IOException("Username Already Exists");
+            users.put(connection.username, connection);
+            informAll(getList());
+            return;
+        }
     }
 
-    public synchronized void remove(ConnectionHandler connection) {
-        // TODO: handle atomicity condition, inform all of change
-        users.remove(connection.username);
-        informAll(getList());
-        return;
+    public void remove(ConnectionHandler connection) {
+        synchronized (users) {
+            users.remove(connection.username);
+            informAll(getList());
+            return;
+        }
     }
 
     private boolean contains(String userName) {
-        // TODO
         return users.containsKey(userName);
     }
 
-    private String getList() {
-    	if(size() <= 0)
-    		return "";
+    protected String getList() {
+        if (size() <= 0)
+            return "";
         StringBuilder output = new StringBuilder("");
         for (String usersString : users.keySet())
             output.append(usersString + " ");
@@ -49,10 +50,11 @@ public abstract class UserList {
         return users.size();
     }
 
-    public void informAll(String message)
-    {
-    	ConnectionHandler[] usersCopy = users.values().toArray(new ConnectionHandler[0]); 
-
+    public void informAll(String message) {
+        ConnectionHandler[] usersCopy;
+        synchronized (users) {
+            usersCopy = users.values().toArray(new ConnectionHandler[0]);
+        }
         for (ConnectionHandler user : usersCopy)
             user.updateQueue(message);
     }

@@ -8,10 +8,10 @@ public class ChatUserList extends UserList {
         super();
         this.name = name;
     }
-
-    public void informAll(String message) {
-        message = "chatRoomUserList " + this.name + " " + message;
-        super.informAll(message);
+    
+    protected String getList() {
+        String list = super.getList();
+        return "chatUserList " + this.name + " " + list;
     }
 
 }

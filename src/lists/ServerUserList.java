@@ -2,8 +2,8 @@ package lists;
 
 public class ServerUserList extends UserList {
 	
-    public void informAll(String message) {
-        message = "serverUserList " + message;
-        super.informAll(message);
+    protected String getList() {
+        String list = super.getList();
+        return "serverUserList " + list;
     }
 }

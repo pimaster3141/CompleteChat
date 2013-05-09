@@ -27,7 +27,7 @@ public class ChatRoom implements Runnable {
         System.out.println("  Room: " + name + " - " + "Input Thread Started");
         while (true) {
             try {
-                connectedClients.informAll(messageBuffer.take());
+                connectedClients.informAll("message " + messageBuffer.take());
                 System.out.println("  Room: " + name + " - " + "Message Sent");
             } catch (InterruptedException e) {
                 System.out.println("  Room: " + name + " - " + "Stopping Input Thread");
