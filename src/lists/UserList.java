@@ -9,13 +9,13 @@ import server.ConnectionHandler;
 public abstract class UserList {
     // Contains a Map of usernames to the appropriate ConnectionHandler
     // For the server to use in general
-    protected Map<String, ConnectionHandler> users;
+    private Map<String, ConnectionHandler> users;
 
     public UserList() {
         users = new HashMap<String, ConnectionHandler>();
     }
 
-    public void add(ConnectionHandler connection) throws IOException {
+    public synchronized void add(ConnectionHandler connection) throws IOException {
         // TODO: no need for concurrency - single threaded here.
         if (this.contains(connection.username))
             throw new IOException("Username Already Exists");
@@ -24,14 +24,14 @@ public abstract class UserList {
         return;
     }
 
-    public void remove(ConnectionHandler connection) {
+    public synchronized void remove(ConnectionHandler connection) {
         // TODO: handle atomicity condition, inform all of change
         users.remove(connection.username);
         informAll(getList());
         return;
     }
 
-    public boolean contains(String userName) {
+    private boolean contains(String userName) {
         // TODO
         return users.containsKey(userName);
     }
@@ -49,5 +49,11 @@ public abstract class UserList {
         return users.size();
     }
 
-    public abstract void informAll(String message);
+    public void informAll(String message)
+    {
+    	ConnectionHandler[] usersCopy = users.values().toArray(new ConnectionHandler[0]); 
+
+        for (ConnectionHandler user : usersCopy)
+            user.updateQueue(message);
+    }
 }

@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 import server.ChatRoom;
+import server.ConnectionHandler;
 
 public class RoomList {
     private ServerUserList users;
@@ -15,23 +16,23 @@ public class RoomList {
         this.rooms = new HashMap<String, ChatRoom>();
     }
 
-    public void add(ChatRoom room) throws IOException {
+    public synchronized void add(ChatRoom room) throws IOException {
         // TODO: check if room exists, concurrency, add room
         if (this.contains(room.name))
-            throw new IOException();
+            throw new IOException("room already exists");
         rooms.put(room.name, room);
         users.informAll(getRooms());
         return;
     }
 
-    public void remove(ChatRoom room) {
+    public synchronized void remove(ChatRoom room) {
         // TODO: remove room, concurrency
         rooms.remove(room.name);
         users.informAll(getRooms());
         return;
     }
 
-    public boolean contains(String name) {
+    public synchronized boolean contains(String name) {
         return rooms.containsKey(name);
     }
     
@@ -47,5 +48,10 @@ public class RoomList {
         }
         roomList.deleteCharAt(roomList.length() - 1);
         return roomList.toString();
+    }
+    
+    public synchronized void updateUser(ConnectionHandler user)
+    {
+    	user.updateQueue(getRooms());
     }
 }

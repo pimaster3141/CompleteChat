@@ -25,7 +25,7 @@ public class ChatRoom implements Runnable {
 
     public void run() {
         System.out.println("  Room: " + name + " - " + "Input Thread Started");
-        while (connectedClients.size() > 0) {
+        while (true) {
             try {
                 connectedClients.informAll(messageBuffer.take());
                 System.out.println("  Room: " + name + " - " + "Message Sent");
@@ -35,27 +35,30 @@ public class ChatRoom implements Runnable {
             }
         }
 
-        System.out.println("  Room: " + name + " - " + "Stopping Input Thread");
+        System.out.println("  Room: " + name + " - " + "Stopped Input Thread");
         cleanup();
         System.out.println("  Room: " + name + " - " + "Cleanup complete");
     }
 
-    public void addUser(ConnectionHandler connection) throws IOException {
-        connectedClients.add(connection);
+    public synchronized void addUser(ConnectionHandler connection) throws IOException {
+        if(self.isAlive())
+            connectedClients.add(connection);
+        else
+            throw new IOException("Room no longer exists");
     }
 
-    public void removeUser(ConnectionHandler connection) {
+    public synchronized void removeUser(ConnectionHandler connection) {
         connectedClients.remove(connection);
         if(connectedClients.size() <= 0)
             self.interrupt();
     }
 
-    public void cleanup() {
+    private void cleanup() {
         System.out.println("  Room: " + name + " - " + "Removing from server listing");
         rooms.remove(this);
     }
 
-    public synchronized void updateQueue(String info) {
+    public  void updateQueue(String info) {
         messageBuffer.add(info);
     }
 }

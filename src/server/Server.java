@@ -35,6 +35,7 @@ public class Server {
                             ConnectionHandler connection = new ConnectionHandler(socket, rooms, users);
                             System.err.println("Adding User");
                             users.add(connection);
+                            rooms.updateUser(connection);
                             System.err.println("Starting User");
                             new Thread(connection).start();
                         } catch (Exception e) {

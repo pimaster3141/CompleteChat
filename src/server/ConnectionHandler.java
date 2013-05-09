@@ -105,7 +105,7 @@ public class ConnectionHandler implements Runnable {
         
         if (!m.matches())
             return "Unrecognized Command " + input; // Should not occur assuming client input is correct
-        
+        // input = input + ' ';
         int spaceIndex = input.indexOf(' ');
         String command = input.substring(0, spaceIndex);
         
@@ -126,8 +126,9 @@ public class ConnectionHandler implements Runnable {
                     connectedRooms.put(newChatRoom.name, newChatRoom);
                     //newChatRoom.addUser(this);
                     return "make room success";
-                } catch (IOException roomAlreadyTaken) {
-                    return "Room name already taken";
+                } catch (IOException e) {
+                	System.err.println(e.getMessage() + (e.getMessage() == null));
+                    return e.getMessage();
                 }
                 
             } else if (command.equals("join")) {
@@ -138,7 +139,7 @@ public class ConnectionHandler implements Runnable {
                         this.connectedRooms.put(roomToJoin.name, roomToJoin);
                         return "user added";
                     } catch (IOException e) {
-                        return "User already in user list";
+                        return e.getMessage();
                     }
                 } else {
                     return "Room name does not exist";
