@@ -1,16 +1,18 @@
 package client;
 
-/**
- * GUI chat client runner.
- */
-public class Client {
+import java.io.BufferedReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 
-    /**
-     * Start a GUI chat client.
-     */
-    public static void main(String[] args) {
-        // YOUR CODE HERE
-        // It is not required (or recommended) to implement the client in
-        // this runner class.
-    }
+public class Client
+{
+	private Socket socket;
+	private PrintWriter out;
+	private BufferedReader in;
+	
+	public static void main(String[] args)
+	{
+		return;
+	}
 }
+	
