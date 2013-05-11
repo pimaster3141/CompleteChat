@@ -1,20 +1,17 @@
 package server.lists;
 
-public class ChatUserList extends UserList
-{
+public class ChatUserList extends UserList {
 
-	private final String name;
+    private final String name;
 
-	public ChatUserList(String name)
-	{
-		super();
-		this.name = name;
-	}
+    public ChatUserList(String name) {
+        super();
+        this.name = name;
+    }
 
-	protected String getList()
-	{
-		String list = super.getList();
-		return "chatUserList " + this.name + " " + list;
-	}
+    protected String getList() {
+        String list = super.getList();
+        return "chatUserList " + this.name + " " + list;
+    }
 
 }
