@@ -27,7 +27,7 @@ public class LoginWindow extends JFrame {
         port = new JTextField("10000", 20);
         portLabel = new JLabel("Port Number");
         submitInfo = new JButton("Submit");
-        allUsers = new JTextArea(0, 20);
+        allUsers = new JTextArea(0, 30);
         JScrollPane userScroll = new JScrollPane(allUsers);
         allUsers.setEditable(false);
         
@@ -45,14 +45,18 @@ public class LoginWindow extends JFrame {
                 .addComponent(welcome)
                 .addGroup(layout.createParallelGroup()
                         .addComponent(usernameLabel)
-                        .addComponent(username))
+                        .addComponent(username, GroupLayout.PREFERRED_SIZE, 
+                                GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup()
                         .addComponent(ipLabel)
-                        .addComponent(ipAddress))
+                        .addComponent(ipAddress, GroupLayout.PREFERRED_SIZE, 
+                                GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup()
                         .addComponent(portLabel)
-                        .addComponent(port))
-                .addComponent(userScroll)
+                        .addComponent(port, GroupLayout.PREFERRED_SIZE, 
+                                GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addComponent(userScroll, GroupLayout.PREFERRED_SIZE, 
+                        GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addComponent(submitInfo)
                 );
         layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
@@ -63,10 +67,14 @@ public class LoginWindow extends JFrame {
                                 .addComponent(ipLabel)
                                 .addComponent(portLabel))
                         .addGroup(layout.createParallelGroup()
-                                .addComponent(username)
-                                .addComponent(ipAddress)
-                                .addComponent(port)))
-                .addComponent(userScroll)
+                                .addComponent(username, GroupLayout.PREFERRED_SIZE, 
+                                        GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(ipAddress, GroupLayout.PREFERRED_SIZE, 
+                                        GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(port, GroupLayout.PREFERRED_SIZE, 
+                                        GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+                .addComponent(userScroll, GroupLayout.PREFERRED_SIZE, 
+                        GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addComponent(submitInfo)
                 );
     }
@@ -76,6 +84,9 @@ public class LoginWindow extends JFrame {
             public void run() {
                 LoginWindow main = new LoginWindow();
 
+                main.pack();
+                main.setLocationRelativeTo(null);
+                main.setResizable(false);
                 main.setVisible(true);
             }
         });
