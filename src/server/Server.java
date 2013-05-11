@@ -38,7 +38,7 @@ public class Server
 					{
 						try
 						{
-							System.err.println("Creating User on - " + socket.getInetAddress());
+							System.err.println("Creating User");
 							ConnectionHandler connection = new ConnectionHandler(socket, rooms, users);
 							System.err.println("Adding User");
 							users.add(connection);
