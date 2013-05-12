@@ -28,8 +28,9 @@ public class LoginWindow extends JFrame {
         portLabel = new JLabel("Port Number");
         submitInfo = new JButton("Submit");
         allUsers = new JTextArea(0, 30);
-        JScrollPane userScroll = new JScrollPane(allUsers);
         allUsers.setEditable(false);
+        
+        JScrollPane userScroll = new JScrollPane(allUsers);
         
         // defining the layout
         Container cp = this.getContentPane();
