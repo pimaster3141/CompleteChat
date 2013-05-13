@@ -27,14 +27,20 @@ public class MainWindow extends JFrame{
         this.add(tabs);
     }
     
+    public void addChatTab(String Chatname) {
+        tabs.addTab(Chatname, new ChatTab(Chatname));
+    }
+    
     public static void main(final String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 MainWindow main = new MainWindow();
+                main.addChatTab("Test1");
 
                 main.pack();
                 main.setLocationRelativeTo(null);
                 main.setVisible(true);
+                main.addChatTab("Test2");
             }
         });
     }
