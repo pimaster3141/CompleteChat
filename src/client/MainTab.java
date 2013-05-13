@@ -21,9 +21,9 @@ public class MainTab extends JPanel{
         userList = new JList();
         
         JScrollPane chatScroll = new JScrollPane (chatRoomList);
-        chatScroll.setPreferredSize(new Dimension(700, 700));
+        chatScroll.setPreferredSize(new Dimension(700, 600));
         JScrollPane userScroll = new JScrollPane (userList);
-        userScroll.setPreferredSize(new Dimension(250, 700));
+        userScroll.setPreferredSize(new Dimension(250, 600));
         
         //defining the layout
         GroupLayout layout = new GroupLayout(this);
