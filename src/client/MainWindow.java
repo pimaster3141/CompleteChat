@@ -26,7 +26,7 @@ public class MainWindow extends JFrame{
         this.setJMenuBar(menuBar);
         
         tabs = new JTabbedPane();
-        JPanel mainTab = new MainTab();
+        JPanel mainTab = new MainTab(this);
         tabs.addTab("Main Window", mainTab);
         this.add(tabs);
     }
@@ -71,7 +71,7 @@ public class MainWindow extends JFrame{
             
             JButton exit = new JButton("x");
             exit.setContentAreaFilled(false);
-            exit.setPreferredSize(new Dimension(15, 15));
+            exit.setPreferredSize(new Dimension(17, 17));
             exit.setFocusable(false);
             exit.setForeground(Color.RED);
             exit.addActionListener(new ActionListener() {

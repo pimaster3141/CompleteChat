@@ -5,10 +5,18 @@ import java.awt.Font;
 
 import javax.swing.*;
 
+/**
+ * Probably needs to take in the actual object representing a chat, but I don't
+ * know what that looks like yet. I would very much like that object to have the
+ * chat's name, a DefaultListModel representing the list of users (read up what it
+ * does on the java docs) and a StyledDocument (model for a Swing Text Component
+ * go read up the API for that).
+ *
+ */
 public class ChatTab extends JPanel{
 
     private final JLabel chatName;
-    private final JTextArea conversation;
+    private final JTextPane conversation;
     private final JList currentUsers;
     private final JTextField myMessage;
     private final JButton send;
@@ -17,11 +25,12 @@ public class ChatTab extends JPanel{
         Font TitleFont = new Font("SANS_SERIF", Font.BOLD, 18);
         chatName = new JLabel(chatname);
         chatName.setFont(TitleFont);
-        conversation = new JTextArea();
+        conversation = new JTextPane();
         currentUsers = new JList();
         myMessage = new JTextField();
         send = new JButton("Submit");
         
+        conversation.setEditable(false);
         JScrollPane chatScroll = new JScrollPane (conversation);
         chatScroll.setPreferredSize(new Dimension(700, 550));
         JScrollPane userScroll = new JScrollPane (currentUsers);
