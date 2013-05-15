@@ -41,25 +41,26 @@ public class LoginWindow extends JFrame {
 
         submitInfo.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                System.out.println(username.getText());
-                if ((username.getText() == null) || username.getText().length() < 1) {
-                    errorMessage.setText("<html>Error: Valid username required to login</html>");
-                }
-                else if ((ipAddress.getText() == null) || ipAddress.getText().length() < 1) {
-                    errorMessage.setText("<html>Error: IP Address required to connect to server</html>");
-                }
-                else if ((port.getText() == null) || port.getText().length() < 1) {
-                    errorMessage.setText("<html>Error: Port number required to connect</html>");
-                }
-                else {
-                    if (username.getText().equals("Test")) {
-                        //should actually be a check for correct formatting
-                        System.out.println("Hi");
-                        errorMessage.setText("<html>Error: Username must be less than 20 characters<br> " +
-                                "and contain no whitespace</html>");
-                    }
-                }
-                LoginWindow.this.pack();
+//                System.out.println(username.getText());
+//                if ((username.getText() == null) || username.getText().length() < 1) {
+//                    errorMessage.setText("<html>Error: Valid username required to login</html>");
+//                }
+//                else if ((ipAddress.getText() == null) || ipAddress.getText().length() < 1) {
+//                    errorMessage.setText("<html>Error: IP Address required to connect to server</html>");
+//                }
+//                else if ((port.getText() == null) || port.getText().length() < 1) {
+//                    errorMessage.setText("<html>Error: Port number required to connect</html>");
+//                }
+//                else {
+//                    if (username.getText().equals("Test")) {
+//                        //should actually be a check for correct formatting
+//                        System.out.println("Hi");
+//                        errorMessage.setText("<html>Error: Username must be less than 20 characters<br> " +
+//                                "and contain no whitespace</html>");
+//                    }
+//                }
+//                LoginWindow.this.pack();
+                LoginWindow.this.dispose();
             }
         });
 
@@ -121,7 +122,7 @@ public class LoginWindow extends JFrame {
                 main.pack();
                 main.setLocationRelativeTo(null);
                 main.setResizable(false);
-                main.setVisible(true);
+                main.setVisible(false);
             }
         });
     }
