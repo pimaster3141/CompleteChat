@@ -42,7 +42,7 @@ public class ChatRoom implements Runnable {
         System.out.println("  Room: " + name + " - " + "Cleanup complete");
     }
 
-    public synchronized void addUser(ConnectionHandler connection)
+    public synchronized void addUser(ConnectionHandler connection) throws IOException
             throws IOException {
         if (self.isAlive())
             connectedClients.add(connection);
