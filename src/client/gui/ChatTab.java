@@ -1,7 +1,8 @@
-package client;
+package client.gui;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.io.PrintWriter;
 
 import javax.swing.*;
 
@@ -20,8 +21,9 @@ public class ChatTab extends JPanel{
     private final JList currentUsers;
     private final JTextField myMessage;
     private final JButton send;
+    private final PrintWriter out;
     
-    public ChatTab(String chatname) {
+    public ChatTab(String chatname, PrintWriter out) {
         Font TitleFont = new Font("SANS_SERIF", Font.BOLD, 18);
         chatName = new JLabel(chatname);
         chatName.setFont(TitleFont);
@@ -29,6 +31,7 @@ public class ChatTab extends JPanel{
         currentUsers = new JList();
         myMessage = new JTextField();
         send = new JButton("Submit");
+        this.out = out;
         
         conversation.setEditable(false);
         JScrollPane chatScroll = new JScrollPane (conversation);
@@ -71,7 +74,8 @@ public class ChatTab extends JPanel{
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 JFrame main = new JFrame();
-                main.add(new ChatTab("Testing"));
+                PrintWriter testOut = new PrintWriter(System.out);
+                main.add(new ChatTab("Testing", testOut));
 
                 main.pack();
                 main.setLocationRelativeTo(null);
