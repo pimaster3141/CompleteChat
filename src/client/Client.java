@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.HashMap;
+
+import javax.swing.DefaultListModel;
 
 public class Client {
     public final String username;
@@ -13,9 +16,14 @@ public class Client {
     private final Socket socket;
     private final PrintWriter out;
     private final BufferedReader in;
+    
+    private final DefaultListModel<String> allUsers;
+    private final HashMap<String,ChatRoomClient> connectedRoomsHistory;
+    private final HashMap<String, ChatRoomClient> connectedRoomsCurrent;
+    private final DefaultListModel<String> allRooms;
+    
 
-    public Client(String username, String IPAddress, int port)
-            throws IOException {
+    public Client(String username, String IPAddress, int port) throws IOException {
         this.username = username;
         this.IPAddress = IPAddress;
         this.port = port;
@@ -43,8 +51,25 @@ public class Client {
         prompt = in.readLine();
         if (!prompt.matches("Connected"))
             throw new IOException(prompt);
+        
+        this.allUsers = new DefaultListModel<String>();
+        this.allRooms = new DefaultListModel<String>();
+        this.connectedRoomsHistory = new HashMap<String,ChatRoomClient>();
+        this.connectedRoomsCurrent = new HashMap<String, ChatRoomClient>();
 
         System.err.println("Client connected");
+    }
+    
+    public ChatRoomClient joinRoom(String roomName)
+    {
+    	ChatRoomClient room;
+    	if(connectedRoomsHistory.keySet().contains(roomName))
+    		room =  connectedRoomsHistory.get(roomName);
+    	else
+    		room = new ChatRoomClient(roomName);
+    	connectedRoomsHistory.put(roomName, room);
+    	connectedRoomsCurrent.put(roomName, room);
+    	return room;
     }
 
     public String readBuffer() throws IOException {
@@ -71,7 +96,7 @@ public class Client {
     // just a method to test this rig... you shouldnt use it in your gui.
     public static void main(String[] args) {
         try {
-            Client c = new Client("user", "localhost", 10000);
+            Client c = new Client("user2", "127.0.0.1", 10000);
 
             while (true)
                 System.out.println(c.readBuffer());
