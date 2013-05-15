@@ -1,10 +1,12 @@
-package client;
+package client.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.*;
+import java.io.PrintWriter;
 
 import javax.swing.*;
+
 
 public class MainWindow extends JFrame{
 
@@ -13,12 +15,14 @@ public class MainWindow extends JFrame{
     private final JMenu file;
     private final JMenuItem getHistory;
     private final JMenuItem logout;
+    private final PrintWriter out;
     
-    public MainWindow() {
+    public MainWindow(PrintWriter out) {
         menuBar = new JMenuBar();
         file = new JMenu("File");
         getHistory = new JMenuItem("Chat History");
         logout = new JMenuItem("Logout");
+        this.out = out;
         
         menuBar.add(file);
         file.add(getHistory);
@@ -26,14 +30,13 @@ public class MainWindow extends JFrame{
         this.setJMenuBar(menuBar);
         
         tabs = new JTabbedPane();
-        JPanel mainTab = new MainTab(this);
+        JPanel mainTab = new MainTab(this, out);
         tabs.addTab("Main Window", mainTab);
         this.add(tabs);
     }
     
     public void addChatTab(String Chatname) {
-        ChatTab newChat = new ChatTab(Chatname);
-        //Fix Chatname so it's not too long
+        ChatTab newChat = new ChatTab(Chatname, this.out);
         tabs.addTab(Chatname, newChat);
         int i = tabs.indexOfComponent(newChat);
         if (i != -1) {
@@ -78,6 +81,7 @@ public class MainWindow extends JFrame{
                 public void actionPerformed(ActionEvent event) {
                     int i = pane.indexOfTabComponent(ChatTabComponent.this);
                     if (i != -1) {
+                        //TODO: appropriate disconnect room from server stuff
                         pane.remove(i);
                     }
                 }
@@ -92,7 +96,8 @@ public class MainWindow extends JFrame{
     	
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                MainWindow main = new MainWindow();
+                PrintWriter testOut = new PrintWriter(System.out);
+                MainWindow main = new MainWindow(testOut);
                 main.addChatTab("Test1");
 
                 main.pack();
