@@ -91,6 +91,9 @@ public class MainWindow extends JFrame{
     }
     
     public static void main(final String[] args) {
+    	
+    	
+    	
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 PrintWriter testOut = new PrintWriter(System.out);
