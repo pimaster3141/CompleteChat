@@ -105,7 +105,7 @@ public class ConnectionHandler implements Runnable {
         }
     }
 
-    public String parseInput(String input) {
+    private String parseInput(String input) {
         String regex = "(((disconnect)|(make)|(join)|(exit)) "
                 + "\\p{Graph}+)|" + "(message \\p{Graph}+ \\p{Print}+)";
         Pattern p = Pattern.compile(regex);
@@ -133,6 +133,7 @@ public class ConnectionHandler implements Runnable {
                     // Constructor above automatically adds the ChatRoom to the
                     // list of chat rooms of the server
                     connectedRooms.put(newChatRoom.name, newChatRoom);
+                    informConnectedRooms();
                     // newChatRoom.addUser(this);
                     return "make room success";
                 } catch (IOException e) {
@@ -189,16 +190,25 @@ public class ConnectionHandler implements Runnable {
 
         return "Unrecongnized Command " + input;
     }
+    
+    private void informConnectedRooms()
+    {
+    	StringBuilder output = new StringBuilder("ConnectedRooms");
+        for (String room : connectedRooms.keySet())
+            output.append(room + " ");
+        updateQueue( output.substring(0, output.length() - 1));
+    }
 
-    public synchronized void parseOutput(String input) {
+    private void parseOutput(String input) {
         // TODO I think pretty much left to do in other places
         // since it will just already be the grammar that we're
         // sending
         out.println(input);
+        out.flush();
         return;
     }
 
-    public void removeAllConnections() {
+    private void removeAllConnections() {
         System.out.println("Client: " + username + " - "
                 + "Removing from all connected rooms");
 
@@ -210,7 +220,7 @@ public class ConnectionHandler implements Runnable {
         return;
     }
 
-    public synchronized void updateQueue(String info) {
+    public void updateQueue(String info) {
         outputBuffer.add(info);
     }
 }

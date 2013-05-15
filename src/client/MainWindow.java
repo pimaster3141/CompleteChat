@@ -87,6 +87,9 @@ public class MainWindow extends JFrame{
     }
     
     public static void main(final String[] args) {
+    	
+    	
+    	
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 MainWindow main = new MainWindow();
