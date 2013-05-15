@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.HashMap;
+import javax.swing.*;
 
 import javax.swing.DefaultListModel;
 
@@ -17,10 +18,10 @@ public class Client {
     private final PrintWriter out;
     private final BufferedReader in;
     
-    private final DefaultListModel<String> allUsers;
+    private final DefaultListModel allUsers;
     private final HashMap<String,ChatRoomClient> connectedRoomsHistory;
     private final HashMap<String, ChatRoomClient> connectedRoomsCurrent;
-    private final DefaultListModel<String> allRooms;
+    private final DefaultListModel allRooms;
     
 
     public Client(String username, String IPAddress, int port) throws IOException {
@@ -52,8 +53,8 @@ public class Client {
         if (!prompt.matches("Connected"))
             throw new IOException(prompt);
         
-        this.allUsers = new DefaultListModel<String>();
-        this.allRooms = new DefaultListModel<String>();
+        this.allUsers = new DefaultListModel();
+        this.allRooms = new DefaultListModel();
         this.connectedRoomsHistory = new HashMap<String,ChatRoomClient>();
         this.connectedRoomsCurrent = new HashMap<String, ChatRoomClient>();
 

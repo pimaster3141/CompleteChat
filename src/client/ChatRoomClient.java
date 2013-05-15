@@ -5,11 +5,13 @@ public class ChatRoomClient {
     private final String chatRoomName;
     private ArrayList<String> connectedUsers;
     private ArrayList<Message> messageHistory;
+    private String displayedMessages;
     
     public ChatRoomClient(String nameOfChatRoom) {
         chatRoomName = nameOfChatRoom;
         connectedUsers = new ArrayList<String>();
         messageHistory = new ArrayList<Message>();
+        displayedMessages = "";
     }
     
     public void setConnectedUsers(ArrayList<String> newConnectedUsers) {
@@ -18,6 +20,10 @@ public class ChatRoomClient {
     
     public void addMessage(Message message) {
         messageHistory.add(message);
+    }
+    
+    public String getChatRoomName() {
+        return chatRoomName;
     }
     
     public int getConnectedUserSize() {
