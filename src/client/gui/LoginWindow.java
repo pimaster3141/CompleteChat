@@ -79,18 +79,18 @@ public class LoginWindow extends JFrame {
                         .addComponent(usernameLabel)
                         .addComponent(username, GroupLayout.PREFERRED_SIZE, 
                                 GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                .addGroup(layout.createParallelGroup()
-                                        .addComponent(ipLabel)
-                                        .addComponent(ipAddress, GroupLayout.PREFERRED_SIZE, 
-                                                GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                                .addGroup(layout.createParallelGroup()
-                                                        .addComponent(portLabel)
-                                                        .addComponent(port, GroupLayout.PREFERRED_SIZE, 
-                                                                GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                                                .addComponent(errorMessage, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                .addComponent(userScroll, GroupLayout.PREFERRED_SIZE, 
-                                                                        GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                                                        .addComponent(submitInfo)
+                .addGroup(layout.createParallelGroup()
+                        .addComponent(ipLabel)
+                        .addComponent(ipAddress, GroupLayout.PREFERRED_SIZE, 
+                                GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup()
+                        .addComponent(portLabel)
+                        .addComponent(port, GroupLayout.PREFERRED_SIZE, 
+                                GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addComponent(errorMessage, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(userScroll, GroupLayout.PREFERRED_SIZE, 
+                        GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(submitInfo)
                 );
         layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
                 .addComponent(welcome)
@@ -99,17 +99,17 @@ public class LoginWindow extends JFrame {
                                 .addComponent(usernameLabel)
                                 .addComponent(ipLabel)
                                 .addComponent(portLabel))
-                                .addGroup(layout.createParallelGroup()
-                                        .addComponent(username, GroupLayout.PREFERRED_SIZE, 
-                                                GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(ipAddress, GroupLayout.PREFERRED_SIZE, 
-                                                        GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(port, GroupLayout.PREFERRED_SIZE, 
-                                                                GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                                                                .addComponent(errorMessage, 0, 10, 400)
-                                                                .addComponent(userScroll, GroupLayout.PREFERRED_SIZE, 
-                                                                        GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                                                        .addComponent(submitInfo)
+                        .addGroup(layout.createParallelGroup()
+                                .addComponent(username, GroupLayout.PREFERRED_SIZE, 
+                                        GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(ipAddress, GroupLayout.PREFERRED_SIZE, 
+                                        GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(port, GroupLayout.PREFERRED_SIZE, 
+                                        GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+                 .addComponent(errorMessage, 0, 10, 400)
+                 .addComponent(userScroll, GroupLayout.PREFERRED_SIZE,GroupLayout.DEFAULT_SIZE, 
+                         GroupLayout.PREFERRED_SIZE)
+                 .addComponent(submitInfo)
                 );
     }
 
