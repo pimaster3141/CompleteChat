@@ -17,7 +17,7 @@ public class CompleteChat {
     public CompleteChat() {
         main = new MainWindow();
         login = new LoginWindow(main);
-        
+        main.setLoginWindow(login);
     }
     
     public void start() {
