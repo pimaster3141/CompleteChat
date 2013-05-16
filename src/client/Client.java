@@ -136,7 +136,9 @@ public class Client {
                 	break;
             }
         } catch(IOException e) {
-            
+            String input = "disconnectedServerSent";
+            ActionEvent event = new ActionEvent(input, 0, input);
+            main.actionPerformed(event);
         } finally {
             // TODO Maybe do stuff to cleanly close the in and out?
         }
