@@ -15,6 +15,7 @@ import server.ConnectionHandler;
 public class RoomList {
     private ServerUserList users;
     private final Map<String, ChatRoom> rooms;
+    private boolean testing = false;
 
     /*
      * constructor for this list
@@ -28,6 +29,19 @@ public class RoomList {
         this.rooms = new HashMap<String, ChatRoom>();
     }
 
+    /*
+     * Constructor for testing
+     * enables pauses that will be used for concurrency testing only
+     * @param
+     * 	ServeruserList -master list of all the people on the server
+     * 	boolean - enable pauses
+     */
+    public RoomList(ServerUserList users, boolean testing)
+    {
+    	this.testing = testing;
+    	this.users = users;
+    	this.rooms = new HashMap<String, ChatRoom>();
+    }
     /*
      * method to add a chatRoom to this list
      * inform everyone of the change
@@ -103,5 +117,16 @@ public class RoomList {
      */
     public synchronized void updateUser(ConnectionHandler user) {
         user.updateQueue(getRooms());
+    }
+
+    /*
+     * method to return the map of all the rooms
+     * only used for testing
+     * @return
+     * 	Map<String, ChatRoom> - map that holds all of the rooms
+     */
+    public Map<String, ChatRoom> getMap()
+    {
+        return this.rooms;
     }
 }
