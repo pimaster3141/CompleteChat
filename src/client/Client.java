@@ -69,7 +69,7 @@ public class Client {
     	if(connectedRoomsHistory.keySet().contains(roomName))
     		room =  connectedRoomsHistory.get(roomName);
     	else
-    		room = new ChatRoomClient(roomName);
+    		room = new ChatRoomClient(roomName, username);
     	connectedRoomsHistory.put(roomName, room);
     	connectedRoomsCurrent.put(roomName, room);
     	return room;
@@ -96,6 +96,14 @@ public class Client {
     
     public DefaultListModel getUsersModel() {
         return allUsers;
+    }
+    
+    public ChatRoomClient getCurrentRoom(String roomName) {
+        return connectedRoomsCurrent.get(roomName);
+    }
+    
+    public ChatRoomClient getHistoryRoom(String roomName) {
+        return connectedRoomsHistory.get(roomName);
     }
 
     public void parseInput(String input) {
