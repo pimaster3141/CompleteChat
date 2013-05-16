@@ -61,7 +61,7 @@ public class ChatRoom implements Runnable {
         while (true)
         	//read an element and inform all of the connected users using the roomList method
             try {
-                connectedClients.informAll("message " + messageBuffer.take());
+                connectedClients.informAll("message " + name + " " + messageBuffer.take());
                 System.out.println("  Room: " + name + " - " + "Message Sent");
             //if the thread is interrupted (on shutdown)
             } catch (InterruptedException e) {

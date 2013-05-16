@@ -12,6 +12,7 @@ public class CompleteChat {
     private final LoginWindow login;
     private final MainWindow main;
     private Client c = null;
+    private Thread consumer;
     
     public CompleteChat() {
         main = new MainWindow();
@@ -32,7 +33,16 @@ public class CompleteChat {
                 }
                 else {
                     main.setClient(c);
-                    c.start(main);
+                    //c.start(main);
+                    consumer = new Thread()
+                    {
+                    	public void run()
+                    	{
+                    		c.start(main);
+                    	}
+                    };
+                    
+                    consumer.start();
                 }
                 
                 // Get the output stream from the client here and then
