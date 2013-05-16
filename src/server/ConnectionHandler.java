@@ -174,86 +174,97 @@ public class ConnectionHandler implements Runnable {
             
             //if joining a new room
             else if (command.equals("join")) {
+            	//if there exists the room
                 if (rooms.contains(roomName))
                     try {
+                    	//try to join the room - what could happen is the room could dissapear at this stage, expect an IOException
                         ChatRoom roomToJoin = rooms.getRoomFromName(roomName);
                         roomToJoin.addUser(this);
                         this.connectedRooms.put(roomToJoin.name, roomToJoin);
                         return "user added";
+                        //if something bad happened when joining a room
                     } catch (IOException e) {
                         return e.getMessage();
                     }
                 else
                     return "Room name does not exist";
 
+                //stuff for exiting a room
             } else if (command.equals("exit")) {
+            	//remove the room from personal listings
                 ChatRoom roomToExit = connectedRooms.remove(roomName);
                 if (roomToExit != null) {
+                	//remove the user from the room
                     roomToExit.removeUser(this);
                     return "user removed from room";
                 }
                 return "user not connected to room";
-
-                // if (rooms.(roomName)) {
-                // ChatRoom roomToExit = rooms.getRoomFromName(roomName);
-                // roomToExit.removeUser(this);
-                // while(connectedRooms.contains(roomToExit)) {
-                // connectedRooms.remove(roomToExit);
-                // }
-                // return "user removed from room";
-                // } else {
-                // return "Room name does not exist";
-                // }
             }
 
+            //stuff for messaging a specific room
         } else if (command.equals("message")) {
+        	//splice out the target chatroom and message
             int secondSpaceIndex = input.indexOf(' ', spaceIndex + 1);
             String chatroom = input.substring(spaceIndex + 1, secondSpaceIndex);
             String message = input.substring(secondSpaceIndex + 1);
 
+            //update the queue of the chatroom
             ChatRoom roomToMessage = connectedRooms.get(chatroom);
             if (roomToMessage != null) {
                 roomToMessage.updateQueue(username + ": " + message);
                 return "messaged " + chatroom;
             }
             return "user not connected to room";
-            // TODO Need to add implementation to add messages into the chat
-            // room
-            // buffer.
         }
 
         return "Unrecongnized Command " + input;
     }
     
-    private void informConnectedRooms()
+    //method to build a string containing all of the connected rooms of the user
+    private String informConnectedRooms()
     {
     	StringBuilder output = new StringBuilder("ConnectedRooms");
         for (String room : connectedRooms.keySet())
             output.append(room + " ");
-        updateQueue( output.substring(0, output.length() - 1));
+        return ( output.substring(0, output.length() - 1));
     }
 
+    /*
+     * method to post process string before sending to the client
+     * we dont think we need to use it but its here if the need arises 
+     * @param
+     * 	String - the raw output string
+     */
     private void parseOutput(String input) {
-        // TODO I think pretty much left to do in other places
-        // since it will just already be the grammar that we're
-        // sending
         out.println(input);
         out.flush();
         return;
     }
 
+    /*
+     * method to remove this connection from everything
+     * called when the user leaves the server
+     */
     private void removeAllConnections() {
-        System.out.println("Client: " + username + " - "
-                + "Removing from all connected rooms");
+        System.out.println("Client: " + username + " - " + "Removing from all connected rooms");
 
+        //removes the user from all connected chatrooms
         for (ChatRoom c : connectedRooms.values())
             c.removeUser(this);
-        System.out.println("Client: " + username + " - "
-                + "Removing from server listing");
+        
+        //removes the user from the server
+        System.out.println("Client: " + username + " - " + "Removing from server listing");
         users.remove(this);
         return;
     }
 
+    /*
+     * method for other things to send messages to this client (like chatrooms)
+     * adds the string to a buffer to be consumed when ready. this frees the sender to do other things and
+     * not wait for a slow connection.
+     * @param
+     * 	String - message to be sent to the client
+     */
     public void updateQueue(String info) {
         outputBuffer.add(info);
     }

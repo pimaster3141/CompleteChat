@@ -1,5 +1,9 @@
 package server.lists;
 
+/*
+ * this class extends the abstract 
+ */
+
 public class ServerUserList extends UserList {
 
     protected String getList() {
