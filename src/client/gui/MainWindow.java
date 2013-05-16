@@ -157,12 +157,14 @@ public class MainWindow extends JFrame implements ActionListener{
         
         int firstSpaceIndex = input.indexOf(' ');
         String command;
-        if (firstSpaceIndex ==  -1)
+        if (firstSpaceIndex ==  -1) {
         	command = input;
+        	firstSpaceIndex = input.length()-1;
+        }
         else
         	command = input.substring(0, firstSpaceIndex);
         if(command.equals("disconnectedServerSent")) {
-            // TODO Make good action of disconnecting server
+            logout();
         } else if(command.equals("message")) {
             int secondSpaceIndex = input.indexOf(' ', firstSpaceIndex+1);
             int thirdSpaceIndex = input.indexOf(' ', secondSpaceIndex+1);
@@ -190,8 +192,10 @@ public class MainWindow extends JFrame implements ActionListener{
                 
                 // TODO Make good server user list update action here
             } else if(command.equals("serverRoomList")) {
+                System.out.println("Updating serverRoomList");
                 allRooms.clear();
                 for(int i = 0; i < list.length; i++) {
+                    System.out.println("Adding room: " + list[i]);
                     allRooms.add(i, list[i]);
                 }
                 
@@ -248,9 +252,15 @@ public class MainWindow extends JFrame implements ActionListener{
                 }
                 // TODO Perform disconnection of room here aka make sure tab is closed
             } else {
+                System.err.println("Derp we seem to have ended up in dead code");
                 // Should not arrive here, dead code
             }
         }
+    }
+    
+    public void setListModels (JList userList, JList chatList) {
+        userList.setModel(allUsers);
+        chatList.setModel(allRooms);
     }
     
     private void chatConnectError(String error) {
@@ -277,6 +287,16 @@ public class MainWindow extends JFrame implements ActionListener{
         }
         else {
             setClient(c);
+            Thread consumer = new Thread()
+            {
+                public void run()
+                {
+                    Client c = getClient();
+                    c.start(MainWindow.this);
+                }
+            };
+            
+            consumer.start();
         }
     }
     
@@ -304,7 +324,11 @@ public class MainWindow extends JFrame implements ActionListener{
         return connectedRoomsHistory.get(name);
     }
     
-//    public static void main(final String[] args) {
+    public Client getClient() {
+        return client;
+    }
+    
+    public static void main(final String[] args) {
 //        
 //        SwingUtilities.invokeLater(new Runnable() {
 //            public void run() {
@@ -326,5 +350,5 @@ public class MainWindow extends JFrame implements ActionListener{
 //                main.addCloseableTab("ReallyLongTestNameBecauseYeah2", test2);
 //            }
 //        });
-//    }
+    }
 }
