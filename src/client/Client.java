@@ -110,6 +110,10 @@ public class Client {
     public void start(client.gui.MainWindow main) {
         try {
             for(String input = in.readLine(); input!=null; input = in.readLine()) {
+                // TODO Check if input is disconnect.  If it is, stop, break, etc.
+                // Otherwise, make the action event and pass it into MainWindow
+                ActionEvent e = new ActionEvent(input, 0, input);
+                main.actionPerformed(e);
             }
         } catch(IOException e) {
             
