@@ -92,6 +92,10 @@ public class Client {
         System.err.println(output);
         return;
     }
+    
+    public String getUsername() {
+        return username;
+    }
 
 //    public DefaultListModel getRoomModel() {
 //        return allRooms;
@@ -110,11 +114,13 @@ public class Client {
     
     public void start(client.gui.MainWindow main) {
         try {
+            System.out.println("About to start loop");
             for(String input = in.readLine(); input!=null; input = in.readLine()) {
                 // TODO Check if input is disconnect.  If it is, stop, break, etc.
                 // Otherwise, make the action event and pass it into MainWindow
+                System.out.println("Looping");
                 ActionEvent e = new ActionEvent(input, 0, input);
-                main.actionPerformed(e);
+                //main.actionPerformed(e);
             }
         } catch(IOException e) {
             
