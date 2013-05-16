@@ -9,20 +9,18 @@ import javax.swing.event.*;
 
 import client.ChatRoomClient;
 
-public class HistoryDialog extends JPanel{
+public class HistoryTab extends JPanel{
 
     private final JLabel history;
     private final JTextPane convoHistory;
     private final JList pastChats;
-    private static PrintWriter out;
     
-    public HistoryDialog(PrintWriter out) {
+    public HistoryTab() {
         Font TitleFont = new Font("SANS_SERIF", Font.BOLD, 18);
         history = new JLabel("History");
         history.setFont(TitleFont);
         convoHistory = new JTextPane();
         pastChats = new JList();
-        this.out = out;
         
         convoHistory.setEditable(false);
         JScrollPane convoScroll = new JScrollPane (convoHistory);

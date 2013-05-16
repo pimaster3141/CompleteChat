@@ -22,9 +22,8 @@ public class MainTab extends JPanel{
     private final JList chatRoomList;
     private final JList userList;
     private final MainWindow myWindow;
-    private final PrintWriter out;
     
-    public MainTab(MainWindow myWindow, PrintWriter out) {
+    public MainTab(MainWindow myWindow) {
         Font TitleFont = new Font("SANS_SERIF", Font.BOLD, 24);
         uiChat = new JLabel("UIChat");
         uiChat.setFont(TitleFont);
@@ -32,7 +31,6 @@ public class MainTab extends JPanel{
         chatRoomList = new JList(new DefaultListModel());
         userList = new JList(new DefaultListModel());
         this.myWindow = myWindow;
-        this.out = out;
         
         chatRoomList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane chatScroll = new JScrollPane (chatRoomList);
@@ -47,7 +45,8 @@ public class MainTab extends JPanel{
                         "Create New Chatroom", JOptionPane.PLAIN_MESSAGE);
                 //TODO Check that chatname is valid, create appropriate chatroom object from name
                 if ((newChat != null) && (newChat.length() > 0)) {
-                    MainTab.this.myWindow.addChatTab(newChat);
+                    ChatTab newTab = new ChatTab(newChat);
+                    MainTab.this.myWindow.addCloseableTab(newChat, newTab);
                     System.out.println(newChat);
                     }
             }

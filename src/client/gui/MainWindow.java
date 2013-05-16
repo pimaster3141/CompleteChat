@@ -15,14 +15,12 @@ public class MainWindow extends JFrame{
     private final JMenu file;
     private final JMenuItem getHistory;
     private final JMenuItem logout;
-    private final PrintWriter out;
     
-    public MainWindow(PrintWriter out) {
+    public MainWindow() {
         menuBar = new JMenuBar();
         file = new JMenu("File");
         getHistory = new JMenuItem("Chat History");
         logout = new JMenuItem("Logout");
-        this.out = out;
         
         menuBar.add(file);
         file.add(getHistory);
@@ -30,15 +28,27 @@ public class MainWindow extends JFrame{
         this.setJMenuBar(menuBar);
         
         tabs = new JTabbedPane();
-        JPanel mainTab = new MainTab(this, out);
+        JPanel mainTab = new MainTab(this);
         tabs.addTab("Main Window", mainTab);
         this.add(tabs);
+        
+        getHistory.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                HistoryTab t = new HistoryTab();
+                addCloseableTab("History", t);
+            }    
+        });
+        
+        logout.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                
+            }
+        });
     }
     
-    public void addChatTab(String Chatname) {
-        ChatTab newChat = new ChatTab(Chatname, this.out);
-        tabs.addTab(Chatname, newChat);
-        int i = tabs.indexOfComponent(newChat);
+    public void addCloseableTab(String tabName, JPanel tab) {
+        tabs.addTab(tabName, tab);
+        int i = tabs.indexOfComponent(tab);
         if (i != -1) {
             tabs.setTabComponentAt(i, new ChatTabComponent(tabs));
         }
@@ -96,14 +106,15 @@ public class MainWindow extends JFrame{
     	
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                PrintWriter testOut = new PrintWriter(System.out);
-                MainWindow main = new MainWindow(testOut);
-                main.addChatTab("Test1");
+                MainWindow main = new MainWindow();
+                ChatTab test1 = new ChatTab("Test1");
+                main.addCloseableTab("Test1", test1);
 
                 main.pack();
                 main.setLocationRelativeTo(null);
                 main.setVisible(true);
-                main.addChatTab("ReallyLongTestNameBecauseYeah2");
+                ChatTab test2 = new ChatTab("ReallyLongTestNameBecauseYeah2");
+                main.addCloseableTab("ReallyLongTestNameBecauseYeah2", test2);
             }
         });
     }

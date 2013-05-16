@@ -11,10 +11,10 @@ public class CompleteChat {
 
     private final LoginWindow login;
     private final MainWindow main;
+    private Client c = null;
     
     public CompleteChat() {
-        PrintWriter out = new PrintWriter(System.out);
-        main = new MainWindow(out);
+        main = new MainWindow();
         login = new LoginWindow(main);
         
     }
@@ -25,7 +25,7 @@ public class CompleteChat {
                 main.pack();
                 main.setLocationRelativeTo(null);
                 main.setVisible(true);
-                Client c = login.getClient();
+                c = login.getClient();
                 if (c == null) {
                     System.out.println("closed login window");
                     main.dispose();

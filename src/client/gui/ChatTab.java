@@ -21,9 +21,8 @@ public class ChatTab extends JPanel{
     private final JList currentUsers;
     private final JTextField myMessage;
     private final JButton send;
-    private final PrintWriter out;
     
-    public ChatTab(String chatname, PrintWriter out) {
+    public ChatTab(String chatname) {
         Font TitleFont = new Font("SANS_SERIF", Font.BOLD, 18);
         chatName = new JLabel(chatname);
         chatName.setFont(TitleFont);
@@ -31,7 +30,6 @@ public class ChatTab extends JPanel{
         currentUsers = new JList();
         myMessage = new JTextField();
         send = new JButton("Submit");
-        this.out = out;
         
         conversation.setEditable(false);
         JScrollPane chatScroll = new JScrollPane (conversation);
@@ -74,8 +72,7 @@ public class ChatTab extends JPanel{
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 JFrame main = new JFrame();
-                PrintWriter testOut = new PrintWriter(System.out);
-                main.add(new ChatTab("Testing", testOut));
+                main.add(new ChatTab("Testing"));
 
                 main.pack();
                 main.setLocationRelativeTo(null);
