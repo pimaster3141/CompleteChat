@@ -201,12 +201,14 @@ public class MainWindow extends JFrame implements ActionListener{
                     } else {
                         ChatRoomClient chat = connectedRoomsHistory.get(roomName);
                         connectedRoomsCurrent.put(roomName, chat);
+                        addCloseableTab(roomName, new ChatTab(roomName, client, this));
                     }
                 } else {
                     if(connectedRoomsHistory.containsKey(roomName)) {
                     } else {
                         ChatRoomClient chat = new ChatRoomClient(roomName, client.getUsername());
                         connectedRoomsCurrent.put(roomName, chat);
+                        addCloseableTab(roomName, new ChatTab(roomName, client, this));
                     }
                 }
                 // TODO Perform connection of room here aka make a new tab

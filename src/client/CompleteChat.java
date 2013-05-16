@@ -32,6 +32,7 @@ public class CompleteChat {
                 }
                 else {
                     main.setClient(c);
+                    c.start(main);
                 }
                 
                 // Get the output stream from the client here and then
