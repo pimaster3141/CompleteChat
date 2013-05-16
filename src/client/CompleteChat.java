@@ -11,28 +11,25 @@ public class CompleteChat {
 
     private final LoginWindow login;
     private final MainWindow main;
-    private final JFrame cards;
-    private final CardLayout layout;
     
     public CompleteChat() {
         PrintWriter out = new PrintWriter(System.out);
-        login = new LoginWindow();
         main = new MainWindow(out);
-        this.cards = new JFrame();
-        this.layout = new CardLayout();
-        cards.setLayout(layout);
-        cards.add(login, "Login Screen");
-        cards.add(main, "Main Window");
+        login = new LoginWindow(main);
+        
     }
     
     public void start() {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                
-
-                cards.pack();
-                cards.setLocationRelativeTo(null);
-                cards.setVisible(true);
+                main.pack();
+                main.setLocationRelativeTo(null);
+                main.setVisible(true);
+                Client c = login.getClient();
+                if (c == null) {
+                    System.out.println("closed login window");
+                    main.dispose();
+                }
             }
         });
     }
