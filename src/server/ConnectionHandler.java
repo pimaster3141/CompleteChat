@@ -165,7 +165,7 @@ public class ConnectionHandler implements Runnable {
         if (command.trim().equals("disconnect")) {
             // removeAllConnections();
             this.alive = false;
-            return "disconnect";
+            return "disconnectedServerSent";
 
             //if the command is to make, join or exit (it is a room command)
         } else if (command.equals("make") || command.equals("join")

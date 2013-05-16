@@ -135,4 +135,24 @@ public class ChatRoom implements Runnable {
     public void updateQueue(String info) {
         messageBuffer.add(info);
     }
+    
+    /*
+     * returns if this room is alive or not
+     * @return
+     * 	boolean - if the room is alive (active)
+     */
+    public boolean isAlive()
+    {
+    	return this.self.isAlive();
+    }
+    
+    /*
+     * gets the userList - for testing only
+     * @return
+     * 	ChatUserList - list of all people on this room
+     */
+    public ChatUserList getList()
+    {
+    	return connectedClients;
+    }
 }

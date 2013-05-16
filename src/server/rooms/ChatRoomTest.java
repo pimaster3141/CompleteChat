@@ -3,9 +3,15 @@ package server.rooms;
 
 
 import static org.junit.Assert.*;
+
+import java.io.IOException;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import server.ConnectionHandler;
+import server.lists.ServerUserList;
 
 /**
  * The test class ChatRoomTest.
@@ -15,12 +21,13 @@ import org.junit.Test;
  */
 public class ChatRoomTest
 {
-    /**
-     * Default constructor for test class ChatRoomTest
-     */
-    public ChatRoomTest()
-    {
-    }
+	public ChatRoom room;
+	public ChatRoom sameName;
+	public RoomList rooms;
+	public ConnectionHandler one;
+	public ConnectionHandler two;
+	public ConnectionHandler three;
+	public ServerUserList users;
 
     /**
      * Sets up the test fixture.
@@ -30,15 +37,52 @@ public class ChatRoomTest
     @Before
     public void setUp()
     {
+    	one = new ConnectionHandler("one");
+    	two = new ConnectionHandler("two");
+    	three = new ConnectionHandler("three");
+    	users = new ServerUserList();
+    	try
+		{
+			users.add(one);
+	    	users.add(two);
+	    	users.add(three);
+	    	rooms = new RoomList(users);
+	    	one.getQueue().clear();
+	    	two.getQueue().clear();
+	    	three.getQueue().clear();
+		}
+		catch (IOException e)
+		{
+			fail();
+		}
     }
-
-    /**
-     * Tears down the test fixture.
-     *
-     * Called after every test case method.
-     */
-    @After
-    public void tearDown()
+    
+    @Test
+    public void testConstructor() throws IOException
     {
+    	room = new ChatRoom("testRoom", rooms, one);
+    	assertEquals(room.name, "testRoom");
+    	assertTrue(room.getList().getMap().containsValue(one));
+    	assertTrue(rooms.contains("testRoom"));
+    	assertTrue(room.isAlive());
+    }
+    
+    @Test
+    public void testSameNameconstructor()
+    {
+    	try
+		{
+			room = new ChatRoom("testRoom", rooms, one);
+	    	sameName = new ChatRoom("testRoom", rooms, one);
+	    	fail();
+		}
+		catch (IOException e)
+		{
+		}
+    	assertTrue(room.getList().getMap().containsValue(one));
+    	assertTrue(rooms.contains("testRoom"));
+    	assertTrue(rooms.getMap().containsValue(room));
+    	assertFalse(rooms.getMap().containsValue(sameName));
+    	assertTrue(room.isAlive());
     }
 }

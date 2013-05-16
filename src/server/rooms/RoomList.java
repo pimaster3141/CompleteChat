@@ -7,6 +7,7 @@ import java.util.Map;
 import server.rooms.ChatRoom;
 import server.lists.*;
 import server.ConnectionHandler;
+import static server.Pause.pause;
 
 /**
  * This class implements a list that holds a number of chat rooms
@@ -51,6 +52,7 @@ public class RoomList {
      * 	IOException - if the room already exists in this list
      */
     public synchronized void add(ChatRoom room) throws IOException {
+        pause(1000, testing);
     	//throw an ioException if the room exisits
         if (this.contains(room.name))
             throw new IOException("room already exists");
@@ -71,6 +73,7 @@ public class RoomList {
         rooms.remove(room.name);
         //inform everyone of change
         users.informAll(getRooms());
+        pause(1000, testing);
         return;
     }
 
