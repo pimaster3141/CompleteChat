@@ -155,8 +155,7 @@ public class ConnectionHandler implements Runnable {
 
         //if there is no match for the input string
         if (!m.matches())
-            return "Unrecognized Command " + input; // Should not occur assuming
-                                                    // client input is correct
+            return "Unrecognized Command " + input; // Should not occur assuming client input is correct
         
         //find the first space in the strign
         int spaceIndex = input.indexOf(' ');
@@ -184,10 +183,10 @@ public class ConnectionHandler implements Runnable {
                     // list of chat rooms of the server
                     connectedRooms.put(newChatRoom.name, newChatRoom);
                     informConnectedRooms();
-                    return "make room success";
+                    return "connectedRoom " + roomName;
                 } catch (IOException e) {
                 	//if we cant make a room there will be an error message
-                    return e.getMessage();
+                    return "invalidRoom " + roomName + " " + e.getMessage();
                 }
             
             //if joining a new room
@@ -199,13 +198,13 @@ public class ConnectionHandler implements Runnable {
                         ChatRoom roomToJoin = rooms.getRoomFromName(roomName);
                         roomToJoin.addUser(this);
                         this.connectedRooms.put(roomToJoin.name, roomToJoin);
-                        return "user added";
+                        return "connectedRoom " + roomName;
                         //if something bad happened when joining a room
                     } catch (IOException e) {
-                        return e.getMessage();
+                        return "invalidRoom " + roomName + " " + e.getMessage();
                     }
                 else
-                    return "Room name does not exist";
+                    return "invalidRoom " + roomName + " Room name does not exist";
 
                 //stuff for exiting a room
             } else if (command.equals("exit")) {
@@ -214,9 +213,9 @@ public class ConnectionHandler implements Runnable {
                 if (roomToExit != null) {
                 	//remove the user from the room
                     roomToExit.removeUser(this);
-                    return "user removed from room";
+                    return "disconnectedRoom " + roomName;
                 }
-                return "user not connected to room";
+                return "invalidRoom " + roomName + " user not connected to room";
             }
 
             //stuff for messaging a specific room
@@ -230,9 +229,9 @@ public class ConnectionHandler implements Runnable {
             ChatRoom roomToMessage = connectedRooms.get(chatroom);
             if (roomToMessage != null) {
                 roomToMessage.updateQueue(username + ": " + message);
-                return "messaged " + chatroom;
+                return "";
             }
-            return "user not connected to room";
+            return "";
         }
 
         return "Unrecongnized Command " + input;
@@ -249,11 +248,13 @@ public class ConnectionHandler implements Runnable {
 
     /*
      * method to post process string before sending to the client
-     * we dont think we need to use it but its here if the need arises 
+     * removes any emtpy strings
      * @param
      * 	String - the raw output string
      */
     private void parseOutput(String input) {
+        if (input.equals(""))
+            return;
         out.println(input);
         out.flush();
         return;

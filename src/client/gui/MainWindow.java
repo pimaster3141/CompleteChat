@@ -142,6 +142,7 @@ public class MainWindow extends JFrame implements ActionListener{
     
     public void actionPerformed(ActionEvent e) {
         String input = e.getActionCommand();
+        System.out.println(input);
         String newLine = "(\\r?\\n)";
         String messageText = "(\\p{Print}+)";
         String name = "(\\p{Graph}+)";
@@ -157,7 +158,11 @@ public class MainWindow extends JFrame implements ActionListener{
         Matcher m = p.matcher(input);
         
         int firstSpaceIndex = input.indexOf(' ');
-        String command = input.substring(0, firstSpaceIndex);
+        String command;
+        if (firstSpaceIndex ==  -1)
+        	command = input;
+        else
+        	command = input.substring(0, firstSpaceIndex);
         if(command.equals("disconnectedServerSent")) {
             // TODO Make good action of disconnecting server
         } else if(command.equals("message")) {
