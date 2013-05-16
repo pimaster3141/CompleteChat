@@ -41,7 +41,8 @@ public class MainWindow extends JFrame implements ActionListener{
         menuBar.add(file);
         file.add(getHistory);
         file.add(logout);
-        this.setJMenuBar(menuBar);
+        setJMenuBar(menuBar);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         
         tabs = new JTabbedPane();
         mainTab = new MainTab(this);
@@ -77,6 +78,7 @@ public class MainWindow extends JFrame implements ActionListener{
      */
     private class ChatTabComponent extends JPanel {
         private final JTabbedPane pane;
+        private final JLabel name;
         
         private ChatTabComponent(final JTabbedPane pane) {
             if (pane == null) {
@@ -85,7 +87,7 @@ public class MainWindow extends JFrame implements ActionListener{
             this.pane = pane;
             setOpaque(false);
             
-            JLabel name = new JLabel() {
+            name = new JLabel() {
                 public String getText() {
                     int i = pane.indexOfTabComponent(ChatTabComponent.this);
                     if (i != -1) {
@@ -107,6 +109,7 @@ public class MainWindow extends JFrame implements ActionListener{
                 public void actionPerformed(ActionEvent event) {
                     int i = pane.indexOfTabComponent(ChatTabComponent.this);
                     if (i != -1) {
+                        client.send("exit " + ChatTabComponent.this.name.getText());
                         //TODO: appropriate disconnect room from server stuff
                         pane.remove(i);
                     }
