@@ -92,6 +92,10 @@ public class Client {
         System.err.println(output);
         return;
     }
+    
+    public String getUsername() {
+        return username;
+    }
 
 //    public DefaultListModel getRoomModel() {
 //        return allRooms;

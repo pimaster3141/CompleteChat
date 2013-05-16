@@ -195,17 +195,29 @@ public class MainWindow extends JFrame implements ActionListener{
                 
                 // TODO Perform update of rooms client is connected to
             } else if(command.equals("connectedRoom")) {
-                // TODO Perform connection of room here
+                String roomName = list[0];
+                if(connectedRoomsHistory.containsKey(roomName)) {
+                    if(connectedRoomsCurrent.containsKey(roomName)) {
+                    } else {
+                        ChatRoomClient chat = connectedRoomsHistory.get(roomName);
+                        connectedRoomsCurrent.put(roomName, chat);
+                    }
+                } else {
+                    if(connectedRoomsHistory.containsKey(roomName)) {
+                    } else {
+                        ChatRoomClient chat = new ChatRoomClient(roomName, client.getUsername());
+                        connectedRoomsCurrent.put(roomName, chat);
+                    }
+                }
+                // TODO Perform connection of room here aka make a new tab
             } else if(command.equals("disconnectedRoom")) {
-                // TODO Perform disconnection of room here
+                // TODO Perform disconnection of room here aka make sure tab is closed
             } else {
                 // Should not arrive here, dead code
             }
         }
-        
-        
-    
     }
+
     public DefaultListModel getRoomModel() {
         return allRooms;
     }
@@ -223,9 +235,7 @@ public class MainWindow extends JFrame implements ActionListener{
     }
     
     public static void main(final String[] args) {
-    	
-    	
-    	
+        
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 MainWindow main = new MainWindow();
