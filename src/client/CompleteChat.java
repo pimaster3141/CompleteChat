@@ -30,6 +30,13 @@ public class CompleteChat {
                     System.out.println("closed login window");
                     main.dispose();
                 }
+                else {
+                    main.setClient(c);
+                    c.start(main);
+                }
+                
+                // Get the output stream from the client here and then
+                // run the processing things and send them to the main
             }
         });
     }

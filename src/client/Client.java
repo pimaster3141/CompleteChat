@@ -5,8 +5,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
+import java.util.regex.*;
 
 import javax.swing.DefaultListModel;
 
@@ -18,10 +22,10 @@ public class Client {
     private final PrintWriter out;
     private final BufferedReader in;
     
-    private final DefaultListModel allUsers;
-    private final HashMap<String,ChatRoomClient> connectedRoomsHistory;
-    private final HashMap<String, ChatRoomClient> connectedRoomsCurrent;
-    private final DefaultListModel allRooms;
+//    private final DefaultListModel allUsers;
+//    private final HashMap<String, ChatRoomClient> connectedRoomsHistory;
+//    private final HashMap<String, ChatRoomClient> connectedRoomsCurrent;
+//    private final DefaultListModel allRooms;
     
 
     public Client(String username, String IPAddress, int port) throws IOException {
@@ -53,25 +57,26 @@ public class Client {
         if (!prompt.matches("Connected"))
             throw new IOException(prompt);
         
-        this.allUsers = new DefaultListModel();
-        this.allRooms = new DefaultListModel();
-        this.connectedRoomsHistory = new HashMap<String,ChatRoomClient>();
-        this.connectedRoomsCurrent = new HashMap<String, ChatRoomClient>();
+//        this.allUsers = new DefaultListModel();
+//        this.allRooms = new DefaultListModel();
+//        this.connectedRoomsHistory = new HashMap<String,ChatRoomClient>();
+//        this.connectedRoomsCurrent = new HashMap<String, ChatRoomClient>();
 
         System.err.println("Client connected");
     }
-    
-    public ChatRoomClient joinRoom(String roomName)
-    {
-    	ChatRoomClient room;
-    	if(connectedRoomsHistory.keySet().contains(roomName))
-    		room =  connectedRoomsHistory.get(roomName);
-    	else
-    		room = new ChatRoomClient(roomName);
-    	connectedRoomsHistory.put(roomName, room);
-    	connectedRoomsCurrent.put(roomName, room);
-    	return room;
-    }
+
+//    public ChatRoomClient joinRoom(String roomName)
+//    {
+//    	ChatRoomClient room;
+//    	if(connectedRoomsHistory.keySet().contains(roomName))
+//    		room =  connectedRoomsHistory.get(roomName);
+//    	else
+//    		room = new ChatRoomClient(roomName);
+//    	connectedRoomsHistory.put(roomName, room);
+//    	connectedRoomsCurrent.put(roomName, room);
+//    	return room;
+//    }
+
 
     public String readBuffer() throws IOException {
         try {
@@ -84,14 +89,42 @@ public class Client {
     public void send(String output) {
         out.println(output);
         out.flush();
+        System.err.println(output);
         return;
     }
+    
+    public String getUsername() {
+        return username;
+    }
+
+//    public DefaultListModel getRoomModel() {
+//        return allRooms;
+//    }
+//    
+//    public DefaultListModel getUsersModel() {
+//        return allUsers;
+//    }
 
     public void parseInput(String input) {
         // TODO: Sayeed - write stuff that interprets the string and updates the
         // proper jcomponent. this method will be called by the gui
         // in the swing worker's 'done' command. this way this method will be
         // called from the EDT instead of the secondary thread.
+    }
+    
+    public void start(client.gui.MainWindow main) {
+        try {
+            System.out.println("About to start loop");
+            for(String input = in.readLine(); input!=null; input = in.readLine()) {
+                // TODO Check if input is disconnect.  If it is, stop, break, etc.
+                // Otherwise, make the action event and pass it into MainWindow
+                System.out.println("Looping");
+                ActionEvent e = new ActionEvent(input, 0, input);
+                //main.actionPerformed(e);
+            }
+        } catch(IOException e) {
+            
+        }
     }
 
     // just a method to test this rig... you shouldnt use it in your gui.

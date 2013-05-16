@@ -146,13 +146,19 @@ public class LoginWindow extends JDialog implements PropertyChangeListener{
                     errorMessage.setText("<html>Error: Port number required to connect</html>");
                 }
                 else {
-                    try {
-                        c = new Client(username.getText(), ipAddress.getText(), 
-                                Integer.parseInt(port.getText()));
-                        setVisible(false);
+                    if (isValidUsername(username.getText())) {
+                        try {
+                            c = new Client(username.getText(), ipAddress.getText(), 
+                                    Integer.parseInt(port.getText()));
+                            setVisible(false);
+                        }
+                        catch (IOException except) {
+                            errorMessage.setText("Something about Client not being made idk");
+                        }
                     }
-                    catch (IOException except) {
-                        errorMessage.setText("Something about Client not being made idk");
+                    else {
+                        errorMessage.setText("<html>Error: Username can't exceed 20 characters<br> " +
+                              "or contain any whitespace</html>");
                     }
                 }
                 pack();
@@ -161,6 +167,14 @@ public class LoginWindow extends JDialog implements PropertyChangeListener{
                 setVisible(false);
             }
         }
+    }
+    
+    private boolean isValidUsername(String Username) {
+        String regex = "\\p{Graph}+";
+        if (Pattern.matches(regex, Username) && Username.length() < 20) {
+            return true;
+        }
+        return false;
     }
     
     public Client getClient() {

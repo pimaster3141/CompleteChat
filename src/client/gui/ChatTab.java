@@ -2,9 +2,16 @@ package client.gui;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.*;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 import javax.swing.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.StyledDocument;
+
+import client.*;
 
 /**
  * Probably needs to take in the actual object representing a chat, but I don't
@@ -21,21 +28,38 @@ public class ChatTab extends JPanel{
     private final JList currentUsers;
     private final JTextField myMessage;
     private final JButton send;
+    private final DefaultListModel userModel;
+    private Client client;
+    private MainWindow main;
     
-    public ChatTab(String chatname) {
+    public ChatTab(String chatname, Client client, MainWindow main) {
         Font TitleFont = new Font("SANS_SERIF", Font.BOLD, 18);
         chatName = new JLabel(chatname);
         chatName.setFont(TitleFont);
         conversation = new JTextPane();
-        currentUsers = new JList();
+        conversation.setDocument(main.getCurrentRoom(chatname).getDoc());
+        userModel = new DefaultListModel();
+        currentUsers = new JList(userModel);
         myMessage = new JTextField();
         send = new JButton("Submit");
+        this.client = client;
+        this.main = main;
         
         conversation.setEditable(false);
         JScrollPane chatScroll = new JScrollPane (conversation);
         chatScroll.setPreferredSize(new Dimension(700, 550));
         JScrollPane userScroll = new JScrollPane (currentUsers);
         userScroll.setPreferredSize(new Dimension(250, 550));
+        
+        send.addActionListener(new ActionListener() {
+            public void actionPerformed (ActionEvent e) {
+                String m = myMessage.getText();
+                if (m != null && m.length() > 0) {
+                    ChatTab.this.client.send("message " + m);
+                    ChatTab.this.myMessage.setText("");
+                }
+            }
+        });
         
         //defining the layout
         GroupLayout layout = new GroupLayout(this);
@@ -68,11 +92,45 @@ public class ChatTab extends JPanel{
                         .addComponent(send)));
     }
     
+    /**
+     * Checks to see if we are in the client's list of current rooms. If we are, we update
+     * the model inside of the ChatRoomClient object, which should result in the textArea being
+     * updated.
+     * @param message the Message object containing the message to be added to the convo.
+     * @throws BadLocationException
+     */
+    private void updateConvo(Message message) throws BadLocationException {
+        ChatRoomClient here = main.getCurrentRoom(chatName.getText());
+        if (here == null) {
+            //panic since i guess we're not synched up
+        }
+        here.addMessage(message);
+    }
+    
+    private void updateUsers() {
+        ChatRoomClient here = this.main.getCurrentRoom(chatName.getText());
+        if (here == null) {
+            //panic since i guess we're not synched up
+        }
+        ArrayList<String> users = here.getConnectedUsers();
+        userModel.clear();
+        for (int i = 0; i < users.size(); i++) {
+            userModel.setElementAt(users.get(i), i);
+        }
+        
+    }
+    
     public static void main(final String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                JFrame main = new JFrame();
-                main.add(new ChatTab("Testing"));
+                MainWindow main = new MainWindow();
+                Client c = null;
+                try {
+                    c = new Client("user2", "127.0.0.1", 10000);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                main.add(new ChatTab("Testing", c, main));
 
                 main.pack();
                 main.setLocationRelativeTo(null);
