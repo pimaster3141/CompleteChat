@@ -26,7 +26,6 @@ public class CompleteChat {
                 main.setLocationRelativeTo(null);
                 main.setVisible(true);
                 c = login.getClient();
-                System.out.println("reached");
                 if (c == null) {
                     System.out.println("closed login window");
                     main.dispose();

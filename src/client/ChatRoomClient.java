@@ -18,7 +18,7 @@ public class ChatRoomClient {
         connectedUsers = newConnectedUsers;
     }
     
-    public void addMessage(Message message) {
+    public synchronized void addMessage(Message message) {
         messageHistory.add(message);
     }
     
