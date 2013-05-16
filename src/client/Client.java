@@ -129,10 +129,14 @@ public class Client {
                 System.out.println("Looping");
                 ActionEvent e = new ActionEvent(input, 0, input);
                 main.actionPerformed(e);
+                
+                if(input.equals("disconnectedServerSent"))
+                	break;
             }
         } catch(IOException e) {
             
         }
+        System.err.println("clinet consumer terminated....");
     }
 
     // just a method to test this rig... you shouldnt use it in your gui.
