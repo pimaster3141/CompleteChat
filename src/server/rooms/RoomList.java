@@ -105,7 +105,7 @@ public class RoomList {
      * 	String - string list of all the names of the rooms in this list
      */
     private String getRooms() {
-        StringBuilder roomList = new StringBuilder("RoomList ");
+        StringBuilder roomList = new StringBuilder("serverRoomList ");
         for (String roomsString : rooms.keySet())
             roomList.append(roomsString + ' ');
         roomList.deleteCharAt(roomList.length() - 1);

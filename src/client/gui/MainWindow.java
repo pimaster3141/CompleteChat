@@ -192,8 +192,10 @@ public class MainWindow extends JFrame implements ActionListener{
                 
                 // TODO Make good server user list update action here
             } else if(command.equals("serverRoomList")) {
+                System.out.println("Updating serverRoomList");
                 allRooms.clear();
                 for(int i = 0; i < list.length; i++) {
+                    System.out.println("Adding room: " + list[i]);
                     allRooms.add(i, list[i]);
                 }
                 
@@ -250,6 +252,7 @@ public class MainWindow extends JFrame implements ActionListener{
                 }
                 // TODO Perform disconnection of room here aka make sure tab is closed
             } else {
+                System.err.println("Derp we seem to have ended up in dead code");
                 // Should not arrive here, dead code
             }
         }
