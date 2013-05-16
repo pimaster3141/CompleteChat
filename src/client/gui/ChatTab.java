@@ -39,7 +39,7 @@ public class ChatTab extends JPanel{
         chatName.setFont(TitleFont);
         conversation = new JTextPane();
         conversation.setDocument(main.getCurrentRoom(chatname).getDoc());
-        currentUsers = new JList(main.getCurrentRoom(chatname).getRoomModel());
+        currentUsers = new JList(main.getCurrentRoom(chatname).getUserListModel());
         myMessage = new JTextField();
         send = new JButton("Submit");
         this.client = client;
