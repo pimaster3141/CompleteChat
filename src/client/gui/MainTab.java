@@ -27,14 +27,16 @@ public class MainTab extends JPanel{
     private final JList chatRoomList;
     private final JList userList;
     private Client client = null;
+    private MainWindow main;
     
-    public MainTab() {
+    public MainTab(MainWindow main) {
         Font TitleFont = new Font("SANS_SERIF", Font.BOLD, 24);
         uiChat = new JLabel("UIChat");
         uiChat.setFont(TitleFont);
         makeChat = new JButton("New ChatRoom");
         chatRoomList = new JList(new DefaultListModel());
         userList = new JList(new DefaultListModel());
+        this.main = main;
         
         chatRoomList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane chatScroll = new JScrollPane (chatRoomList);

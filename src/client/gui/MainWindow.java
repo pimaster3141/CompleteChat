@@ -9,6 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.*;
+import javax.swing.text.BadLocationException;
 
 import client.*;
 
@@ -43,7 +44,7 @@ public class MainWindow extends JFrame implements ActionListener{
         this.setJMenuBar(menuBar);
         
         tabs = new JTabbedPane();
-        mainTab = new MainTab();
+        mainTab = new MainTab(this);
         tabs.addTab("Main Window", mainTab);
         this.add(tabs);
         
@@ -153,7 +154,12 @@ public class MainWindow extends JFrame implements ActionListener{
             String message = input.substring(thirdSpaceIndex + 1);
             if(connectedRoomsCurrent.containsKey(chatRoomName)){
                 ChatRoomClient roomCurrent = connectedRoomsCurrent.get(chatRoomName);
-                roomCurrent.addMessage(new Message(userName, message));
+                try {
+                    roomCurrent.addMessage(new Message(userName, message));
+                } catch (BadLocationException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
             }
             
             // TODO Make good based on message and chatroom
@@ -200,6 +206,21 @@ public class MainWindow extends JFrame implements ActionListener{
         
     
     }
+    public DefaultListModel getRoomModel() {
+        return allRooms;
+    }
+
+    public DefaultListModel getUsersModel() {
+        return allUsers;
+    }
+    
+    public ChatRoomClient getCurrentRoom(String name) {
+        return connectedRoomsCurrent.get(name);
+    }
+    
+    public ChatRoomClient getHistoryRoom(String name) {
+        return connectedRoomsHistory.get(name);
+    }
     
     public static void main(final String[] args) {
     	
@@ -215,13 +236,13 @@ public class MainWindow extends JFrame implements ActionListener{
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
-                ChatTab test1 = new ChatTab("Test1", client);
+                ChatTab test1 = new ChatTab("Test1", client, main);
                 main.addCloseableTab("Test1", test1);
 
                 main.pack();
                 main.setLocationRelativeTo(null);
                 main.setVisible(true);
-                ChatTab test2 = new ChatTab("ReallyLongTestNameBecauseYeah2", client);
+                ChatTab test2 = new ChatTab("ReallyLongTestNameBecauseYeah2", client, main);
                 main.addCloseableTab("ReallyLongTestNameBecauseYeah2", test2);
             }
         });

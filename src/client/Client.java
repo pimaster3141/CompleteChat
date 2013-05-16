@@ -64,7 +64,7 @@ public class Client {
 
         System.err.println("Client connected");
     }
-    
+
 //    public ChatRoomClient joinRoom(String roomName)
 //    {
 //    	ChatRoomClient room;
@@ -76,6 +76,7 @@ public class Client {
 //    	connectedRoomsCurrent.put(roomName, room);
 //    	return room;
 //    }
+
 
     public String readBuffer() throws IOException {
         try {
@@ -91,7 +92,7 @@ public class Client {
         System.err.println(output);
         return;
     }
-    
+
 //    public DefaultListModel getRoomModel() {
 //        return allRooms;
 //    }
