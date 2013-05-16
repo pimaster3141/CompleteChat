@@ -153,7 +153,7 @@ public class LoginWindow extends JDialog implements PropertyChangeListener{
                             setVisible(false);
                         }
                         catch (IOException except) {
-                            errorMessage.setText("Something about Client not being made idk");
+                            errorMessage.setText(except.getMessage());
                         }
                     }
                     else {

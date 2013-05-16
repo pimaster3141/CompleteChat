@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.awt.event.ActionEvent;
@@ -15,9 +16,9 @@ import java.util.regex.*;
 import javax.swing.DefaultListModel;
 
 public class Client {
-    public final String username;
-    public final String IPAddress;
-    public final int port;
+    private final String username;
+    private final String IPAddress;
+    private final int port;
     private final Socket socket;
     private final PrintWriter out;
     private final BufferedReader in;
@@ -32,7 +33,14 @@ public class Client {
         this.username = username;
         this.IPAddress = IPAddress;
         this.port = port;
-        this.socket = new Socket(IPAddress, port);
+        try
+		{
+			this.socket = new Socket(IPAddress, port);
+		}
+		catch (Exception e)
+		{
+			throw new IOException("Could not resolve host");
+		}
         System.err.println("Connected to server");
 
         this.in = new BufferedReader(new InputStreamReader(
