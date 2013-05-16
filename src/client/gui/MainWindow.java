@@ -71,7 +71,7 @@ public class MainWindow extends JFrame implements ActionListener{
         int i = tabs.indexOfComponent(tab);
         if (i != -1) {
             ChatRoomClient chatroom = connectedRoomsCurrent.get(tabName);
-            tabs.setTabComponentAt(i, new ChatTabComponent(chatroom.getChatRoomName()));
+            tabs.setTabComponentAt(i, new ChatTabComponent(chatroom));
         }
     }
     
@@ -82,8 +82,10 @@ public class MainWindow extends JFrame implements ActionListener{
      */
     private class ChatTabComponent extends JPanel {
         private final JLabel name;
+        private final ChatRoomClient chatroom;
         
-        private ChatTabComponent(final String chatroom) {
+        private ChatTabComponent(ChatRoomClient chatroom) {
+            this.chatroom = chatroom;
             if (tabs == null) {
                 throw new NullPointerException("Tabbed Pane is null");   
             }
@@ -91,7 +93,7 @@ public class MainWindow extends JFrame implements ActionListener{
             
             name = new JLabel() {
                 public String getText() {
-                    return chatroom;
+                    return ChatTabComponent.this.chatroom.getChatRoomName();
                 }
             };
             name.setPreferredSize(new Dimension(60, 15));
@@ -105,7 +107,7 @@ public class MainWindow extends JFrame implements ActionListener{
             exit.setForeground(Color.RED);
             exit.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent event) {
-                    closeTab(ChatTabComponent.this, chatroom);
+                    closeTab(ChatTabComponent.this, ChatTabComponent.this.chatroom);
                 }
             });
             add(exit);
@@ -268,6 +270,7 @@ public class MainWindow extends JFrame implements ActionListener{
     
     private void logout() {
         int i = 0;
+        String myUsername = client.getUsername();
         while (tabs.getTabCount()>1) {
             System.out.println("              " + tabs.getComponent(i).getName());
             if (tabs.getComponent(i) == mainTab) {
@@ -277,7 +280,7 @@ public class MainWindow extends JFrame implements ActionListener{
             }
             tabs.remove(i);
         }
-        client.send("disconnect " + client.getUsername());
+        client.send("disconnect " + myUsername);
         setClient(null);
         Client c = login.getClient();
         if (c == null) {
@@ -299,12 +302,14 @@ public class MainWindow extends JFrame implements ActionListener{
         }
     }
     
-    private void closeTab(Component t, String name) {
+    private void closeTab(Component t, ChatRoomClient chatroom) {
         int i = tabs.indexOfTabComponent(t);
         if (i != -1) {
-            client.send("exit " + name);
+            client.send("exit " + chatroom.getChatRoomName());
             tabs.remove(i);
         }
+        connectedRoomsCurrent.remove(chatroom.getChatRoomName());
+        chatroom.getUserListModel().clear();
     }
 
     public DefaultListModel getRoomModel() {

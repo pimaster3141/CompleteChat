@@ -82,7 +82,8 @@ public class ChatRoomClient {
         return messageHistory.get(i);
     }
     
-    public DefaultListModel getRoomModel() {
+    public DefaultListModel getUserListModel() {
         return userModel;
     }
+
 }
