@@ -70,7 +70,8 @@ public class MainWindow extends JFrame implements ActionListener{
         tabs.addTab(tabName, tab);
         int i = tabs.indexOfComponent(tab);
         if (i != -1) {
-            tabs.setTabComponentAt(i, new ChatTabComponent());
+            ChatRoomClient chatroom = connectedRoomsCurrent.get(tabName);
+            tabs.setTabComponentAt(i, new ChatTabComponent(chatroom.getChatRoomName()));
         }
     }
     
@@ -82,7 +83,7 @@ public class MainWindow extends JFrame implements ActionListener{
     private class ChatTabComponent extends JPanel {
         private final JLabel name;
         
-        private ChatTabComponent() {
+        private ChatTabComponent(final String chatroom) {
             if (tabs == null) {
                 throw new NullPointerException("Tabbed Pane is null");   
             }
@@ -90,11 +91,7 @@ public class MainWindow extends JFrame implements ActionListener{
             
             name = new JLabel() {
                 public String getText() {
-                    int i = tabs.indexOfTabComponent(ChatTabComponent.this);
-                    if (i != -1) {
-                        return tabs.getTitleAt(i);
-                    }
-                    return null;
+                    return chatroom;
                 }
             };
             name.setPreferredSize(new Dimension(60, 15));
@@ -108,7 +105,7 @@ public class MainWindow extends JFrame implements ActionListener{
             exit.setForeground(Color.RED);
             exit.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent event) {
-                    closeTab(ChatTabComponent.this);
+                    closeTab(ChatTabComponent.this, chatroom);
                 }
             });
             add(exit);
@@ -251,6 +248,12 @@ public class MainWindow extends JFrame implements ActionListener{
                     }
                 }
                 // TODO Perform disconnection of room here aka make sure tab is closed
+            } else if (command.equals("invalidRoom")) {
+                StringBuilder errorMessage = new StringBuilder();
+                for (int i = 1; i < list.length; i++) {
+                    errorMessage.append(list[i] + " ");
+                }
+                JOptionPane.showMessageDialog(this, errorMessage.toString(), "Error", JOptionPane.WARNING_MESSAGE);
             } else {
                 System.err.println("Derp we seem to have ended up in dead code");
                 // Should not arrive here, dead code
@@ -261,10 +264,6 @@ public class MainWindow extends JFrame implements ActionListener{
     public void setListModels (JList userList, JList chatList) {
         userList.setModel(allUsers);
         chatList.setModel(allRooms);
-    }
-    
-    private void chatConnectError(String error) {
-        JOptionPane.showMessageDialog(this, error, "Error", JOptionPane.WARNING_MESSAGE);
     }
     
     private void logout() {
@@ -300,10 +299,10 @@ public class MainWindow extends JFrame implements ActionListener{
         }
     }
     
-    private void closeTab(Component t) {
+    private void closeTab(Component t, String name) {
         int i = tabs.indexOfTabComponent(t);
         if (i != -1) {
-            client.send("exit " + t.getName());
+            client.send("exit " + name);
             tabs.remove(i);
         }
     }
