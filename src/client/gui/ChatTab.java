@@ -28,7 +28,6 @@ public class ChatTab extends JPanel{
     private final JList currentUsers;
     private final JTextField myMessage;
     private final JButton send;
-    private final DefaultListModel userModel;
     private Client client;
     private MainWindow main;
     
@@ -38,12 +37,12 @@ public class ChatTab extends JPanel{
         chatName.setFont(TitleFont);
         conversation = new JTextPane();
         conversation.setDocument(main.getCurrentRoom(chatname).getDoc());
-        userModel = new DefaultListModel();
-        currentUsers = new JList(userModel);
+        currentUsers = new JList(main.getCurrentRoom(chatname).getRoomModel());
         myMessage = new JTextField();
         send = new JButton("Submit");
         this.client = client;
         this.main = main;
+        setName(chatname);
         
         conversation.setEditable(false);
         JScrollPane chatScroll = new JScrollPane (conversation);
@@ -92,33 +91,33 @@ public class ChatTab extends JPanel{
                         .addComponent(send)));
     }
     
-    /**
-     * Checks to see if we are in the client's list of current rooms. If we are, we update
-     * the model inside of the ChatRoomClient object, which should result in the textArea being
-     * updated.
-     * @param message the Message object containing the message to be added to the convo.
-     * @throws BadLocationException
-     */
-    private void updateConvo(Message message) throws BadLocationException {
-        ChatRoomClient here = main.getCurrentRoom(chatName.getText());
-        if (here == null) {
-            //panic since i guess we're not synched up
-        }
-        here.addMessage(message);
-    }
-    
-    private void updateUsers() {
-        ChatRoomClient here = this.main.getCurrentRoom(chatName.getText());
-        if (here == null) {
-            //panic since i guess we're not synched up
-        }
-        ArrayList<String> users = here.getConnectedUsers();
-        userModel.clear();
-        for (int i = 0; i < users.size(); i++) {
-            userModel.setElementAt(users.get(i), i);
-        }
-        
-    }
+//    /**
+//     * Checks to see if we are in the client's list of current rooms. If we are, we update
+//     * the model inside of the ChatRoomClient object, which should result in the textArea being
+//     * updated.
+//     * @param message the Message object containing the message to be added to the convo.
+//     * @throws BadLocationException
+//     */
+//    private void updateConvo(Message message) throws BadLocationException {
+//        ChatRoomClient here = main.getCurrentRoom(chatName.getText());
+//        if (here == null) {
+//            //panic since i guess we're not synched up
+//        }
+//        here.addMessage(message);
+//    }
+//    
+//    private void updateUsers() {
+//        ChatRoomClient here = this.main.getCurrentRoom(chatName.getText());
+//        if (here == null) {
+//            //panic since i guess we're not synched up
+//        }
+//        ArrayList<String> users = here.getConnectedUsers();
+//        userModel.clear();
+//        for (int i = 0; i < users.size(); i++) {
+//            userModel.setElementAt(users.get(i), i);
+//        }
+//        
+//    }
     
     public static void main(final String[] args) {
         SwingUtilities.invokeLater(new Runnable() {

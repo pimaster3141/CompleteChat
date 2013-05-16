@@ -21,6 +21,7 @@ public class HistoryTab extends JPanel{
         history.setFont(TitleFont);
         convoHistory = new JTextPane();
         pastChats = new JList();
+        setName("History");
         
         convoHistory.setEditable(false);
         JScrollPane convoScroll = new JScrollPane (convoHistory);

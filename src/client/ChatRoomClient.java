@@ -2,6 +2,7 @@ package client;
 import java.awt.Color;
 import java.util.*;
 
+import javax.swing.DefaultListModel;
 import javax.swing.text.*;
 
 
@@ -14,6 +15,7 @@ public class ChatRoomClient {
     private ArrayList<String> connectedUsers;
     private ArrayList<Message> messageHistory;
     private DefaultStyledDocument displayedMessages;
+    private DefaultListModel userModel;
     private final String myUsername;
     
     public ChatRoomClient(String nameOfChatRoom, String username) {
@@ -21,6 +23,7 @@ public class ChatRoomClient {
         connectedUsers = new ArrayList<String>();
         messageHistory = new ArrayList<Message>();
         displayedMessages = new DefaultStyledDocument();
+        userModel = new DefaultListModel();
         myUsername = username;
     }
     
@@ -38,6 +41,15 @@ public class ChatRoomClient {
         displayedMessages.insertString(displayedMessages.getLength(), message.getUsername() + ": ", userStyle);
         displayedMessages.insertString(displayedMessages.getLength(), message.getMessage() + "\n", null);
 
+    }
+    
+    public synchronized void updateUsers(ArrayList<String> newUsers) {
+        connectedUsers = newUsers;
+        userModel.clear();
+        for (int i = 0; i < connectedUsers.size(); i++) {
+            userModel.setElementAt(connectedUsers.get(i), i);
+        }
+        
     }
     
     public DefaultStyledDocument getDoc() {
@@ -66,5 +78,9 @@ public class ChatRoomClient {
     
     public Message getMessageAtIndex(int i) {
         return messageHistory.get(i);
+    }
+    
+    public DefaultListModel getRoomModel() {
+        return userModel;
     }
 }

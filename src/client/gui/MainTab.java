@@ -37,6 +37,7 @@ public class MainTab extends JPanel{
         chatRoomList = new JList(new DefaultListModel());
         userList = new JList(new DefaultListModel());
         this.main = main;
+        setName("Main Window");
         
         chatRoomList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane chatScroll = new JScrollPane (chatRoomList);

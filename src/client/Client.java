@@ -120,7 +120,7 @@ public class Client {
                 // Otherwise, make the action event and pass it into MainWindow
                 System.out.println("Looping");
                 ActionEvent e = new ActionEvent(input, 0, input);
-                //main.actionPerformed(e);
+                main.actionPerformed(e);
             }
         } catch(IOException e) {
             

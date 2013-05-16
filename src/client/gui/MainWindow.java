@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.*;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -129,6 +130,16 @@ public class MainWindow extends JFrame implements ActionListener{
         mainTab.addRooms(ChatRooms);
     }
     
+    private JPanel findTab(String chatName) {
+        for (int i = 0; i<tabs.getTabCount(); i++) {
+            String tabName = tabs.getComponentAt(i).getName();
+            if (tabName == chatName) {
+                return (JPanel) tabs.getComponentAt(i);
+            }
+        }
+        return null;
+    }
+    
     public void actionPerformed(ActionEvent e) {
         String input = e.getActionCommand();
         String newLine = "(\\r?\\n)";
@@ -183,7 +194,15 @@ public class MainWindow extends JFrame implements ActionListener{
                 
                 // TODO Make good server room list update action here
             } else if(command.equals("chatUserList")) {
-                
+                String chatName = list[0];
+                if (connectedRoomsCurrent.containsKey(chatName)) {
+                    ArrayList<String> newChatList = new ArrayList<String>();
+                    for (int i = 1; i < list.length; i++) {
+                        newChatList.add(list[i]);
+                    }
+                    ChatRoomClient roomCurrent = connectedRoomsCurrent.get(list[0]);
+                    roomCurrent.updateUsers(newChatList);
+                }
                 // TODO Make good update of users in particular chat
             } else if(command.equals("clientRoomList")) {
                 String user = list[0];
@@ -207,15 +226,22 @@ public class MainWindow extends JFrame implements ActionListener{
                         addCloseableTab(roomName, new ChatTab(roomName, client, this));
                     }
                 } else {
-                    if(connectedRoomsHistory.containsKey(roomName)) {
-                    } else {
+                    
                         ChatRoomClient chat = new ChatRoomClient(roomName, client.getUsername());
                         connectedRoomsCurrent.put(roomName, chat);
+                        connectedRoomsHistory.put(roomName, chat);
                         addCloseableTab(roomName, new ChatTab(roomName, client, this));
-                    }
                 }
                 // TODO Perform connection of room here aka make a new tab
             } else if(command.equals("disconnectedRoom")) {
+                String roomName = list[0];
+                if (connectedRoomsCurrent.containsKey(roomName)) {
+                    JPanel removedRoom = findTab(roomName);
+                    if (removedRoom != null) {
+                        int tabIndex = tabs.indexOfComponent(removedRoom);
+                        tabs.remove(tabIndex);
+                    }
+                }
                 // TODO Perform disconnection of room here aka make sure tab is closed
             } else {
                 // Should not arrive here, dead code
