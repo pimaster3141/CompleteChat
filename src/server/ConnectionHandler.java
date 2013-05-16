@@ -13,6 +13,10 @@ import java.util.regex.Pattern;
 import server.rooms.*;
 import server.lists.ServerUserList;
 
+/**
+ * This class represents a connection to the server and handles communicationg with a single client
+ *
+ */
 public class ConnectionHandler implements Runnable {
     public final String username;
     private final Socket socket;
@@ -25,120 +29,150 @@ public class ConnectionHandler implements Runnable {
     private final Thread outputConsumer;
     private boolean alive = true;
 
-    public ConnectionHandler(Socket socket, RoomList rooms, ServerUserList users)
-            throws IOException {
+    /*
+     * Constructor for connection
+     * @param
+     * 	socket - connection to client
+     * 	RoomList - reference to master list of all rooms
+     * 	ServerUserList - reference to master list of all clients
+     * 
+     * @throws
+     * 	IOException - if the socket is somehow closed during this process
+     */
+    public ConnectionHandler(Socket socket, RoomList rooms, ServerUserList users) throws IOException {
+    	//fill in fields
         this.socket = socket;
         this.rooms = rooms;
         this.users = users;
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
-
+        //prompt for username
         out.println("To connect type: \"connect [username]\"");
 
+        //parse username
         String input = in.readLine();
         Pattern p = Pattern.compile("connect \\p{Graph}+");
         Matcher m = p.matcher(input);
+        //if the usernme is invalid, disconnect the client
         if (!m.matches())
             throw new IOException(
                     "Client input not in the format 'connect [username]'");
         this.username = input.substring(input.indexOf(' ') + 1);
 
-        // if (this.users.contains(username)) {
-        // out.println("username already taken");
-        // throw new IOException();
-        // }
-        // out.println("Connected");
-
+        //thread object that will monitor and consume the output buffer and send it to the client
         outputConsumer = new Thread() {
             public void run() {
-                System.out.println("Client: " + username + " - "
-                        + "Started Output Thread");
+                System.out.println("Client: " + username + " - " + "Started Output Thread");
+                //keep looping this thread until the connection dies
                 while (alive)
                     try {
+                    	//send data to client
                         parseOutput(outputBuffer.take());
                     } catch (InterruptedException e) {
-                        System.out.println("Client: " + username + " - "
-                                + "Stopping Output Thread");
+                        System.out.println("Client: " + username + " - " + "Stopping Output Thread");
                         break;
                     }
             }
         };
     }
 
+    /*
+     * Starts the main thread for this connection 
+     */
     public void run() {
+    	//echo to client that you're connected
         out.println("Connected");
 
         try {
+        	//start the output consumer thread to relay data back to user
             outputConsumer.start();
 
-            System.out.println("Client: " + username + " - "
-                    + "Starting Input Thread");
-            for (String line = in.readLine(); (line != null && alive); line = in
-                    .readLine()) {
-                out.println();
+            System.out.println("Client: " + username + " - " + "Starting Input Thread");
+            
+            //main loop for parsing responses from client
+            for (String line = in.readLine(); (line != null && alive); line = in.readLine()) {
+                //out.println();
+            	//parse the input
                 String parsedInput = parseInput(line);
                 System.out.println("Client: " + username + " - " + parsedInput);
+                //echo the parsed output to the client
                 updateQueue(parsedInput);
+                //if the client is not alive anymore, shutdown
                 if (!alive) {
-                    System.out.println("Client: " + username + " - "
-                            + "Stopping Input Thread");
+                    System.out.println("Client: " + username + " - " + "Stopping Input Thread");
                     break;
                 }
             }
-            System.out.println("Client: " + username + " - "
-                    + "Input Thread Stopped");
+            System.out.println("Client: " + username + " - " + "Input Thread Stopped");
 
         } catch (IOException e) {
             System.out.println("Client: " + username + " - Connection Lost");
 
         } finally {
+        	//stop the output thread
             outputConsumer.interrupt();
-            System.out.println("Client: " + username + " - "
-                    + "Output Thread Stopped");
+            System.out.println("Client: " + username + " - " + "Output Thread Stopped");
+            //remove client from all chat rooms and room listings
             removeAllConnections();
+            //close the socket
             try {
                 socket.close();
             } catch (IOException ignore) {
             }
-            System.out.println("Client: " + username + " - "
-                    + "Cleanup Complete");
+            System.out.println("Client: " + username + " - " + "Cleanup Complete");
         }
     }
 
+    /*
+     * parses the input string and performs the appropriate action such as joining a room or saying a message
+     * @param
+     * 	String - the string to be parsed
+     */
     private String parseInput(String input) {
+    	//sets up regex
         String regex = "(((disconnect)|(make)|(join)|(exit)) "
                 + "\\p{Graph}+)|" + "(message \\p{Graph}+ \\p{Print}+)";
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(input);
 
+        //if there is no match for the input string
         if (!m.matches())
             return "Unrecognized Command " + input; // Should not occur assuming
                                                     // client input is correct
-        // input = input + ' ';
+        
+        //find the first space in the strign
         int spaceIndex = input.indexOf(' ');
         String command = input.substring(0, spaceIndex);
 
+        //if the string contains "disconnect", set alive to false and kill connection
         if (command.trim().equals("disconnect")) {
             // removeAllConnections();
             this.alive = false;
             return "disconnect";
 
+            //if the command is to make, join or exit (it is a room command)
         } else if (command.equals("make") || command.equals("join")
                 || command.equals("exit")) {
+        	
+        	//find the next word in string and parse it as the room name
             String roomName = input.substring(spaceIndex + 1);
 
+            //if making a new room
             if (command.equals("make"))
                 try {
+                	//make a new room
                     ChatRoom newChatRoom = new ChatRoom(roomName, rooms, this);
                     // Constructor above automatically adds the ChatRoom to the
                     // list of chat rooms of the server
                     connectedRooms.put(newChatRoom.name, newChatRoom);
                     informConnectedRooms();
-                    // newChatRoom.addUser(this);
                     return "make room success";
                 } catch (IOException e) {
+                	//if we cant make a room there will be an error message
                     return e.getMessage();
                 }
+            
+            //if joining a new room
             else if (command.equals("join")) {
                 if (rooms.contains(roomName))
                     try {
