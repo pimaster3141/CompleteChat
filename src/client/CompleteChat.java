@@ -30,6 +30,9 @@ public class CompleteChat {
                     System.out.println("closed login window");
                     main.dispose();
                 }
+                else {
+                    main.setClient(c);
+                }
             }
         });
     }

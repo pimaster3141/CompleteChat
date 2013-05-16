@@ -4,8 +4,11 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.*;
 import java.io.PrintWriter;
+import java.util.regex.Pattern;
 
 import javax.swing.*;
+
+import client.Client;
 
 /**
  * The Main tab of our GuiChat. It's where all the chatrooms and all the users are displayed.
@@ -22,6 +25,7 @@ public class MainTab extends JPanel{
     private final JList chatRoomList;
     private final JList userList;
     private final MainWindow myWindow;
+    private Client client = null;
     
     public MainTab(MainWindow myWindow) {
         Font TitleFont = new Font("SANS_SERIF", Font.BOLD, 24);
@@ -44,11 +48,12 @@ public class MainTab extends JPanel{
                 String newChat = JOptionPane.showInputDialog(MainTab.this, "Specify a name for your new chatroom:", 
                         "Create New Chatroom", JOptionPane.PLAIN_MESSAGE);
                 //TODO Check that chatname is valid, create appropriate chatroom object from name
-                if ((newChat != null) && (newChat.length() > 0)) {
-                    ChatTab newTab = new ChatTab(newChat);
-                    MainTab.this.myWindow.addCloseableTab(newChat, newTab);
-                    System.out.println(newChat);
-                    }
+                //Actually now that I think about it I probably should let feedback from the server open that new tab
+//                if ((newChat != null) && (newChat.length() > 0)) {
+//                    ChatTab newTab = new ChatTab(newChat);
+//                    MainTab.this.myWindow.addCloseableTab(newChat, newTab);
+//                    System.out.println(newChat);
+//                    }
             }
         });
         
@@ -76,5 +81,17 @@ public class MainTab extends JPanel{
                         .addComponent(userScroll))
                 );
         
+    }
+    
+    private boolean isValidChatname(String Chatname) {
+        String regex = "\\p{Graph}+";
+        if (Pattern.matches(regex, Chatname) && Chatname.length() < 40) {
+            return true;
+        }
+        return false;
+    }
+    
+    public void setClient(Client c) {
+        client = c;
     }
 }

@@ -3,9 +3,10 @@ package client.gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.*;
-import java.io.PrintWriter;
 
 import javax.swing.*;
+
+import client.*;
 
 
 public class MainWindow extends JFrame{
@@ -15,6 +16,8 @@ public class MainWindow extends JFrame{
     private final JMenu file;
     private final JMenuItem getHistory;
     private final JMenuItem logout;
+    private final MainTab mainTab;
+    private Client client = null;
     
     public MainWindow() {
         menuBar = new JMenuBar();
@@ -28,7 +31,7 @@ public class MainWindow extends JFrame{
         this.setJMenuBar(menuBar);
         
         tabs = new JTabbedPane();
-        JPanel mainTab = new MainTab(this);
+        mainTab = new MainTab(this);
         tabs.addTab("Main Window", mainTab);
         this.add(tabs);
         
@@ -98,6 +101,11 @@ public class MainWindow extends JFrame{
             });
             add(exit);
         }
+    }
+    
+    public void setClient(Client c) {
+        client = c;
+        mainTab.setClient(c);
     }
     
     public static void main(final String[] args) {
