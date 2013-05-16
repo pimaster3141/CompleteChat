@@ -30,18 +30,20 @@ public class ChatTab extends JPanel{
     private final JButton send;
     private final DefaultListModel userModel;
     private Client client;
+    private MainWindow main;
     
-    public ChatTab(String chatname, Client client) {
+    public ChatTab(String chatname, Client client, MainWindow main) {
         Font TitleFont = new Font("SANS_SERIF", Font.BOLD, 18);
         chatName = new JLabel(chatname);
         chatName.setFont(TitleFont);
         conversation = new JTextPane();
-        conversation.setDocument(client.getCurrentRoom(chatname).getDoc());
+        conversation.setDocument(main.getCurrentRoom(chatname).getDoc());
         userModel = new DefaultListModel();
         currentUsers = new JList(userModel);
         myMessage = new JTextField();
         send = new JButton("Submit");
         this.client = client;
+        this.main = main;
         
         conversation.setEditable(false);
         JScrollPane chatScroll = new JScrollPane (conversation);
@@ -98,7 +100,7 @@ public class ChatTab extends JPanel{
      * @throws BadLocationException
      */
     private void updateConvo(Message message) throws BadLocationException {
-        ChatRoomClient here = client.getCurrentRoom(chatName.getText());
+        ChatRoomClient here = main.getCurrentRoom(chatName.getText());
         if (here == null) {
             //panic since i guess we're not synched up
         }
@@ -106,7 +108,7 @@ public class ChatTab extends JPanel{
     }
     
     private void updateUsers() {
-        ChatRoomClient here = client.getCurrentRoom(chatName.getText());
+        ChatRoomClient here = this.main.getCurrentRoom(chatName.getText());
         if (here == null) {
             //panic since i guess we're not synched up
         }
@@ -121,14 +123,14 @@ public class ChatTab extends JPanel{
     public static void main(final String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                JFrame main = new JFrame();
+                MainWindow main = new MainWindow();
                 Client c = null;
                 try {
                     c = new Client("user2", "127.0.0.1", 10000);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                main.add(new ChatTab("Testing", c));
+                main.add(new ChatTab("Testing", c, main));
 
                 main.pack();
                 main.setLocationRelativeTo(null);

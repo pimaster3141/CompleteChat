@@ -5,10 +5,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
+import java.util.regex.*;
 
 import javax.swing.DefaultListModel;
 
@@ -20,10 +22,10 @@ public class Client {
     private final PrintWriter out;
     private final BufferedReader in;
     
-    private final DefaultListModel allUsers;
-    private final HashMap<String, ChatRoomClient> connectedRoomsHistory;
-    private final HashMap<String, ChatRoomClient> connectedRoomsCurrent;
-    private final DefaultListModel allRooms;
+//    private final DefaultListModel allUsers;
+//    private final HashMap<String, ChatRoomClient> connectedRoomsHistory;
+//    private final HashMap<String, ChatRoomClient> connectedRoomsCurrent;
+//    private final DefaultListModel allRooms;
     
 
     public Client(String username, String IPAddress, int port) throws IOException {
@@ -55,25 +57,26 @@ public class Client {
         if (!prompt.matches("Connected"))
             throw new IOException(prompt);
         
-        this.allUsers = new DefaultListModel();
-        this.allRooms = new DefaultListModel();
-        this.connectedRoomsHistory = new HashMap<String,ChatRoomClient>();
-        this.connectedRoomsCurrent = new HashMap<String, ChatRoomClient>();
+//        this.allUsers = new DefaultListModel();
+//        this.allRooms = new DefaultListModel();
+//        this.connectedRoomsHistory = new HashMap<String,ChatRoomClient>();
+//        this.connectedRoomsCurrent = new HashMap<String, ChatRoomClient>();
 
         System.err.println("Client connected");
     }
-    
-    public ChatRoomClient joinRoom(String roomName)
-    {
-    	ChatRoomClient room;
-    	if(connectedRoomsHistory.keySet().contains(roomName))
-    		room =  connectedRoomsHistory.get(roomName);
-    	else
-    		room = new ChatRoomClient(roomName, username);
-    	connectedRoomsHistory.put(roomName, room);
-    	connectedRoomsCurrent.put(roomName, room);
-    	return room;
-    }
+
+//    public ChatRoomClient joinRoom(String roomName)
+//    {
+//    	ChatRoomClient room;
+//    	if(connectedRoomsHistory.keySet().contains(roomName))
+//    		room =  connectedRoomsHistory.get(roomName);
+//    	else
+//    		room = new ChatRoomClient(roomName);
+//    	connectedRoomsHistory.put(roomName, room);
+//    	connectedRoomsCurrent.put(roomName, room);
+//    	return room;
+//    }
+
 
     public String readBuffer() throws IOException {
         try {
@@ -89,22 +92,14 @@ public class Client {
         System.err.println(output);
         return;
     }
-    
-    public DefaultListModel getRoomModel() {
-        return allRooms;
-    }
-    
-    public DefaultListModel getUsersModel() {
-        return allUsers;
-    }
-    
-    public ChatRoomClient getCurrentRoom(String roomName) {
-        return connectedRoomsCurrent.get(roomName);
-    }
-    
-    public ChatRoomClient getHistoryRoom(String roomName) {
-        return connectedRoomsHistory.get(roomName);
-    }
+
+//    public DefaultListModel getRoomModel() {
+//        return allRooms;
+//    }
+//    
+//    public DefaultListModel getUsersModel() {
+//        return allUsers;
+//    }
 
     public void parseInput(String input) {
         // TODO: Sayeed - write stuff that interprets the string and updates the
@@ -115,9 +110,7 @@ public class Client {
     
     public void start(client.gui.MainWindow main) {
         try {
-            for(String inputLine = in.readLine(); inputLine!=null; inputLine = in.readLine()) {
-                ActionEvent e = new ActionEvent(inputLine, 0, inputLine);
-                main.actionPerformed(e);
+            for(String input = in.readLine(); input!=null; input = in.readLine()) {
             }
         } catch(IOException e) {
             

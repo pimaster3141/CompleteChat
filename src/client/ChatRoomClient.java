@@ -28,7 +28,7 @@ public class ChatRoomClient {
         connectedUsers = newConnectedUsers;
     }
     
-    public void addMessage(Message message) throws BadLocationException {
+    public synchronized void addMessage(Message message) throws BadLocationException {
         messageHistory.add(message);
         SimpleAttributeSet userStyle = new SimpleAttributeSet();
         StyleConstants.setBold(userStyle, true);
