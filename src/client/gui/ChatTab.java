@@ -2,9 +2,13 @@ package client.gui;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.*;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.swing.*;
+
+import client.Client;
 
 /**
  * Probably needs to take in the actual object representing a chat, but I don't
@@ -21,8 +25,9 @@ public class ChatTab extends JPanel{
     private final JList currentUsers;
     private final JTextField myMessage;
     private final JButton send;
+    private Client client;
     
-    public ChatTab(String chatname) {
+    public ChatTab(String chatname, Client client) {
         Font TitleFont = new Font("SANS_SERIF", Font.BOLD, 18);
         chatName = new JLabel(chatname);
         chatName.setFont(TitleFont);
@@ -30,12 +35,23 @@ public class ChatTab extends JPanel{
         currentUsers = new JList();
         myMessage = new JTextField();
         send = new JButton("Submit");
+        this.client = client;
         
         conversation.setEditable(false);
         JScrollPane chatScroll = new JScrollPane (conversation);
         chatScroll.setPreferredSize(new Dimension(700, 550));
         JScrollPane userScroll = new JScrollPane (currentUsers);
         userScroll.setPreferredSize(new Dimension(250, 550));
+        
+        send.addActionListener(new ActionListener() {
+            public void actionPerformed (ActionEvent e) {
+                String m = myMessage.getText();
+                if (m != null && m.length() > 0) {
+                    ChatTab.this.client.send("message " + m);
+                    ChatTab.this.myMessage.setText("");
+                }
+            }
+        });
         
         //defining the layout
         GroupLayout layout = new GroupLayout(this);
@@ -72,7 +88,13 @@ public class ChatTab extends JPanel{
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 JFrame main = new JFrame();
-                main.add(new ChatTab("Testing"));
+                Client c = null;
+                try {
+                    c = new Client("user2", "127.0.0.1", 10000);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                main.add(new ChatTab("Testing", c));
 
                 main.pack();
                 main.setLocationRelativeTo(null);

@@ -157,7 +157,7 @@ public class LoginWindow extends JDialog implements PropertyChangeListener{
                         }
                     }
                     else {
-                        errorMessage.setText("<html>Error: Username cannt exceed 20 characters<br> " +
+                        errorMessage.setText("<html>Error: Username can't exceed 20 characters<br> " +
                               "or contain any whitespace</html>");
                     }
                 }

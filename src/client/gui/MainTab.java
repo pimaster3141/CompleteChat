@@ -3,12 +3,14 @@ package client.gui;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.*;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.regex.Pattern;
 
 import javax.swing.*;
 
 import client.Client;
+import client.CompleteChat;
 
 /**
  * The Main tab of our GuiChat. It's where all the chatrooms and all the users are displayed.
@@ -24,17 +26,15 @@ public class MainTab extends JPanel{
     private final JButton makeChat;
     private final JList chatRoomList;
     private final JList userList;
-    private final MainWindow myWindow;
     private Client client = null;
     
-    public MainTab(MainWindow myWindow) {
+    public MainTab() {
         Font TitleFont = new Font("SANS_SERIF", Font.BOLD, 24);
         uiChat = new JLabel("UIChat");
         uiChat.setFont(TitleFont);
         makeChat = new JButton("New ChatRoom");
         chatRoomList = new JList(new DefaultListModel());
         userList = new JList(new DefaultListModel());
-        this.myWindow = myWindow;
         
         chatRoomList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane chatScroll = new JScrollPane (chatRoomList);
@@ -47,13 +47,27 @@ public class MainTab extends JPanel{
             public void actionPerformed(ActionEvent event) {
                 String newChat = JOptionPane.showInputDialog(MainTab.this, "Specify a name for your new chatroom:", 
                         "Create New Chatroom", JOptionPane.PLAIN_MESSAGE);
-                //TODO Check that chatname is valid, create appropriate chatroom object from name
-                //Actually now that I think about it I probably should let feedback from the server open that new tab
-//                if ((newChat != null) && (newChat.length() > 0)) {
-//                    ChatTab newTab = new ChatTab(newChat);
-//                    MainTab.this.myWindow.addCloseableTab(newChat, newTab);
-//                    System.out.println(newChat);
-//                    }
+                if (newChat.length() > 0) {
+                    if (isValidChatname(newChat)) {
+                        client.send("make " + newChat);
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(MainTab.this, "Error: Chatroom name cannot exceed 40 characters " +
+                                "or contain any whitespace", "Error", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+                else {
+                    makeChat.doClick();
+                }
+            }
+        });
+        
+        chatRoomList.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    String chatName = (String)chatRoomList.getSelectedValue();
+                    client.send("join " + chatName);
+                }
             }
         });
         
@@ -93,5 +107,29 @@ public class MainTab extends JPanel{
     
     public void setClient(Client c) {
         client = c;
+    }
+    
+    public void setListModels(DefaultListModel users, DefaultListModel rooms) {
+        userList.setModel(rooms);
+        chatRoomList.setModel(rooms);
+    }
+    
+    public void addRooms(Object[] chatRooms) {
+        DefaultListModel chatRoomModel = (DefaultListModel) this.chatRoomList.getModel();
+        for (int i = 0; i < chatRooms.length; i++) {
+            chatRoomModel.add(i, chatRooms[i]);
+        }
+    }
+    
+    public static void main(final String[] args) {
+        Client c = null;
+        try {
+            c = new Client("Jenny", "18.189.35.192", 10000);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        MainWindow main = new MainWindow();
+        main.setClient(c);
     }
 }

@@ -3,6 +3,7 @@ package client.gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.*;
+import java.io.IOException;
 
 import javax.swing.*;
 
@@ -31,7 +32,7 @@ public class MainWindow extends JFrame{
         this.setJMenuBar(menuBar);
         
         tabs = new JTabbedPane();
-        mainTab = new MainTab(this);
+        mainTab = new MainTab();
         tabs.addTab("Main Window", mainTab);
         this.add(tabs);
         
@@ -106,6 +107,11 @@ public class MainWindow extends JFrame{
     public void setClient(Client c) {
         client = c;
         mainTab.setClient(c);
+        mainTab.setListModels(c.getRoomModel(), c.getUsersModel());
+    }
+    
+    public void addRooms(Object[] ChatRooms) {
+        mainTab.addRooms(ChatRooms);
     }
     
     public static void main(final String[] args) {
@@ -115,13 +121,20 @@ public class MainWindow extends JFrame{
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 MainWindow main = new MainWindow();
-                ChatTab test1 = new ChatTab("Test1");
+                Client client = null;
+                try {
+                    client = new Client("user2", "127.0.0.1", 10000);
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                ChatTab test1 = new ChatTab("Test1", client);
                 main.addCloseableTab("Test1", test1);
 
                 main.pack();
                 main.setLocationRelativeTo(null);
                 main.setVisible(true);
-                ChatTab test2 = new ChatTab("ReallyLongTestNameBecauseYeah2");
+                ChatTab test2 = new ChatTab("ReallyLongTestNameBecauseYeah2", client);
                 main.addCloseableTab("ReallyLongTestNameBecauseYeah2", test2);
             }
         });

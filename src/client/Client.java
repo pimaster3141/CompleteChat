@@ -84,7 +84,16 @@ public class Client {
     public void send(String output) {
         out.println(output);
         out.flush();
+        System.err.println(output);
         return;
+    }
+    
+    public DefaultListModel getRoomModel() {
+        return allRooms;
+    }
+    
+    public DefaultListModel getUsersModel() {
+        return allUsers;
     }
 
     public void parseInput(String input) {
