@@ -8,41 +8,86 @@ import server.rooms.ChatRoom;
 import server.lists.*;
 import server.ConnectionHandler;
 
+/**
+ * This class implements a list that holds a number of chat rooms
+ * this class will define methods for adding and removing rooms from the server
+ */
 public class RoomList {
     private ServerUserList users;
     private final Map<String, ChatRoom> rooms;
 
+    /*
+     * constructor for this list
+     * just initializes the fields
+     * @param
+     * 	ServerUserList - master list of all of the people on the server 
+     * 		(used to inform everyone on the server)
+     */
     public RoomList(ServerUserList users) {
         this.users = users;
         this.rooms = new HashMap<String, ChatRoom>();
     }
 
+    /*
+     * method to add a chatRoom to this list
+     * inform everyone of the change
+     * @param
+     * 	ChatRoom - room to add
+     * @throws
+     * 	IOException - if the room already exists in this list
+     */
     public synchronized void add(ChatRoom room) throws IOException {
-        // TODO: check if room exists, concurrency, add room
+    	//throw an ioException if the room exisits
         if (this.contains(room.name))
             throw new IOException("room already exists");
+        //put the room in the list
         rooms.put(room.name, room);
+        //infrom everyone of the new rooms
         users.informAll(getRooms());
         return;
     }
 
+    /*
+     * method to remove a ChatRoom from this list
+     * informs everyone of the change
+     * @param
+     * 	ChatRoom - room to remove
+     */
     public synchronized void remove(ChatRoom room) {
-        // TODO: remove room, concurrency
         rooms.remove(room.name);
+        //inform everyone of change
         users.informAll(getRooms());
         return;
     }
 
+    /*
+     * returns if a room name is in the list
+     * @param
+     * 	String - name of room
+     * @return
+     * 	boolean - if the room exists in this list
+     */
     public synchronized boolean contains(String name) {
         return rooms.containsKey(name);
     }
 
+    /*
+     * method for getting a ChatRoom object by name
+     * @param 
+     * 	String - name of room to get
+     * @return
+     * 	ChatRoom - room that matches this name (null if no room)
+     */
     public ChatRoom getRoomFromName(String roomName) {
         return rooms.get(roomName);
     }
 
+    /*
+     * returns a string representation of all the rooms in this list
+     * @return
+     * 	String - string list of all the names of the rooms in this list
+     */
     private String getRooms() {
-        // TODO
         StringBuilder roomList = new StringBuilder("RoomList ");
         for (String roomsString : rooms.keySet())
             roomList.append(roomsString + ' ');
@@ -50,6 +95,12 @@ public class RoomList {
         return roomList.toString();
     }
 
+    /*
+     * method to update a specific user of all the rooms in this list
+     * @param
+     * 	ConnectionHandler - user to be updated
+     * 
+     */
     public synchronized void updateUser(ConnectionHandler user) {
         user.updateQueue(getRooms());
     }

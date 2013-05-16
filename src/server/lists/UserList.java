@@ -3,6 +3,7 @@ package server.lists;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import static server.Pause.pause;
 
 import server.ConnectionHandler;
 
@@ -15,12 +16,21 @@ public abstract class UserList {
     // Contains a Map of usernames to the appropriate ConnectionHandler
     // For the server to use in general
     private Map<String, ConnectionHandler> users;
+    // boolean for if this list is being tested for concurrency
+    //this boolean will delay some methods from executing.
+    private boolean testing = false; //should only be true for testing.
 
 /*
  * constroctor for a list of users - just initializes the mapping of users
  */
     public UserList() {
         users = new HashMap<String, ConnectionHandler>();
+    }
+
+    public UserList(boolean testing)
+    {
+        users = new HashMap<String, ConnectionHandler>();
+        this.testing = testing;
     }
 
     /*
@@ -34,6 +44,7 @@ public abstract class UserList {
      */
     public void add(ConnectionHandler connection) throws IOException {
         synchronized (users) {
+        	pause(1000, testing);
             if (this.contains(connection.username))
                 throw new IOException("Username Already Exists");
             users.put(connection.username, connection);
@@ -51,6 +62,7 @@ public abstract class UserList {
         synchronized (users) {
             users.remove(connection.username);
             informAll(getList());
+            pause(1000, testing);
             return;
         }
     }
@@ -104,5 +116,10 @@ public abstract class UserList {
         //send the message to every connection
         for (ConnectionHandler user : usersCopy)
             user.updateQueue(message);
+    }
+
+    public Map<String, ConnectionHandler> getMap()
+    {
+        return this.users;
     }
 }

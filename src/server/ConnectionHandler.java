@@ -14,7 +14,7 @@ import server.rooms.*;
 import server.lists.ServerUserList;
 
 /**
- * This class represents a connection to the server and handles communicationg with a single client
+ * This class represents a connection to the server and handles communicating with a single client
  *
  */
 public class ConnectionHandler implements Runnable {
@@ -74,6 +74,24 @@ public class ConnectionHandler implements Runnable {
                     }
             }
         };
+    }
+    
+    /*
+     * Constructor to test other stuff with
+     * Creates a completely empty Connection handler to test other classes with
+     * @param
+     * 	String - username for this connectionHandler
+     */
+    public ConnectionHandler(String username)
+    {
+    	this.username = username;
+    	this.socket = null;
+    	this.rooms = null;
+    	this.users = null;
+    	this.in = null;
+    	this.out = null;
+    	this.outputConsumer = null;
+    	
     }
 
     /*
@@ -267,5 +285,16 @@ public class ConnectionHandler implements Runnable {
      */
     public void updateQueue(String info) {
         outputBuffer.add(info);
+    }
+
+    /*
+     * accessor method to get the output buffer
+     * Should not be used for anything other than testing this class and classes that use this class.
+     * @return
+     * 	LinkedBlockingQueue<String> - the queue object of this class.
+     */
+    public LinkedBlockingQueue<String> getQueue()
+    {
+    	return this.outputBuffer;
     }
 }
