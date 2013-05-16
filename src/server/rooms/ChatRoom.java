@@ -38,15 +38,19 @@ public class ChatRoom implements Runnable {
         this.rooms = rooms;
         //create a new list to hold all of the connected users to this room
         this.connectedClients = new ChatUserList(name);
-        //add this room to the listing of the rooms
-        rooms.add(this);
-        //connect the creator to the room
-        connectedClients.add(connection);
-        //construct a new thread based on itself
-        self = new Thread(this);
-        System.out.println("  Room: " + name + " - " + "Created");
-        //start this chatroom!!!!
-        self.start();
+    	synchronized(connectedClients)
+    	{
+	        //add this room to the listing of the rooms
+	        rooms.add(this);
+	        //connect the creator to the room
+	        connection.updateQueue("connectedRoom " + name);
+	        connectedClients.add(connection);
+	        //construct a new thread based on itself
+	        self = new Thread(this);
+	        System.out.println("  Room: " + name + " - " + "Created");
+	        //start this chatroom!!!!
+	        self.start();
+    	}
     }
 
     /*
@@ -99,10 +103,15 @@ public class ChatRoom implements Runnable {
      * 	IOException - if the client cannot be added
      * 		this could happen if the client already exists or if the room is dead
      */
-    public synchronized void addUser(ConnectionHandler connection) throws IOException {
+    public void addUser(ConnectionHandler connection) throws IOException {
         if (self.isAlive())
         	//try to add the connection
-            connectedClients.add(connection);
+        	synchronized(connectedClients)
+        	{
+        		if(!connectedClients.contains(connection.username))
+        			connection.updateQueue("connectedRoom " + name);
+        		connectedClients.add(connection);
+        	}
         else
         	//throw an IOException if the room is dead
             throw new IOException("Room no longer exists");
@@ -113,11 +122,14 @@ public class ChatRoom implements Runnable {
      * @param
      * 	ConnectionHandler - client to remove
      */
-    public synchronized void removeUser(ConnectionHandler connection) {
-        connectedClients.remove(connection);
-        //if there are no more connections to this room - stop the room
-        if (connectedClients.size() <= 0)
-            self.interrupt();
+    public void removeUser(ConnectionHandler connection) {
+    	synchronized(connectedClients)
+    	{
+    		connectedClients.remove(connection);
+    		//if there are no more connections to this room - stop the room
+    		if (connectedClients.size() <= 0)
+    			self.interrupt();   
+    	}
     }
 
     /*

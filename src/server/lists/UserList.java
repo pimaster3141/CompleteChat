@@ -74,7 +74,7 @@ public abstract class UserList {
      * @return
      * 	boolean - if the user is in this list
      */
-    private boolean contains(String userName) {
+    public boolean contains(String userName) {
         return users.containsKey(userName);
     }
 

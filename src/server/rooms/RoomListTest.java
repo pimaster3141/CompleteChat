@@ -63,7 +63,7 @@ public class RoomListTest
     	assertEquals(map.get("one"), one);
     	LinkedBlockingQueue<String> buffer = client.getQueue();
     	String output = buffer.poll();
-    	assertEquals(output, "RoomList one");
+    	assertEquals(output, "serverRoomList one");
     	output = buffer.poll();
     	assertEquals(output, null);
     }
@@ -85,11 +85,11 @@ public class RoomListTest
     	
     	buffer = client.getQueue();
     	output = buffer.poll();
-    	assertEquals(output, "RoomList one");
+    	assertEquals(output, "serverRoomList one");
     	output = buffer.poll();
-    	assertEquals(output, "RoomList two one");
+    	assertEquals(output, "serverRoomList two one");
     	output = buffer.poll();
-    	assertEquals(output, "RoomList two one three");
+    	assertEquals(output, "serverRoomList two one three");
     	output = buffer.poll();
     	assertEquals(output, null);
     }
@@ -120,7 +120,7 @@ public class RoomListTest
     	
     	buffer =  client.getQueue();
     	output = buffer.poll();
-    	assertEquals(output, "RoomList two one");
+    	assertEquals(output, "serverRoomList two one");
     	output = buffer.poll();
     	assertEquals(output, null);
     }

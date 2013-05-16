@@ -112,7 +112,6 @@ public class ConnectionHandler implements Runnable {
                 //out.println();
             	//parse the input
                 String parsedInput = parseInput(line);
-                System.out.println("Client: " + username + " - " + parsedInput);
                 //echo the parsed output to the client
                 updateQueue(parsedInput);
                 //if the client is not alive anymore, shutdown
@@ -183,7 +182,7 @@ public class ConnectionHandler implements Runnable {
                     // list of chat rooms of the server
                     connectedRooms.put(newChatRoom.name, newChatRoom);
                     informConnectedRooms();
-                    return "connectedRoom " + roomName;
+                    return "";
                 } catch (IOException e) {
                 	//if we cant make a room there will be an error message
                     return "invalidRoom " + roomName + " " + e.getMessage();
@@ -198,7 +197,7 @@ public class ConnectionHandler implements Runnable {
                         ChatRoom roomToJoin = rooms.getRoomFromName(roomName);
                         roomToJoin.addUser(this);
                         this.connectedRooms.put(roomToJoin.name, roomToJoin);
-                        return "connectedRoom " + roomName;
+                        return "";
                         //if something bad happened when joining a room
                     } catch (IOException e) {
                         return "invalidRoom " + roomName + " " + e.getMessage();
@@ -255,6 +254,7 @@ public class ConnectionHandler implements Runnable {
     private void parseOutput(String input) {
         if (input.equals(""))
             return;
+        System.out.println("Client: " + username + " - " + input);
         out.println(input);
         out.flush();
         return;
