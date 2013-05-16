@@ -43,11 +43,13 @@ public class ChatRoomClient {
 
     }
     
-    public synchronized void updateUsers(ArrayList<String> newUsers) {
+    @SuppressWarnings("unchecked")
+	public synchronized void updateUsers(ArrayList<String> newUsers) {
         connectedUsers = newUsers;
         userModel.clear();
         for (int i = 0; i < connectedUsers.size(); i++) {
-            userModel.setElementAt(connectedUsers.get(i), i);
+        	System.out.println("putting   " + connectedUsers.get(i));
+            userModel.addElement(connectedUsers.get(i));
         }
         
     }

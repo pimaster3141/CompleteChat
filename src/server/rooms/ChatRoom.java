@@ -50,6 +50,20 @@ public class ChatRoom implements Runnable {
     }
 
     /*
+     * Constructor for ChatRoom stub - only used for testing
+     * sets all fields except name to null
+     * @param
+     * 	String - name of room
+     */
+    public ChatRoom(String name)
+    {
+        this.name = name;
+        this.rooms = null;
+        this.connectedClients = null;
+        this.self = null;
+    }
+
+    /*
      * Method that controls the main loop for the chatroom
      * will keep looping while this chatroom is 'alive' - at least one person is connected
      * the loop will block until it consumes an element from the buffer and relay the message

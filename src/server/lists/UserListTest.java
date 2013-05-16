@@ -101,8 +101,6 @@ public class UserListTest
     @Test (expected = IOException.class)
     public void addFailure() throws IOException
     {
-    	String output;
-    	LinkedBlockingQueue<String> buffer;
     	list.add(one);
     	list.add(one);
     	fail();

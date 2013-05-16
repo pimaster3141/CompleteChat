@@ -203,6 +203,7 @@ public class MainWindow extends JFrame implements ActionListener{
                 if (connectedRoomsCurrent.containsKey(chatName)) {
                     ArrayList<String> newChatList = new ArrayList<String>();
                     for (int i = 1; i < list.length; i++) {
+                    	System.err.println("adding: " + list[i]);
                         newChatList.add(list[i]);
                     }
                     ChatRoomClient roomCurrent = connectedRoomsCurrent.get(list[0]);

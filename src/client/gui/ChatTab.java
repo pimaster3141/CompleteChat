@@ -30,8 +30,10 @@ public class ChatTab extends JPanel{
     private final JButton send;
     private Client client;
     private MainWindow main;
+    private final String roomname;
     
     public ChatTab(String chatname, Client client, MainWindow main) {
+    	this.roomname = chatname;
         Font TitleFont = new Font("SANS_SERIF", Font.BOLD, 18);
         chatName = new JLabel(chatname);
         chatName.setFont(TitleFont);
@@ -54,7 +56,7 @@ public class ChatTab extends JPanel{
             public void actionPerformed (ActionEvent e) {
                 String m = myMessage.getText();
                 if (m != null && m.length() > 0) {
-                    ChatTab.this.client.send("message " + m);
+                    ChatTab.this.client.send("message " + roomname + " " + m);
                     ChatTab.this.myMessage.setText("");
                 }
             }
