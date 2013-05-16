@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.HashMap;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
 
 import javax.swing.DefaultListModel;
@@ -19,7 +21,7 @@ public class Client {
     private final BufferedReader in;
     
     private final DefaultListModel allUsers;
-    private final HashMap<String,ChatRoomClient> connectedRoomsHistory;
+    private final HashMap<String, ChatRoomClient> connectedRoomsHistory;
     private final HashMap<String, ChatRoomClient> connectedRoomsCurrent;
     private final DefaultListModel allRooms;
     
@@ -92,6 +94,17 @@ public class Client {
         // proper jcomponent. this method will be called by the gui
         // in the swing worker's 'done' command. this way this method will be
         // called from the EDT instead of the secondary thread.
+    }
+    
+    public void start(client.gui.MainWindow main) {
+        try {
+            for(String inputLine = in.readLine(); inputLine!=null; inputLine = in.readLine()) {
+                ActionEvent e = new ActionEvent(inputLine, 0, inputLine);
+                main.actionPerformed(e);
+            }
+        } catch(IOException e) {
+            
+        }
     }
 
     // just a method to test this rig... you shouldnt use it in your gui.

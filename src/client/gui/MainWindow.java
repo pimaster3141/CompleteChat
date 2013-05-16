@@ -9,7 +9,7 @@ import javax.swing.*;
 import client.*;
 
 
-public class MainWindow extends JFrame{
+public class MainWindow extends JFrame implements ActionListener{
 
     private final JTabbedPane tabs;
     private final JMenuBar menuBar;
@@ -106,6 +106,10 @@ public class MainWindow extends JFrame{
     public void setClient(Client c) {
         client = c;
         mainTab.setClient(c);
+    }
+    
+    public void actionPerformed(ActionEvent e) {
+        
     }
     
     public static void main(final String[] args) {

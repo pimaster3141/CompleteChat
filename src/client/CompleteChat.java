@@ -26,6 +26,7 @@ public class CompleteChat {
                 main.setLocationRelativeTo(null);
                 main.setVisible(true);
                 c = login.getClient();
+                System.out.println("reached");
                 if (c == null) {
                     System.out.println("closed login window");
                     main.dispose();
@@ -33,6 +34,9 @@ public class CompleteChat {
                 else {
                     main.setClient(c);
                 }
+                
+                // Get the output stream from the client here and then
+                // run the processing things and send them to the main
             }
         });
     }
