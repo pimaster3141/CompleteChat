@@ -54,11 +54,15 @@ public class ChatTab extends JPanel{
         
         send.addActionListener(new ActionListener() {
             public void actionPerformed (ActionEvent e) {
-                String m = myMessage.getText();
-                if (m != null && m.length() > 0) {
-                    ChatTab.this.client.send("message " + roomname + " " + m);
-                    ChatTab.this.myMessage.setText("");
-                }
+                sendMessage();
+            }
+        });
+
+        myMessage.addKeyListener(new KeyAdapter() {
+
+            public void keyPressed(KeyEvent event) {
+                if (event.getKeyCode() == KeyEvent.VK_ENTER)
+                    sendMessage();
             }
         });
         
@@ -93,6 +97,14 @@ public class ChatTab extends JPanel{
                         .addComponent(send)));
     }
     
+    private void sendMessage() {
+        String m = myMessage.getText();
+        if (m != null && m.length() > 0) {
+            client.send("message " + roomname + " " + m);
+            myMessage.setText("");
+        }
+    }
+    
 //    /**
 //     * Checks to see if we are in the client's list of current rooms. If we are, we update
 //     * the model inside of the ChatRoomClient object, which should result in the textArea being
@@ -121,22 +133,22 @@ public class ChatTab extends JPanel{
 //        
 //    }
     
-    public static void main(final String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                MainWindow main = new MainWindow();
-                Client c = null;
-                try {
-                    c = new Client("user2", "127.0.0.1", 10000);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                main.add(new ChatTab("Testing", c, main));
-
-                main.pack();
-                main.setLocationRelativeTo(null);
-                main.setVisible(true);
-            }
-        });
-    }
+//    public static void main(final String[] args) {
+//        SwingUtilities.invokeLater(new Runnable() {
+//            public void run() {
+//                MainWindow main = new MainWindow();
+//                Client c = null;
+//                try {
+//                    c = new Client("user2", "127.0.0.1", 10000);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//                main.add(new ChatTab("Testing", c, main));
+//
+//                main.pack();
+//                main.setLocationRelativeTo(null);
+//                main.setVisible(true);
+//            }
+//        });
+//    }
 }

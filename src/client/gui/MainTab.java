@@ -124,15 +124,15 @@ public class MainTab extends JPanel{
         }
     }
     
-    public static void main(final String[] args) {
-        Client c = null;
-        try {
-            c = new Client("Jenny", "18.189.35.192", 10000);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        MainWindow main = new MainWindow();
-        main.setClient(c);
-    }
+//    public static void main(final String[] args) {
+//        Client c = null;
+//        try {
+//            c = new Client("Jenny", "18.189.35.192", 10000);
+//        } catch (IOException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+//        MainWindow main = new MainWindow();
+//        main.setClient(c);
+//    }
 }

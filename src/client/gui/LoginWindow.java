@@ -178,6 +178,7 @@ public class LoginWindow extends JDialog implements PropertyChangeListener{
     }
     
     public Client getClient() {
+        c = null; //reset client to make sure it starts as null
         pack();
         setResizable(false);
         setLocationRelativeTo(null);

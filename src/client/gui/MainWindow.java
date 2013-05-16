@@ -1,6 +1,7 @@
 package client.gui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.*;
 import java.io.IOException;
@@ -22,6 +23,7 @@ public class MainWindow extends JFrame implements ActionListener{
     private final JMenuItem getHistory;
     private final JMenuItem logout;
     private final MainTab mainTab;
+    private LoginWindow login = null;
     private Client client = null;
     
     private final DefaultListModel allUsers;
@@ -59,7 +61,7 @@ public class MainWindow extends JFrame implements ActionListener{
         
         logout.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                
+                logout();
             }
         });
     }
@@ -68,7 +70,7 @@ public class MainWindow extends JFrame implements ActionListener{
         tabs.addTab(tabName, tab);
         int i = tabs.indexOfComponent(tab);
         if (i != -1) {
-            tabs.setTabComponentAt(i, new ChatTabComponent(tabs));
+            tabs.setTabComponentAt(i, new ChatTabComponent());
         }
     }
     
@@ -78,21 +80,19 @@ public class MainWindow extends JFrame implements ActionListener{
      *
      */
     private class ChatTabComponent extends JPanel {
-        private final JTabbedPane pane;
         private final JLabel name;
         
-        private ChatTabComponent(final JTabbedPane pane) {
-            if (pane == null) {
+        private ChatTabComponent() {
+            if (tabs == null) {
                 throw new NullPointerException("Tabbed Pane is null");   
             }
-            this.pane = pane;
             setOpaque(false);
             
             name = new JLabel() {
                 public String getText() {
-                    int i = pane.indexOfTabComponent(ChatTabComponent.this);
+                    int i = tabs.indexOfTabComponent(ChatTabComponent.this);
                     if (i != -1) {
-                        return pane.getTitleAt(i);
+                        return tabs.getTitleAt(i);
                     }
                     return null;
                 }
@@ -108,12 +108,7 @@ public class MainWindow extends JFrame implements ActionListener{
             exit.setForeground(Color.RED);
             exit.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent event) {
-                    int i = pane.indexOfTabComponent(ChatTabComponent.this);
-                    if (i != -1) {
-                        client.send("exit " + ChatTabComponent.this.name.getText());
-                        //TODO: appropriate disconnect room from server stuff
-                        pane.remove(i);
-                    }
+                    closeTab(ChatTabComponent.this);
                 }
             });
             add(exit);
@@ -123,7 +118,10 @@ public class MainWindow extends JFrame implements ActionListener{
     public void setClient(Client c) {
         client = c;
         mainTab.setClient(c);
-        //mainTab.setListModels(c.getRoomModel(), c.getUsersModel());
+    }
+    
+    public void setLoginWindow(LoginWindow l) {
+        login = l;
     }
     
     public void addRooms(Object[] ChatRooms) {
@@ -254,6 +252,41 @@ public class MainWindow extends JFrame implements ActionListener{
             }
         }
     }
+    
+    private void chatConnectError(String error) {
+        JOptionPane.showMessageDialog(this, error, "Error", JOptionPane.WARNING_MESSAGE);
+    }
+    
+    private void logout() {
+        int i = 0;
+        while (tabs.getTabCount()>1) {
+            System.out.println("              " + tabs.getComponent(i).getName());
+            if (tabs.getComponent(i) == mainTab) {
+                System.err.println("Found mainTab");
+                i++;
+                continue;
+            }
+            tabs.remove(i);
+        }
+        client.send("disconnect " + client.getUsername());
+        setClient(null);
+        Client c = login.getClient();
+        if (c == null) {
+            System.out.println("closed login window");
+            this.dispose();
+        }
+        else {
+            setClient(c);
+        }
+    }
+    
+    private void closeTab(Component t) {
+        int i = tabs.indexOfTabComponent(t);
+        if (i != -1) {
+            client.send("exit " + t.getName());
+            tabs.remove(i);
+        }
+    }
 
     public DefaultListModel getRoomModel() {
         return allRooms;
@@ -271,27 +304,27 @@ public class MainWindow extends JFrame implements ActionListener{
         return connectedRoomsHistory.get(name);
     }
     
-    public static void main(final String[] args) {
-        
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                MainWindow main = new MainWindow();
-                Client client = null;
-                try {
-                    client = new Client("user2", "127.0.0.1", 10000);
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                ChatTab test1 = new ChatTab("Test1", client, main);
-                main.addCloseableTab("Test1", test1);
-
-                main.pack();
-                main.setLocationRelativeTo(null);
-                main.setVisible(true);
-                ChatTab test2 = new ChatTab("ReallyLongTestNameBecauseYeah2", client, main);
-                main.addCloseableTab("ReallyLongTestNameBecauseYeah2", test2);
-            }
-        });
-    }
+//    public static void main(final String[] args) {
+//        
+//        SwingUtilities.invokeLater(new Runnable() {
+//            public void run() {
+//                MainWindow main = new MainWindow();
+//                Client client = null;
+//                try {
+//                    client = new Client("user2", "127.0.0.1", 10000);
+//                } catch (IOException e) {
+//                    // TODO Auto-generated catch block
+//                    e.printStackTrace();
+//                }
+//                ChatTab test1 = new ChatTab("Test1", client, main);
+//                main.addCloseableTab("Test1", test1);
+//
+//                main.pack();
+//                main.setLocationRelativeTo(null);
+//                main.setVisible(true);
+//                ChatTab test2 = new ChatTab("ReallyLongTestNameBecauseYeah2", client, main);
+//                main.addCloseableTab("ReallyLongTestNameBecauseYeah2", test2);
+//            }
+//        });
+//    }
 }
