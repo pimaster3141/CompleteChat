@@ -118,6 +118,8 @@ public class Client {
         // proper jcomponent. this method will be called by the gui
         // in the swing worker's 'done' command. this way this method will be
         // called from the EDT instead of the secondary thread.
+        
+        // This is now moved into the MainWindow ActionEvents
     }
     
     public void start(client.gui.MainWindow main) {
@@ -134,7 +136,11 @@ public class Client {
                 	break;
             }
         } catch(IOException e) {
-            
+            String input = "disconnectedServerSent";
+            ActionEvent event = new ActionEvent(input, 0, input);
+            main.actionPerformed(event);
+        } finally {
+            // TODO Maybe do stuff to cleanly close the in and out?
         }
         System.err.println("clinet consumer terminated....");
     }
