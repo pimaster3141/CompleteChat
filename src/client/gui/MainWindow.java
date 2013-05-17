@@ -130,7 +130,6 @@ public class MainWindow extends JFrame implements ActionListener{
     }
     
     public void setClient(Client c) {
-    	//System.out.println("IVE SET THE CLIENT!!!" + c.getUsername());
         client = c;
         mainTab.setClient(c);
     }
@@ -191,12 +190,9 @@ public class MainWindow extends JFrame implements ActionListener{
                 try {
                     roomCurrent.addMessage(new Message(userName, message));
                 } catch (BadLocationException e1) {
-                    // TODO Auto-generated catch block
                     e1.printStackTrace();
                 }
             }
-            
-            // TODO Make good based on message and chatroom
         } else {
             String[] list = input.substring(firstSpaceIndex+1).split(" ");
             if(command.equals("serverUserList")) {
@@ -206,7 +202,6 @@ public class MainWindow extends JFrame implements ActionListener{
                 }
                 mainTab.setListModels(allUsers, allRooms);
                 
-                // TODO Make good server user list update action here
             } else if(command.equals("serverRoomList")) {
                 System.out.println("Updating serverRoomList");
                 allRooms.clear();
@@ -216,7 +211,6 @@ public class MainWindow extends JFrame implements ActionListener{
                 }
                 mainTab.setListModels(allUsers, allRooms);
                 
-                // TODO Make good server room list update action here
             } else if(command.equals("chatUserList")) {
                 String chatName = list[0];
                 if (connectedRoomsCurrent.containsKey(chatName)) {
@@ -228,7 +222,7 @@ public class MainWindow extends JFrame implements ActionListener{
                     ChatRoomClient roomCurrent = connectedRoomsCurrent.get(list[0]);
                     roomCurrent.updateUsers(newChatList);
                 }
-                // TODO Make good update of users in particular chat
+
             } else if(command.equals("clientRoomList")) {
                 String user = list[0];
                 for(int i = 1; i < list.length; i++) {
@@ -236,11 +230,7 @@ public class MainWindow extends JFrame implements ActionListener{
                         client.send("disconnect " + user);
                     }
                 }
-                for(String s : connectedRoomsCurrent.keySet()) {
-                    
-                }
-                
-                // TODO Perform update of rooms client is connected to
+
             } else if(command.equals("connectedRoom")) {
                 String roomName = list[0];
                 if(connectedRoomsHistory.containsKey(roomName)) {
@@ -257,7 +247,7 @@ public class MainWindow extends JFrame implements ActionListener{
                         connectedRoomsHistory.put(roomName, chat);
                         addCloseableTab(roomName, new ChatTab(roomName, client, this));
                 }
-                // TODO Perform connection of room here aka make a new tab
+
             } else if(command.equals("disconnectedRoom")) {
                 String roomName = list[0];
                 if (connectedRoomsCurrent.containsKey(roomName)) {
@@ -267,7 +257,7 @@ public class MainWindow extends JFrame implements ActionListener{
                         tabs.remove(tabIndex);
                     }
                 }
-                // TODO Perform disconnection of room here aka make sure tab is closed
+
             } else if (command.equals("invalidRoom")) {
                 StringBuilder errorMessage = new StringBuilder();
                 for (int i = 1; i < list.length; i++) {
@@ -276,7 +266,6 @@ public class MainWindow extends JFrame implements ActionListener{
                 JOptionPane.showMessageDialog(this, errorMessage.toString(), "Error", JOptionPane.WARNING_MESSAGE);
             } else {
                 System.err.println("Derp we seem to have ended up in dead code");
-                // Should not arrive here, dead code
             }
         }
     }

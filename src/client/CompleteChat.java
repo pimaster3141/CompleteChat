@@ -33,7 +33,6 @@ public class CompleteChat {
                 }
                 else {
                     main.setClient(c);
-                    //c.start(main);
                     consumer = new Thread()
                     {
                     	public void run()
@@ -41,12 +40,8 @@ public class CompleteChat {
                     		c.start(main);
                     	}
                     };
-                    
                     consumer.start();
                 }
-                
-                // Get the output stream from the client here and then
-                // run the processing things and send them to the main
             }
         });
     }
