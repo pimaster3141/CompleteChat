@@ -12,7 +12,7 @@ import javax.swing.text.*;
  */
 public class ChatRoomClient {
     private final String chatRoomName;
-    private ArrayList<String> connectedUsers;
+    //private ArrayList<String> connectedUsers;
     private ArrayList<Message> messageHistory;
     private DefaultStyledDocument displayedMessages;
     private DefaultListModel userModel;
@@ -20,16 +20,17 @@ public class ChatRoomClient {
     
     public ChatRoomClient(String nameOfChatRoom, String username) {
         chatRoomName = nameOfChatRoom;
-        connectedUsers = new ArrayList<String>();
+        //connectedUsers = new ArrayList<String>();
         messageHistory = new ArrayList<Message>();
         displayedMessages = new DefaultStyledDocument();
         userModel = new DefaultListModel();
         myUsername = username;
     }
     
-    public void setConnectedUsers(ArrayList<String> newConnectedUsers) {
-        connectedUsers = newConnectedUsers;
-    }
+//    public void setConnectedUsers(ArrayList<String> newConnectedUsers) {
+//        connectedUsers = newConnectedUsers;
+//        
+//    }
     
     public synchronized void addMessage(Message message) throws BadLocationException {
         messageHistory.add(message);
@@ -45,11 +46,11 @@ public class ChatRoomClient {
     
     @SuppressWarnings("unchecked")
 	public synchronized void updateUsers(ArrayList<String> newUsers) {
-        connectedUsers = newUsers;
+        //connectedUsers = newUsers;
         userModel.clear();
-        for (int i = 0; i < connectedUsers.size(); i++) {
-        	System.out.println("putting   " + connectedUsers.get(i));
-            userModel.addElement(connectedUsers.get(i));
+        for (int i = 0; i < newUsers.size(); i++) {
+        	System.out.println("putting   " + newUsers.get(i));
+            userModel.addElement(newUsers.get(i));
         }
         
     }
@@ -62,17 +63,9 @@ public class ChatRoomClient {
         return chatRoomName;
     }
     
-    public ArrayList<String> getConnectedUsers() {
-        return connectedUsers;
-    }
-    
-    public int getConnectedUserSize() {
-        return connectedUsers.size();
-    }
-    
-    public String getConnectedUserAtIndex(int i) {
-        return connectedUsers.get(i);
-    }
+//    public ArrayList<String> getConnectedUsers() {
+//        return connectedUsers;
+//    }
 
     public int getMessageHistorySize() {
         return messageHistory.size();

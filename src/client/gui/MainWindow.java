@@ -61,7 +61,7 @@ public class MainWindow extends JFrame implements ActionListener{
         
         logout.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                logout();
+                client.send("disconnect " + client.getUsername());
             }
         });
     }
@@ -71,6 +71,14 @@ public class MainWindow extends JFrame implements ActionListener{
         int i = tabs.indexOfComponent(tab);
         if (i != -1) {
             ChatRoomClient chatroom = connectedRoomsCurrent.get(tabName);
+            if (chatroom == null) {
+                if (tabName == "History") {
+                    tabs.setTabComponentAt(i, new ChatTabComponent(null));
+                }
+                else {
+                    System.err.println("Should never arrive here unless we have concurrency problems");
+                }
+            }
             tabs.setTabComponentAt(i, new ChatTabComponent(chatroom));
         }
     }
@@ -83,9 +91,16 @@ public class MainWindow extends JFrame implements ActionListener{
     private class ChatTabComponent extends JPanel {
         private final JLabel name;
         private final ChatRoomClient chatroom;
+        private final String tabName;
         
         private ChatTabComponent(ChatRoomClient chatroom) {
             this.chatroom = chatroom;
+            if (chatroom == null) {
+                tabName = "History";
+            }
+            else {
+                this.tabName = chatroom.getChatRoomName();
+            }
             if (tabs == null) {
                 throw new NullPointerException("Tabbed Pane is null");   
             }
@@ -93,7 +108,7 @@ public class MainWindow extends JFrame implements ActionListener{
             
             name = new JLabel() {
                 public String getText() {
-                    return ChatTabComponent.this.chatroom.getChatRoomName();
+                    return ChatTabComponent.this.tabName;
                 }
             };
             name.setPreferredSize(new Dimension(60, 15));
@@ -187,7 +202,7 @@ public class MainWindow extends JFrame implements ActionListener{
             if(command.equals("serverUserList")) {
                 allUsers.clear();
                 for(int i = 0; i < list.length; i++) {
-                    allUsers.add(i, list[i]);
+                    allUsers.addElement(list[i]);
                 }
                 
                 // TODO Make good server user list update action here
@@ -196,7 +211,7 @@ public class MainWindow extends JFrame implements ActionListener{
                 allRooms.clear();
                 for(int i = 0; i < list.length; i++) {
                     System.out.println("Adding room: " + list[i]);
-                    allRooms.add(i, list[i]);
+                    allRooms.addElement(list[i]);
                 }
                 
                 // TODO Make good server room list update action here
@@ -271,7 +286,6 @@ public class MainWindow extends JFrame implements ActionListener{
     
     private void logout() {
         int i = 0;
-        String myUsername = client.getUsername();
         while (tabs.getTabCount()>1) {
             System.out.println("              " + tabs.getComponent(i).getName());
             if (tabs.getComponent(i) == mainTab) {
@@ -281,9 +295,11 @@ public class MainWindow extends JFrame implements ActionListener{
             }
             tabs.remove(i);
         }
-        client.send("disconnect " + myUsername);
         setClient(null);
-        System.out.println("ive set client to null now.");
+        connectedRoomsHistory.clear();
+        connectedRoomsCurrent.clear();
+        allUsers.clear();
+        allRooms.clear();
         Client c = login.getClient();
         if (c == null) {
             System.out.println("closed login window");
