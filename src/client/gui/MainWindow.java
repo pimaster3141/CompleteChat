@@ -62,6 +62,7 @@ public class MainWindow extends JFrame implements ActionListener{
         logout.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 client.send("disconnect " + client.getUsername());
+                MainWindow.this.dispose();
             }
         });
     }
@@ -178,8 +179,8 @@ public class MainWindow extends JFrame implements ActionListener{
         else
         	command = input.substring(0, firstSpaceIndex);
         if(command.equals("disconnectedServerSent")) {
-            System.out.println("About to call logout");
-            logout();
+            System.out.println("Actually we'll never get here because my logout was too beautiful " +
+            		"for this world.");
         } else if(command.equals("message")) {
             int secondSpaceIndex = input.indexOf(' ', firstSpaceIndex+1);
             int thirdSpaceIndex = input.indexOf(' ', secondSpaceIndex+1);
@@ -312,45 +313,6 @@ public class MainWindow extends JFrame implements ActionListener{
     public void setListModels (JList userList, JList chatList) {
         userList.setModel(allUsers);
         chatList.setModel(allRooms);
-    }
-    
-    private void logout() {
-        System.out.println("Before invoke later");
-                System.out.println("Inside of invokeLater");
-                int i = 0;
-                while (tabs.getTabCount()>1) {
-                    System.out.println("              " + tabs.getComponent(i).getName());
-                    if (tabs.getComponent(i) == mainTab) {
-                        System.err.println("Found mainTab");
-                        i++;
-                        continue;
-                    }
-                    tabs.remove(i);
-                }
-                setClient(null);
-                connectedRoomsHistory.clear();
-                connectedRoomsCurrent.clear();
-                allUsers.clear();
-                allRooms.clear();
-        Client c = login.getClient();
-        if (c == null) {
-            System.out.println("closed login window");
-            this.dispose();
-        }
-        else {
-            System.out.println("starting new thread");
-            setClient(c);
-            Thread consumer = new Thread()
-            {
-                public void run()
-                {
-                    Client c = getClient();
-                    c.start(MainWindow.this);
-                }
-            };
-            
-            consumer.start();
-        }
     }
     
     private void closeTab(Component t, ChatRoomClient chatroom) {
