@@ -26,10 +26,10 @@ public class MainWindow extends JFrame implements ActionListener{
     private LoginWindow login = null;
     private Client client = null;
     
-    private final DefaultListModel allUsers;
+    private DefaultListModel allUsers;
     private final HashMap<String, ChatRoomClient> connectedRoomsHistory;
     private final HashMap<String, ChatRoomClient> connectedRoomsCurrent;
-    private final DefaultListModel allRooms;
+    private DefaultListModel allRooms;
     
     public MainWindow() {
         menuBar = new JMenuBar();
@@ -204,6 +204,7 @@ public class MainWindow extends JFrame implements ActionListener{
                 for(int i = 0; i < list.length; i++) {
                     allUsers.addElement(list[i]);
                 }
+                mainTab.setListModels(allUsers, allRooms);
                 
                 // TODO Make good server user list update action here
             } else if(command.equals("serverRoomList")) {
@@ -213,6 +214,7 @@ public class MainWindow extends JFrame implements ActionListener{
                     System.out.println("Adding room: " + list[i]);
                     allRooms.addElement(list[i]);
                 }
+                mainTab.setListModels(allUsers, allRooms);
                 
                 // TODO Make good server room list update action here
             } else if(command.equals("chatUserList")) {
