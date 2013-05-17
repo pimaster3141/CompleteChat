@@ -178,103 +178,145 @@ public class MainWindow extends JFrame implements ActionListener{
         	command = input.substring(0, firstSpaceIndex);
         
         if(command.equals("disconnectedServerSent")) {
+            System.out.println("About to call logout");
             logout();
         } else if(command.equals("message")) {
             int secondSpaceIndex = input.indexOf(' ', firstSpaceIndex+1);
             int thirdSpaceIndex = input.indexOf(' ', secondSpaceIndex+1);
-            String chatRoomName = input.substring(firstSpaceIndex + 1, secondSpaceIndex);
-            String userName = input.substring(secondSpaceIndex + 1, thirdSpaceIndex);
-            String message = input.substring(thirdSpaceIndex + 1);
-            if(connectedRoomsCurrent.containsKey(chatRoomName)){
-                ChatRoomClient roomCurrent = connectedRoomsCurrent.get(chatRoomName);
-                try {
-                    roomCurrent.addMessage(new Message(userName, message));
-                } catch (BadLocationException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        } else {
-            String[] list = input.substring(firstSpaceIndex+1).split(" ");
-            if(command.equals("serverUserList")) {
-                allUsers.clear();
-                for(int i = 0; i < list.length; i++) {
-                    allUsers.addElement(list[i]);
-                }
-                mainTab.setListModels(allUsers, allRooms);
-                
-            } else if(command.equals("serverRoomList")) {
-                System.out.println("Updating serverRoomList");
-                allRooms.clear();
-                for(int i = 0; i < list.length; i++) {
-                    System.out.println("Adding room: " + list[i]);
-                    allRooms.addElement(list[i]);
-                }
-                mainTab.setListModels(allUsers, allRooms);
-                
-            } else if(command.equals("chatUserList")) {
-                String chatName = list[0];
-                if (connectedRoomsCurrent.containsKey(chatName)) {
-                    ArrayList<String> newChatList = new ArrayList<String>();
-                    for (int i = 1; i < list.length; i++) {
-                    	System.err.println("adding: " + list[i]);
-                        newChatList.add(list[i]);
+            final String chatRoomName = input.substring(firstSpaceIndex + 1, secondSpaceIndex);
+            final String userName = input.substring(secondSpaceIndex + 1, thirdSpaceIndex);
+            final String message = input.substring(thirdSpaceIndex + 1);
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    if(connectedRoomsCurrent.containsKey(chatRoomName)){
+                        ChatRoomClient roomCurrent = connectedRoomsCurrent.get(chatRoomName);
+                        try {
+                            roomCurrent.addMessage(new Message(userName, message));
+                        } catch (BadLocationException e1) {
+                            e1.printStackTrace();
+                        }
                     }
-                    ChatRoomClient roomCurrent = connectedRoomsCurrent.get(list[0]);
-                    roomCurrent.updateUsers(newChatList);
                 }
+            });
+        } else {
+            final String[] list = input.substring(firstSpaceIndex+1).split(" ");
+            if(command.equals("serverUserList")) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        allUsers.clear();
+                        for(int i = 0; i < list.length; i++) {
+                            allUsers.addElement(list[i]);
+                        }
+                        mainTab.setListModels(allUsers, allRooms);
+                    }
+                });
+            } else if(command.equals("serverRoomList")) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        System.out.println("Updating serverRoomList");
+                        allRooms.clear();
+                        for(int i = 0; i < list.length; i++) {
+                            System.out.println("Adding room: " + list[i]);
+                            allRooms.addElement(list[i]);
+                        }
+                        mainTab.setListModels(allUsers, allRooms);
+                    }
+                });
+
+            } else if(command.equals("chatUserList")) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        String chatName = list[0];
+                        if (connectedRoomsCurrent.containsKey(chatName)) {
+                            ArrayList<String> newChatList = new ArrayList<String>();
+                            for (int i = 1; i < list.length; i++) {
+                                System.err.println("adding: " + list[i]);
+                                newChatList.add(list[i]);
+                            }
+                            ChatRoomClient roomCurrent = connectedRoomsCurrent.get(list[0]);
+                            roomCurrent.updateUsers(newChatList);
+                        }
+                    }
+                });
 
             } else if(command.equals("clientRoomList")) {
-                String user = list[0];
-                for(int i = 1; i < list.length; i++) {
-                    if(!connectedRoomsCurrent.containsKey(list[i])) {
-                        client.send("disconnect " + user);
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        String user = list[0];
+                        for(int i = 1; i < list.length; i++) {
+                            if(!connectedRoomsCurrent.containsKey(list[i])) {
+                                client.send("disconnect " + user);
+                            }
+                        }
                     }
-                }
+                });
+                
 
             } else if(command.equals("connectedRoom")) {
-                String roomName = list[0];
-                if(connectedRoomsHistory.containsKey(roomName)) {
-                    if(connectedRoomsCurrent.containsKey(roomName)) {
-                    } else {
-                        ChatRoomClient chat = connectedRoomsHistory.get(roomName);
-                        connectedRoomsCurrent.put(roomName, chat);
-                        addCloseableTab(roomName, new ChatTab(roomName, client, this));
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        String roomName = list[0];
+                        if(connectedRoomsHistory.containsKey(roomName)) {
+                            if(connectedRoomsCurrent.containsKey(roomName)) {
+                            } else {
+                                ChatRoomClient chat = connectedRoomsHistory.get(roomName);
+                                connectedRoomsCurrent.put(roomName, chat);
+                                addCloseableTab(roomName, new ChatTab(roomName, client, MainWindow.this));
+                            }
+                        } else {
+                            
+                                ChatRoomClient chat = new ChatRoomClient(roomName, client.getUsername());
+                                connectedRoomsCurrent.put(roomName, chat);
+                                connectedRoomsHistory.put(roomName, chat);
+                                addCloseableTab(roomName, new ChatTab(roomName, client, MainWindow.this));
+                        }
                     }
-                } else {
-                    
-                        ChatRoomClient chat = new ChatRoomClient(roomName, client.getUsername());
-                        connectedRoomsCurrent.put(roomName, chat);
-                        connectedRoomsHistory.put(roomName, chat);
-                        addCloseableTab(roomName, new ChatTab(roomName, client, this));
-                }
+                });
+                
 
             } else if(command.equals("disconnectedRoom")) {
-                String roomName = list[0];
-                if (connectedRoomsCurrent.containsKey(roomName)) {
-                    JPanel removedRoom = findTab(roomName);
-                    if (removedRoom != null) {
-                        int tabIndex = tabs.indexOfComponent(removedRoom);
-                        tabs.remove(tabIndex);
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        String roomName = list[0];
+                        if (connectedRoomsCurrent.containsKey(roomName)) {
+                            JPanel removedRoom = findTab(roomName);
+                            if (removedRoom != null) {
+                                int tabIndex = tabs.indexOfComponent(removedRoom);
+                                tabs.remove(tabIndex);
+                            }
+                        } 
                     }
-                }
+                });
+                
 
             } else if (command.equals("invalidRoom")) {
-                StringBuilder errorMessage = new StringBuilder();
+                final StringBuilder errorMessage = new StringBuilder();
                 for (int i = 1; i < list.length; i++) {
                     errorMessage.append(list[i] + " ");
                 }
-                JOptionPane.showMessageDialog(this, errorMessage.toString(), "Error", JOptionPane.WARNING_MESSAGE);
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        MainWindow.this.displayErrorMessage(errorMessage.toString());
+                    }
+                });
             } else {
                 System.err.println("Derp we seem to have ended up in dead code");
             }
         }
     }
     
+<<<<<<< HEAD
     /**
      * Sets the list models to the models we have.
      * @param userList
      * @param chatList
      */
+=======
+    private void displayErrorMessage(String errorMessage) {
+        JOptionPane.showMessageDialog(this, errorMessage.toString(), "Error", JOptionPane.WARNING_MESSAGE);
+    }
+    
+>>>>>>> 5e2b191c201eaf216cd641890390fd63ce55b817
     public void setListModels (JList userList, JList chatList) {
         userList.setModel(allUsers);
         chatList.setModel(allRooms);
@@ -290,27 +332,30 @@ public class MainWindow extends JFrame implements ActionListener{
      * a new client if the user inputs valid information.
      */
     private void logout() {
-        int i = 0;
-        while (tabs.getTabCount()>1) {
-            System.out.println("              " + tabs.getComponent(i).getName());
-            if (tabs.getComponent(i) == mainTab) {
-                System.err.println("Found mainTab");
-                i++;
-                continue;
-            }
-            tabs.remove(i);
-        }
-        setClient(null);
-        connectedRoomsHistory.clear();
-        connectedRoomsCurrent.clear();
-        allUsers.clear();
-        allRooms.clear();
+        System.out.println("Before invoke later");
+                System.out.println("Inside of invokeLater");
+                int i = 0;
+                while (tabs.getTabCount()>1) {
+                    System.out.println("              " + tabs.getComponent(i).getName());
+                    if (tabs.getComponent(i) == mainTab) {
+                        System.err.println("Found mainTab");
+                        i++;
+                        continue;
+                    }
+                    tabs.remove(i);
+                }
+                setClient(null);
+                connectedRoomsHistory.clear();
+                connectedRoomsCurrent.clear();
+                allUsers.clear();
+                allRooms.clear();
         Client c = login.getClient();
         if (c == null) {
             System.out.println("closed login window");
             this.dispose();
         }
         else {
+            System.out.println("starting new thread");
             setClient(c);
             Thread consumer = new Thread()
             {
@@ -365,28 +410,4 @@ public class MainWindow extends JFrame implements ActionListener{
         return client;
     }
     
-    public static void main(final String[] args) {
-//        
-//        SwingUtilities.invokeLater(new Runnable() {
-//            public void run() {
-//                MainWindow main = new MainWindow();
-//                Client client = null;
-//                try {
-//                    client = new Client("user2", "127.0.0.1", 10000);
-//                } catch (IOException e) {
-//                    // TODO Auto-generated catch block
-//                    e.printStackTrace();
-//                }
-//                ChatTab test1 = new ChatTab("Test1", client, main);
-//                main.addCloseableTab("Test1", test1);
-//
-//                main.pack();
-//                main.setLocationRelativeTo(null);
-//                main.setVisible(true);
-//                ChatTab test2 = new ChatTab("ReallyLongTestNameBecauseYeah2", client, main);
-//                main.addCloseableTab("ReallyLongTestNameBecauseYeah2", test2);
-//            }
-//        });
-    }
 }
-//s
