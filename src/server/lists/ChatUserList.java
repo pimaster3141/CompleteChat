@@ -1,5 +1,9 @@
 package server.lists;
 
+import java.io.IOException;
+
+import server.ConnectionHandler;
+
 /*
  * This class extends the abstract class userList and overrites the default constructor and 
  * getList method
@@ -29,5 +33,22 @@ public class ChatUserList extends UserList
 		String list = super.getList();
 		return "chatUserList " + this.name + " " + list;
 	}
-
+	
+	/*
+	 * overrides the 
+	 */
+	public void add(ConnectionHandler connection) throws IOException
+	{
+		try
+		{
+			super.add(connection);
+		}
+		catch (IOException e)
+		{
+			if(e.getMessage().equals("Username Already Exists"))
+				throw new IOException("User already in Chatroom");
+			else
+				throw e;
+		}
+	}
 }

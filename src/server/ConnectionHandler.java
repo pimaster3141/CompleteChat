@@ -189,9 +189,8 @@ public class ConnectionHandler implements Runnable
 			// removeAllConnections();
 			this.alive = false;
 			return "disconnectedServerSent";
-
-			// if the command is to make, join or exit (it is a room command)
 		}
+		// if the command is to make, join or exit (it is a room command)
 		else if (command.equals("make") || command.equals("join") || command.equals("exit"))
 		{
 
@@ -295,7 +294,7 @@ public class ConnectionHandler implements Runnable
 	{
 		if (input.equals(""))
 			return;
-		System.out.println("Client: " + username + " - " + input);
+		System.out.println("Client: " + username + " - seinding - " + input);
 		out.println(input);
 		out.flush();
 		return;
@@ -326,7 +325,7 @@ public class ConnectionHandler implements Runnable
 	 * 
 	 * @param String - message to be sent to the client
 	 */
-	public void updateQueue(String info)
+	public void  updateQueue(String info)
 	{
 		outputBuffer.add(info);
 	}
@@ -340,5 +339,27 @@ public class ConnectionHandler implements Runnable
 	public LinkedBlockingQueue<String> getQueue()
 	{
 		return this.outputBuffer;
+	}
+
+	/*
+	 * accessor method to get the list of connected rooms Should not be used for anything
+	 * other than testing this class and classes that use this class.
+	 * 
+	 * @return Map<String, ChatRoom> - the map of connected rooms
+	 */
+	public HashMap<String, ChatRoom> getConnectedRooms()
+	{
+		return this.connectedRooms;
+	}
+
+	/*
+	 * accessor method to get the thread of the consumer Should not be used for anything
+	 * other than testing this class and classes that use this class.
+	 * 
+	 * @return Thread - the queue object of this class.
+	 */
+	public Thread getConsumer()
+	{
+		return this.outputConsumer;
 	}
 }
