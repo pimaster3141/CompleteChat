@@ -54,7 +54,7 @@ public class MainWindow extends JFrame implements ActionListener{
         
         getHistory.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                HistoryTab t = new HistoryTab();
+                HistoryTab t = new HistoryTab(connectedRoomsHistory);
                 addCloseableTab("History", t);
             }    
         });
@@ -322,11 +322,13 @@ public class MainWindow extends JFrame implements ActionListener{
     private void closeTab(Component t, ChatRoomClient chatroom) {
         int i = tabs.indexOfTabComponent(t);
         if (i != -1) {
-            client.send("exit " + chatroom.getChatRoomName());
-            tabs.remove(i);
+            if (chatroom != null) {
+                client.send("exit " + chatroom.getChatRoomName());
+                tabs.remove(i);
+                connectedRoomsCurrent.remove(chatroom.getChatRoomName());
+            }
+            chatroom.getUserListModel().clear();
         }
-        connectedRoomsCurrent.remove(chatroom.getChatRoomName());
-        chatroom.getUserListModel().clear();
     }
 
     public DefaultListModel getRoomModel() {
