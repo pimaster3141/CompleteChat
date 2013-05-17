@@ -12,7 +12,6 @@ import javax.swing.text.*;
  */
 public class ChatRoomClient {
     private final String chatRoomName;
-    //private ArrayList<String> connectedUsers;
     private ArrayList<Message> messageHistory;
     private DefaultStyledDocument displayedMessages;
     private DefaultListModel userModel;
@@ -20,17 +19,11 @@ public class ChatRoomClient {
     
     public ChatRoomClient(String nameOfChatRoom, String username) {
         chatRoomName = nameOfChatRoom;
-        //connectedUsers = new ArrayList<String>();
         messageHistory = new ArrayList<Message>();
         displayedMessages = new DefaultStyledDocument();
         userModel = new DefaultListModel();
         myUsername = username;
     }
-    
-//    public void setConnectedUsers(ArrayList<String> newConnectedUsers) {
-//        connectedUsers = newConnectedUsers;
-//        
-//    }
     
     public synchronized void addMessage(Message message) throws BadLocationException {
         messageHistory.add(message);
@@ -62,20 +55,7 @@ public class ChatRoomClient {
     public String getChatRoomName() {
         return chatRoomName;
     }
-    
-    
-//    public ArrayList<String> getConnectedUsers() {
-//        return connectedUsers;
-//    }
 
-    public int getMessageHistorySize() {
-        return messageHistory.size();
-    }
-    
-    public Message getMessageAtIndex(int i) {
-        return messageHistory.get(i);
-    }
-    
     public DefaultListModel getUserListModel() {
         return userModel;
     }
