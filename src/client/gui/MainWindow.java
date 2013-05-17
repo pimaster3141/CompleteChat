@@ -327,10 +327,10 @@ public class MainWindow extends JFrame implements ActionListener{
         if (i != -1) {
             if (chatroom != null) {
                 client.send("exit " + chatroom.getChatRoomName());
-                tabs.remove(i);
                 connectedRoomsCurrent.remove(chatroom.getChatRoomName());
+                chatroom.getUserListModel().clear();
             }
-            chatroom.getUserListModel().clear();
+            tabs.remove(i);
         }
     }
 
