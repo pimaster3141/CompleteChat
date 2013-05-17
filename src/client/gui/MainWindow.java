@@ -298,14 +298,10 @@ public class MainWindow extends JFrame implements ActionListener{
             tabs.remove(i);
         }
         setClient(null);
-<<<<<<< HEAD
-        System.out.println("ive set client to null now.");
-=======
         connectedRoomsHistory.clear();
         connectedRoomsCurrent.clear();
         allUsers.clear();
         allRooms.clear();
->>>>>>> fc43e232cf686cd2b6e2d15315b1e1aab1741db9
         Client c = login.getClient();
         if (c == null) {
             System.out.println("closed login window");
