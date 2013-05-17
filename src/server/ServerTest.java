@@ -3,6 +3,9 @@ package server;
 
 
 import static org.junit.Assert.*;
+
+import java.io.BufferedReader;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,6 +18,8 @@ import org.junit.Test;
  */
 public class ServerTest
 {
+	BufferedReader in;
+	
     /**
      * Default constructor for test class ServerTest
      */
@@ -30,6 +35,7 @@ public class ServerTest
     @Before
     public void setUp()
     {
+    	System.setOut(out)
     }
 
     /**

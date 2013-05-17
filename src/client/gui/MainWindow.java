@@ -130,6 +130,7 @@ public class MainWindow extends JFrame implements ActionListener{
     }
     
     public void setClient(Client c) {
+    	//System.out.println("IVE SET THE CLIENT!!!" + c.getUsername());
         client = c;
         mainTab.setClient(c);
     }
@@ -201,7 +202,7 @@ public class MainWindow extends JFrame implements ActionListener{
             if(command.equals("serverUserList")) {
                 allUsers.clear();
                 for(int i = 0; i < list.length; i++) {
-                    allUsers.add(i, list[i]);
+                    allUsers.addElement(list[i]);
                 }
                 
                 // TODO Make good server user list update action here
@@ -210,7 +211,7 @@ public class MainWindow extends JFrame implements ActionListener{
                 allRooms.clear();
                 for(int i = 0; i < list.length; i++) {
                     System.out.println("Adding room: " + list[i]);
-                    allRooms.add(i, list[i]);
+                    allRooms.addElement(list[i]);
                 }
                 
                 // TODO Make good server room list update action here
