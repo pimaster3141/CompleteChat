@@ -16,7 +16,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,6 +25,9 @@ import org.junit.Test;
  */
 public class ServerTest
 {
+	/*
+	 * @category no_didit - didit wont let me change the ioStreams for System.... so this test wont work :(
+	 */
 	BufferedReader in;
 	Server server;
 	Thread serverRunner;

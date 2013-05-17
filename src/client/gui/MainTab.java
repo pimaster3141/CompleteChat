@@ -3,14 +3,11 @@ package client.gui;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.*;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.regex.Pattern;
 
 import javax.swing.*;
 
 import client.Client;
-import client.CompleteChat;
 
 /**
  * The Main tab of our GuiChat. It's where all the chatrooms and all the users are displayed.
@@ -21,14 +18,13 @@ import client.CompleteChat;
  * creating a new chat and clicking cancel (does not make a new chat tab).
  */
 public class MainTab extends JPanel{
-
-    private final JLabel uiChat;
+	
+	private static final long serialVersionUID = 1L;
+	private final JLabel uiChat;
     private final JButton makeChat;
     private final JList chatRoomList;
     private final JList userList;
     private Client client = null;
-    private MainWindow main;
-    
     public MainTab(MainWindow main) {
         Font TitleFont = new Font("SANS_SERIF", Font.BOLD, 24);
         uiChat = new JLabel("UIChat");
@@ -36,7 +32,6 @@ public class MainTab extends JPanel{
         makeChat = new JButton("New ChatRoom");
         chatRoomList = new JList(new DefaultListModel());
         userList = new JList(new DefaultListModel());
-        this.main = main;
         setName("Main Window");
         main.setListModels(userList, chatRoomList);
         

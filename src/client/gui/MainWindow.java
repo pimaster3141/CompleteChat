@@ -4,26 +4,21 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.*;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
 
 import client.*;
 
 public class MainWindow extends JFrame implements ActionListener{
-
-    private final JTabbedPane tabs;
+	private static final long serialVersionUID = 1L;
+	private final JTabbedPane tabs;
     private final JMenuBar menuBar;
     private final JMenu file;
     private final JMenuItem getHistory;
     private final JMenuItem logout;
     private final MainTab mainTab;
-    private LoginWindow login = null;
     private Client client = null;
     
     private DefaultListModel allUsers;
@@ -90,7 +85,11 @@ public class MainWindow extends JFrame implements ActionListener{
      *
      */
     private class ChatTabComponent extends JPanel {
-        private final JLabel name;
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		private final JLabel name;
         private final ChatRoomClient chatroom;
         private final String tabName;
         
@@ -108,7 +107,12 @@ public class MainWindow extends JFrame implements ActionListener{
             setOpaque(false);
             
             name = new JLabel() {
-                public String getText() {
+                /**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
+
+				public String getText() {
                     return ChatTabComponent.this.tabName;
                 }
             };
@@ -136,7 +140,6 @@ public class MainWindow extends JFrame implements ActionListener{
     }
     
     public void setLoginWindow(LoginWindow l) {
-        login = l;
     }
     
     public void addRooms(Object[] ChatRooms) {

@@ -5,28 +5,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.*;
-import java.util.regex.*;
-
-import javax.swing.DefaultListModel;
 
 public class Client {
     private final String username;
-    private final String IPAddress;
-    private final int port;
     private final Socket socket;
     private final PrintWriter out;
     private final BufferedReader in;    
 
     public Client(String username, String IPAddress, int port) throws IOException {
         this.username = username;
-        this.IPAddress = IPAddress;
-        this.port = port;
         try
 		{
 			this.socket = new Socket(IPAddress, port);

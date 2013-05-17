@@ -3,18 +3,14 @@ package client.gui;
 import client.*;
 import javax.swing.*;
 
-import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.event.*;
 import java.beans.*;
 import java.io.IOException;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LoginWindow extends JDialog implements PropertyChangeListener{
-
-    private final JLabel welcome;
+	private static final long serialVersionUID = 1L;
+	private final JLabel welcome;
     private final JTextField username;
     private final JLabel usernameLabel;
     private final JTextField ipAddress;

@@ -2,7 +2,6 @@ package client.gui;
 
 import java.awt.Dimension;
 import java.awt.Font;
-import java.io.PrintWriter;
 import java.util.HashMap;
 
 import javax.swing.*;
@@ -11,8 +10,8 @@ import javax.swing.event.*;
 import client.ChatRoomClient;
 
 public class HistoryTab extends JPanel{
-
-    private final JLabel history;
+	private static final long serialVersionUID = 1L;
+	private final JLabel history;
     private final JTextPane convoHistory;
     private final JList pastChats;
     private final HashMap<String, ChatRoomClient> roomMapping;

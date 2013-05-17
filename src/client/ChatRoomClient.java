@@ -37,8 +37,7 @@ public class ChatRoomClient {
 
     }
     
-    @SuppressWarnings("unchecked")
-	public synchronized void updateUsers(ArrayList<String> newUsers) {
+    public synchronized void updateUsers(ArrayList<String> newUsers) {
         //connectedUsers = newUsers;
         userModel.clear();
         for (int i = 0; i < newUsers.size(); i++) {

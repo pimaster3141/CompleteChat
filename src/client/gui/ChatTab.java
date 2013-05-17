@@ -17,14 +17,13 @@ import client.*;
  *
  */
 public class ChatTab extends JPanel{
-
-    private final JLabel chatName;
+	private static final long serialVersionUID = 1L;
+	private final JLabel chatName;
     private final JTextPane conversation;
     private final JList currentUsers;
     private final JTextField myMessage;
     private final JButton send;
     private Client client;
-    private MainWindow main;
     private final String roomname;
     
     public ChatTab(String chatname, Client client, MainWindow main) {
@@ -38,7 +37,6 @@ public class ChatTab extends JPanel{
         myMessage = new JTextField();
         send = new JButton("Submit");
         this.client = client;
-        this.main = main;
         setName(chatname);
         
         conversation.setEditable(false);
