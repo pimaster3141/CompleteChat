@@ -35,7 +35,6 @@ public class ServerTest
     @Before
     public void setUp()
     {
-    	System.setOut(out)
     }
 
     /**
