@@ -114,7 +114,7 @@ public class MainTab extends JPanel{
     }
     
     public void setListModels(DefaultListModel users, DefaultListModel rooms) {
-        userList.setModel(rooms);
+        userList.setModel(users);
         chatRoomList.setModel(rooms);
     }
     

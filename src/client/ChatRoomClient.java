@@ -63,6 +63,7 @@ public class ChatRoomClient {
         return chatRoomName;
     }
     
+    
 //    public ArrayList<String> getConnectedUsers() {
 //        return connectedUsers;
 //    }

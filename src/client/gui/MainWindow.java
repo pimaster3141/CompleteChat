@@ -26,10 +26,10 @@ public class MainWindow extends JFrame implements ActionListener{
     private LoginWindow login = null;
     private Client client = null;
     
-    private final DefaultListModel allUsers;
+    private DefaultListModel allUsers;
     private final HashMap<String, ChatRoomClient> connectedRoomsHistory;
     private final HashMap<String, ChatRoomClient> connectedRoomsCurrent;
-    private final DefaultListModel allRooms;
+    private DefaultListModel allRooms;
     
     public MainWindow() {
         menuBar = new JMenuBar();
@@ -54,7 +54,7 @@ public class MainWindow extends JFrame implements ActionListener{
         
         getHistory.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                HistoryTab t = new HistoryTab();
+                HistoryTab t = new HistoryTab(connectedRoomsHistory);
                 addCloseableTab("History", t);
             }    
         });
@@ -204,6 +204,7 @@ public class MainWindow extends JFrame implements ActionListener{
                 for(int i = 0; i < list.length; i++) {
                     allUsers.addElement(list[i]);
                 }
+                mainTab.setListModels(allUsers, allRooms);
                 
                 // TODO Make good server user list update action here
             } else if(command.equals("serverRoomList")) {
@@ -213,6 +214,7 @@ public class MainWindow extends JFrame implements ActionListener{
                     System.out.println("Adding room: " + list[i]);
                     allRooms.addElement(list[i]);
                 }
+                mainTab.setListModels(allUsers, allRooms);
                 
                 // TODO Make good server room list update action here
             } else if(command.equals("chatUserList")) {
@@ -327,11 +329,13 @@ public class MainWindow extends JFrame implements ActionListener{
     private void closeTab(Component t, ChatRoomClient chatroom) {
         int i = tabs.indexOfTabComponent(t);
         if (i != -1) {
-            client.send("exit " + chatroom.getChatRoomName());
-            tabs.remove(i);
+            if (chatroom != null) {
+                client.send("exit " + chatroom.getChatRoomName());
+                tabs.remove(i);
+                connectedRoomsCurrent.remove(chatroom.getChatRoomName());
+            }
+            chatroom.getUserListModel().clear();
         }
-        connectedRoomsCurrent.remove(chatroom.getChatRoomName());
-        chatroom.getUserListModel().clear();
     }
 
     public DefaultListModel getRoomModel() {
