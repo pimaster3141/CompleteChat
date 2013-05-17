@@ -63,7 +63,7 @@ public class Server
 							// attempt to add the connection (client) to the
 							// list of connected clients
 							users.add(connection);
-							// update the client with all the avaliable rooms
+							// update the client with all the available rooms
 							rooms.updateUser(connection);
 							System.err.println("Starting User");
 							// start the connection thread to start IO

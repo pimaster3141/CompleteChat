@@ -53,9 +53,11 @@ public class ConnectionHandler implements Runnable
 
 		// parse username
 		String input = in.readLine();
+		if (input == null)
+			throw new IOException("input was null");
 		Pattern p = Pattern.compile("connect \\p{Graph}+");
 		Matcher m = p.matcher(input);
-		// if the usernme is invalid, disconnect the client
+		// if the username is invalid, disconnect the client
 		if (!m.matches())
 			throw new IOException("Client input not in the format 'connect [username]'");
 		this.username = input.substring(input.indexOf(' ') + 1);
@@ -176,7 +178,7 @@ public class ConnectionHandler implements Runnable
 			return "Unrecognized Command " + input; // Should not occur assuming
 													// client input is correct
 
-		// find the first space in the strign
+		// find the first space in the string
 		int spaceIndex = input.indexOf(' ');
 		String command = input.substring(0, spaceIndex);
 
