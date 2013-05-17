@@ -143,6 +143,12 @@ public class MainWindow extends JFrame implements ActionListener{
         mainTab.addRooms(ChatRooms);
     }
     
+    /**
+     * Returns the particular tab given the string for the
+     * chat name
+     * @param chatName
+     * @return The JPanel Tab with the given chatroom name
+     */
     private JPanel findTab(String chatName) {
         for (int i = 0; i<tabs.getTabCount(); i++) {
             String tabName = tabs.getComponentAt(i).getName();
@@ -153,22 +159,15 @@ public class MainWindow extends JFrame implements ActionListener{
         return null;
     }
     
+    /**
+     * This method parses the input taken in from the Client and
+     * creates SwingUtilities to invokeLater and set them onto the
+     * event dispatch thread.  The respective action is performed
+     * based on the input from the server.
+     */
     public void actionPerformed(ActionEvent e) {
         String input = e.getActionCommand();
         System.out.println(input);
-        String newLine = "(\\r?\\n)";
-        String messageText = "(\\p{Print}+)";
-        String name = "(\\p{Graph}+)";
-        String nameList = "((" + name + " )*" + name + ")";
-        String mess = "(message " + name + " " + name + " " + messageText + ")";
-        String xYList = "(((clientRoomList)|(chatUserList)) " + name + " " + nameList + ")";
-        String listRX = "(((serverUserList)|(serverRoomList)) " + nameList + ")";
-        String roomCD = "(((connectedRoom)|(disconnectedRoom)) " + name + ")";
-        String regex = "((disconnectedServerSent)|" + roomCD + "|" + listRX + "|" + 
-                        xYList + "|" + mess + ")" + newLine;
-        
-        Pattern p = Pattern.compile(regex);
-        Matcher m = p.matcher(input);
         
         int firstSpaceIndex = input.indexOf(' ');
         String command;
@@ -178,6 +177,7 @@ public class MainWindow extends JFrame implements ActionListener{
         }
         else
         	command = input.substring(0, firstSpaceIndex);
+        
         if(command.equals("disconnectedServerSent")) {
             System.out.println("Actually we'll never get here because my logout was too beautiful " +
             		"for this world.");
@@ -305,16 +305,30 @@ public class MainWindow extends JFrame implements ActionListener{
             }
         }
     }
+
     
     private void displayErrorMessage(String errorMessage) {
         JOptionPane.showMessageDialog(this, errorMessage.toString(), "Error", JOptionPane.WARNING_MESSAGE);
     }
     
+    /**
+     * Sets the list models to the models we have.
+     * @param userList
+     * @param chatList
+     */
     public void setListModels (JList userList, JList chatList) {
         userList.setModel(allUsers);
         chatList.setModel(allRooms);
     }
     
+    /**
+     * This method closes a particular tab in the GUI.  It takes
+     * in the tab component to close and the ChatRoomClient object
+     * that contains the information of the messages of the chatroom.
+     * 
+     * @param t
+     * @param chatroom
+     */
     private void closeTab(Component t, ChatRoomClient chatroom) {
         int i = tabs.indexOfTabComponent(t);
         if (i != -1) {
