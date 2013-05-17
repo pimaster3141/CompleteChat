@@ -63,7 +63,7 @@ public class MainTab extends JPanel{
         
         chatRoomList.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
+                if (e.getClickCount() == 2 && chatRoomList.getSelectedValue() != null) {
                     String chatName = (String)chatRoomList.getSelectedValue();
                     client.send("join " + chatName);
                 }
