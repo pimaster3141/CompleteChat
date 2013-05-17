@@ -13,6 +13,7 @@ import server.ConnectionHandler;
 import server.lists.ServerUserList;
 import static server.Pause.pause;
 
+
 /**
  * This class tests all public methods of UserList with single, and multiple users as well as before and after removing users
  */
