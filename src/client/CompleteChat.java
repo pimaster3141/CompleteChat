@@ -1,8 +1,5 @@
 package client;
 
-import java.awt.CardLayout;
-import java.io.PrintWriter;
-
 import javax.swing.*;
 
 import client.gui.*;
