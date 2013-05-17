@@ -9,11 +9,14 @@ import javax.swing.*;
 import client.*;
 
 /**
- * Probably needs to take in the actual object representing a chat, but I don't
- * know what that looks like yet. I would very much like that object to have the
- * chat's name, a DefaultListModel representing the list of users (read up what it
- * does on the java docs) and a StyledDocument (model for a Swing Text Component
- * go read up the API for that).
+ * A class representing the gui for a single chatroom. Messages are entered into a
+ * text field and submitted to the server either by hitting the send button or by
+ * pressing ENTER on the keyboard. The conversation is displayed in a text pane on
+ * the left, and all users in the chatroom are displayed on the right. Earlier chat
+ * history is displayed in the window upon the user rejoining the room, where the
+ * history is defined as conversation held while the user is present in the room, and
+ * rejoining is defined as entering a chatroom with the exact same name as a previously
+ * entered chatroom.
  *
  */
 public class ChatTab extends JPanel{
@@ -26,7 +29,14 @@ public class ChatTab extends JPanel{
     private Client client;
     private final String roomname;
     
-    public ChatTab(String chatname, Client client, MainWindow main) {
+    /**
+     * 
+     * The constructor for the ChatTab
+     * 
+     * @param chatname The name of the chatroom in the tab.
+     * @param main The MainWindow where the ChatTab is displayed.
+     */
+    public ChatTab(String chatname, MainWindow main) {
     	this.roomname = chatname;
         Font TitleFont = new Font("SANS_SERIF", Font.BOLD, 18);
         chatName = new JLabel(chatname);
@@ -36,7 +46,7 @@ public class ChatTab extends JPanel{
         currentUsers = new JList(main.getCurrentRoom(chatname).getUserListModel());
         myMessage = new JTextField();
         send = new JButton("Submit");
-        this.client = client;
+        this.client = main.getClient();
         setName(chatname);
         
         conversation.setEditable(false);
@@ -90,6 +100,9 @@ public class ChatTab extends JPanel{
                         .addComponent(send)));
     }
     
+    /**
+     * Used to send a message to the client (which will pass it on to the server)
+     */
     private void sendMessage() {
         String m = myMessage.getText();
         if (m != null && m.length() > 0) {

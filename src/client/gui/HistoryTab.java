@@ -40,7 +40,7 @@ public class HistoryTab extends JPanel{
         
         pastChats.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent e) {
-                if (!e.getValueIsAdjusting()) {
+                if (!e.getValueIsAdjusting() && pastChats.getSelectedValue() != null) {
                     ChatRoomClient chatroom = roomMapping.get(pastChats.getSelectedValue());
                     convoHistory.setStyledDocument(chatroom.getDoc());
                 }
