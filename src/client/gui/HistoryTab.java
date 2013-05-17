@@ -34,8 +34,7 @@ public class HistoryTab extends JPanel{
             public void valueChanged(ListSelectionEvent e) {
                 if (!e.getValueIsAdjusting()) {
                     ChatRoomClient chatName = (ChatRoomClient) pastChats.getSelectedValue();
-                    //convoHistory.setStyledDocument(chatName.getRoomModel());
-                    //or just whatever in order to grab the right model
+                    convoHistory.setStyledDocument(chatName.getDoc());
                 }
             }
         });
