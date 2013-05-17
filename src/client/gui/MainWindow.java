@@ -304,19 +304,17 @@ public class MainWindow extends JFrame implements ActionListener{
             }
         }
     }
+
     
-<<<<<<< HEAD
+    private void displayErrorMessage(String errorMessage) {
+        JOptionPane.showMessageDialog(this, errorMessage.toString(), "Error", JOptionPane.WARNING_MESSAGE);
+    }
+    
     /**
      * Sets the list models to the models we have.
      * @param userList
      * @param chatList
      */
-=======
-    private void displayErrorMessage(String errorMessage) {
-        JOptionPane.showMessageDialog(this, errorMessage.toString(), "Error", JOptionPane.WARNING_MESSAGE);
-    }
-    
->>>>>>> 5e2b191c201eaf216cd641890390fd63ce55b817
     public void setListModels (JList userList, JList chatList) {
         userList.setModel(allUsers);
         chatList.setModel(allRooms);
