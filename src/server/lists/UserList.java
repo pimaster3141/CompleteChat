@@ -1,6 +1,6 @@
 package server.lists;
 
-import static server.Pause.pause;
+import static server.TestHelpers.pause;
 
 import java.io.IOException;
 import java.util.HashMap;

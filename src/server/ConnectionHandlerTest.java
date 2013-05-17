@@ -1,7 +1,31 @@
 package server;
 
+import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
+import static server.TestHelpers.pause;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Collections;
+
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
+
+import server.lists.ServerUserList;
+import server.rooms.RoomList;
+
+
 
 /**
  * The test class ConnectionHandlerTest.
@@ -11,30 +35,197 @@ import org.junit.Before;
  */
 public class ConnectionHandlerTest
 {
-	/**
-	 * Default constructor for test class ConnectionHandlerTest
-	 */
-	public ConnectionHandlerTest()
-	{
-	}
+	private ServerSocket server;
+	private Socket serverSide;
+	private Socket clientSide;
+	private BufferedReader clientIn;
+	private PrintWriter clientOut;
+	private BufferedReader handlerIn;
+	private PrintWriter handlerOut;
+	private ServerUserList users;
+	private RoomList rooms;
+	private ConnectionHandler c;
 
 	/**
 	 * Sets up the test fixture.
 	 * 
 	 * Called before every test case method.
+	 * @throws IOException 
+	 * @throws UnknownHostException 
 	 */
 	@Before
-	public void setUp()
+	public void setUp() throws IOException 
 	{
+		server = new ServerSocket(10000);
+		pause(200, true);
+		clientSide = new Socket("localhost", 10000);
+		serverSide = server.accept();
+		clientIn = new BufferedReader(new InputStreamReader(clientSide.getInputStream()));
+		clientOut = new PrintWriter(clientSide.getOutputStream());
+		handlerIn = new BufferedReader(new InputStreamReader(serverSide.getInputStream()));
+		handlerOut = new PrintWriter(clientSide.getOutputStream());
 	}
-
-	/**
-	 * Tears down the test fixture.
-	 * 
-	 * Called after every test case method.
-	 */
+	
 	@After
-	public void tearDown()
+	public void tearDown() throws IOException
 	{
+		server.close();
+		pause(200, true);
 	}
+	
+	@Test
+	public void testSetup()
+	{
+		assertFalse(serverSide == null);
+		assertFalse(clientOut == null);
+		assertFalse(clientIn == null);
+		assertFalse(handlerOut == null);
+		assertFalse(handlerIn == null);
+	}
+	
+	@Test
+	public void testConstructor() throws IOException, InterruptedException
+	{
+		clientOut.println("connect test1");
+		clientOut.flush();
+		c = new ConnectionHandler(serverSide, rooms, users);
+		assertEquals(clientIn.readLine(), "To connect type: \"connect [username]\"");
+		assertEquals(c.username, "test1");
+	}
+	
+	@Test
+	public void testConstructerThreaded() throws IOException, InterruptedException
+	{
+		Thread connector = new Thread()
+		{
+			public void run()
+			{
+				try
+				{
+					c = new ConnectionHandler(serverSide, rooms, users);
+				}
+				catch (IOException e)
+				{
+					fail();
+				}
+			}
+		};
+		connector.start();
+		pause(200, true);
+		assertEquals(clientIn.readLine(), "To connect type: \"connect [username]\"");
+		clientOut.println("connect test1");
+		clientOut.flush();
+		pause(100, true);
+		connector.join();
+		assertEquals(c.username, "test1");
+	}
+	
+	@Test
+	public void testThreadInit() throws IOException
+	{
+		clientOut.println("connect test1");
+		clientOut.flush();
+		c = new ConnectionHandler(serverSide, rooms, users);
+		assertEquals(clientIn.readLine(), "To connect type: \"connect [username]\"");
+		assertEquals(c.username, "test1");
+		
+		Thread runner = new Thread(c);
+		runner.start();
+		
+		assertEquals(clientIn.readLine(), "Connected");
+	}
+	
+	@Test (expected = IOException.class)
+	public void testBadUsernameInput() throws IOException
+	{
+		clientOut.println("asdjfadf test1");
+		clientOut.flush();
+		c = new ConnectionHandler(serverSide, rooms, users);
+		fail();
+	}
+	
+	@Test
+	public void testSpontaneiousDisconnectAtLogin() throws IOException, InterruptedException
+	{
+		Thread connector = new Thread()
+		{
+			public void run()
+			{
+				try
+				{
+					c = new ConnectionHandler(serverSide, rooms, users);
+				}
+				catch (IOException e)
+				{
+					c = null;
+				}
+			}
+		};
+		connector.start();
+		pause(200, true);
+		assertEquals(clientIn.readLine(), "To connect type: \"connect [username]\"");
+		clientSide.close();
+		connector.join();
+		assertEquals(c, null);
+	}
+	@Test
+	public void testConsumerThread() throws IOException
+	{
+		clientOut.println("connect test1");
+		clientOut.flush();
+		c = new ConnectionHandler(serverSide, rooms, users);
+		assertEquals(clientIn.readLine(), "To connect type: \"connect [username]\"");
+		assertEquals(c.username, "test1");
+		
+		Thread runner = new Thread(c);
+		runner.start();
+		
+		assertEquals(clientIn.readLine(), "Connected");
+		
+		c.updateQueue("someTestData");
+		
+		assertEquals(clientIn.readLine(), "someTestData");
+		assertFalse(handlerIn.ready());
+	}
+		
+	@Test
+	public void testConsumerThreadSpam() throws IOException, InterruptedException
+	{
+		clientOut.println("connect test1");
+		clientOut.flush();
+		c = new ConnectionHandler(serverSide, rooms, users);
+		assertEquals(clientIn.readLine(), "To connect type: \"connect [username]\"");
+		assertEquals(c.username, "test1");
+		
+		Thread runner = new Thread(c);
+		runner.start();
+		
+		assertEquals(clientIn.readLine(), "Connected");
+		
+		Thread[] threadList = new Thread[8000];
+		for(int i = 0; i < 8000; i++)
+		{
+			threadList[i] = new Thread()
+			{
+				public void run()
+				{
+					c.updateQueue("hello");
+				}
+			};
+		}
+		
+		for(Thread t : threadList)
+			t.start();
+		for(Thread t : threadList)
+			t.join();
+		
+		for(int i = 0; i<8000; i++)
+		{
+			assertTrue(clientIn.ready());
+			assertEquals(clientIn.readLine(), "hello");
+		}
+		assertFalse(clientIn.ready());
+	}
+	
+	
 }
