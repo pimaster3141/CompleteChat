@@ -265,7 +265,7 @@ public class ConnectionHandler implements Runnable
 			ChatRoom roomToMessage = connectedRooms.get(chatroom);
 			if (roomToMessage != null)
 			{
-				roomToMessage.updateQueue(username + ": " + message);
+				roomToMessage.updateQueue(username + " " + message);
 				return "";
 			}
 			return "";

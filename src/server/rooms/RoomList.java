@@ -3,6 +3,8 @@ package server.rooms;
 import static server.TestHelpers.pause;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -111,8 +113,12 @@ public class RoomList
 	private String getRooms()
 	{
 		StringBuilder roomList = new StringBuilder("serverRoomList ");
+		ArrayList<String> copy = new ArrayList<String>();
 		for (String roomsString : rooms.keySet())
-			roomList.append(roomsString + ' ');
+			copy.add(new String(roomsString));
+		Collections.sort(copy);
+		for (String s : copy)
+			roomList.append(s + ' ');
 		roomList.deleteCharAt(roomList.length() - 1);
 		return roomList.toString();
 	}

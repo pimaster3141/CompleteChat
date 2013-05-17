@@ -52,7 +52,7 @@ public class ChatUserListTest
 		list.add(three);
 
 		String output = list.getList();
-		assertEquals(output, "chatUserList myList two one three");
+		assertEquals(output, "chatUserList myList one three two");
 	}
 
 	// tests the getList method on an emtpy list
@@ -114,23 +114,23 @@ public class ChatUserListTest
 		output = buffer.poll();
 		assertEquals(output, "chatUserList myList one");
 		output = buffer.poll();
-		assertEquals(output, "chatUserList myList two one");
+		assertEquals(output, "chatUserList myList one two");
 		output = buffer.poll();
-		assertEquals(output, "chatUserList myList two one three");
+		assertEquals(output, "chatUserList myList one three two");
 		output = buffer.poll();
 		assertEquals(output, null);
 
 		buffer = two.getQueue();
 		output = buffer.poll();
-		assertEquals(output, "chatUserList myList two one");
+		assertEquals(output, "chatUserList myList one two");
 		output = buffer.poll();
-		assertEquals(output, "chatUserList myList two one three");
+		assertEquals(output, "chatUserList myList one three two");
 		output = buffer.poll();
 		assertEquals(output, null);
 
 		buffer = three.getQueue();
 		output = buffer.poll();
-		assertEquals(output, "chatUserList myList two one three");
+		assertEquals(output, "chatUserList myList one three two");
 		output = buffer.poll();
 		assertEquals(output, null);
 	}

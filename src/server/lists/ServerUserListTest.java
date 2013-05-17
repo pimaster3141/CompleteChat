@@ -45,7 +45,7 @@ public class ServerUserListTest
 		list.add(three);
 
 		String output = list.getList();
-		assertEquals(output, "serverUserList two one three");
+		assertEquals(output, "serverUserList one three two");
 	}
 
 	// tests the getList method on an emtpy list

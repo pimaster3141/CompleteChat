@@ -1,8 +1,6 @@
 package server.lists;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 import static server.TestHelpers.pause;
 
 import java.io.IOException;
@@ -80,23 +78,23 @@ public class UserListTest
 		output = buffer.poll();
 		assertEquals(output, "one");
 		output = buffer.poll();
-		assertEquals(output, "two one");
+		assertEquals(output, "one two");
 		output = buffer.poll();
-		assertEquals(output, "two one three");
+		assertEquals(output, "one three two");
 		output = buffer.poll();
 		assertEquals(output, null);
 
 		buffer = two.getQueue();
 		output = buffer.poll();
-		assertEquals(output, "two one");
+		assertEquals(output, "one two");
 		output = buffer.poll();
-		assertEquals(output, "two one three");
+		assertEquals(output, "one three two");
 		output = buffer.poll();
 		assertEquals(output, null);
 
 		buffer = three.getQueue();
 		output = buffer.poll();
-		assertEquals(output, "two one three");
+		assertEquals(output, "one three two");
 		output = buffer.poll();
 		assertEquals(output, null);
 	}
@@ -138,13 +136,13 @@ public class UserListTest
 
 		buffer = one.getQueue();
 		output = buffer.poll();
-		assertEquals(output, "two one");
+		assertEquals(output, "one two");
 		output = buffer.poll();
 		assertEquals(output, null);
 
 		buffer = two.getQueue();
 		output = buffer.poll();
-		assertEquals(output, "two one");
+		assertEquals(output, "one two");
 		output = buffer.poll();
 		assertEquals(output, null);
 
@@ -178,7 +176,7 @@ public class UserListTest
 		list.add(three);
 
 		String output = list.getList();
-		assertEquals(output, "two one three");
+		assertEquals(output, "one three two");
 	}
 
 	// tests the getList method on an emtpy list

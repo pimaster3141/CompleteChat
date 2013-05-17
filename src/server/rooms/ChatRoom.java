@@ -22,6 +22,7 @@ public class ChatRoom implements Runnable
 	private LinkedBlockingQueue<String> messageBuffer = new LinkedBlockingQueue<String>();
 	// a consumer thread for the above buffer
 	private Thread self;
+	private boolean alive = true;
 
 	/*
 	 * constructor for Chat room - will attempt to add self to the room listing,
@@ -79,7 +80,7 @@ public class ChatRoom implements Runnable
 	{
 		System.out.println("  Room: " + name + " - " + "Input Thread Started");
 		// main loop
-		while (true)
+		while (alive)
 			// read an element and inform all of the connected users using the
 			// roomList method
 			try
@@ -111,17 +112,19 @@ public class ChatRoom implements Runnable
 	 */
 	public void addUser(ConnectionHandler connection) throws IOException
 	{
-		if (self.isAlive())
+		synchronized(connectedClients)
+		{
+			if (alive)
 			// try to add the connection
-			synchronized (connectedClients)
 			{
 				if (!connectedClients.contains(connection.username))
 					connection.updateQueue("connectedRoom " + name);
 				connectedClients.add(connection);
 			}
-		else
-			// throw an IOException if the room is dead
-			throw new IOException("Room no longer exists");
+			else
+				// throw an IOException if the room is dead
+				throw new IOException("Room no longer exists");
+		}
 	}
 
 	/*
@@ -136,7 +139,10 @@ public class ChatRoom implements Runnable
 			connectedClients.remove(connection);
 			// if there are no more connections to this room - stop the room
 			if (connectedClients.size() <= 0)
+			{
+				alive = false;
 				self.interrupt();
+			}
 		}
 	}
 
