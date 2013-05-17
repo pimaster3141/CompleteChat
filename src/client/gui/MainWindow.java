@@ -115,6 +115,7 @@ public class MainWindow extends JFrame implements ActionListener{
     }
     
     public void setClient(Client c) {
+    	//System.out.println("IVE SET THE CLIENT!!!" + c.getUsername());
         client = c;
         mainTab.setClient(c);
     }
@@ -282,6 +283,7 @@ public class MainWindow extends JFrame implements ActionListener{
         }
         client.send("disconnect " + myUsername);
         setClient(null);
+        System.out.println("ive set client to null now.");
         Client c = login.getClient();
         if (c == null) {
             System.out.println("closed login window");
