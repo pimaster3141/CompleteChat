@@ -69,17 +69,15 @@ public class ChatRoomClient {
         
     }
     
-<<<<<<< HEAD
-    /**
-     * @return The DefaultStyledDocument of the chatroom messages
-     */
-=======
+    
     @Override
     public String toString() {
         return chatRoomName;
     }
-    
->>>>>>> b3f36db232dbd1497245898aad6cccf958d9a929
+
+    /**
+     * @return The DefaultStyledDocument of the chatroom messages
+     */
     public DefaultStyledDocument getDoc() {
         return displayedMessages;
     }
