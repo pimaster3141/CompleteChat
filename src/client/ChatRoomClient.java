@@ -47,6 +47,11 @@ public class ChatRoomClient {
         
     }
     
+    @Override
+    public String toString() {
+        return chatRoomName;
+    }
+    
     public DefaultStyledDocument getDoc() {
         return displayedMessages;
     }
