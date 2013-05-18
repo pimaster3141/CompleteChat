@@ -8,8 +8,6 @@ import java.util.regex.Pattern;
 
 import javax.swing.*;
 
-import client.Client;
-
 /**
  * The Main tab of our GuiChat. Contains a list of all chatrooms, a list of all users and a button
  * for creating a new chat. Clicking on the New ChatRoom button will trigger a popup prompting the

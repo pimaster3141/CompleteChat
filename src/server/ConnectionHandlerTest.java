@@ -48,9 +48,9 @@ public class ConnectionHandlerTest
 	@Before
 	public void setUp() throws IOException 
 	{
-		server = new ServerSocket(10000);
-		pause(100, true);
-		clientSide = new Socket("localhost", 10000);
+		server = new ServerSocket(5000);
+		pause(50, true);
+		clientSide = new Socket("localhost", 5000);
 		serverSide = server.accept();
 		clientIn = new BufferedReader(new InputStreamReader(clientSide.getInputStream()));
 		clientOut = new PrintWriter(clientSide.getOutputStream());
@@ -66,7 +66,7 @@ public class ConnectionHandlerTest
 	public void tearDown() throws IOException
 	{
 		server.close();
-		pause(100, true);
+		pause(50, true);
 	}
 	
 	//tests if i actually got the sockets working on the same thread
@@ -87,7 +87,7 @@ public class ConnectionHandlerTest
 		clientOut.println("connect test1");
 		clientOut.flush();
 		c = new ConnectionHandler(serverSide, rooms, users);
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "To connect type: \"connect [username]\"");
 		assertEquals(c.username, "test1");
@@ -112,12 +112,12 @@ public class ConnectionHandlerTest
 			}
 		};
 		connector.start();
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "To connect type: \"connect [username]\"");
 		clientOut.println("connect test1");
 		clientOut.flush();
-		pause(100, true);
+		pause(50, true);
 		connector.join();
 		assertEquals(c.username, "test1");
 	}
@@ -129,7 +129,7 @@ public class ConnectionHandlerTest
 		clientOut.println("connect test1");
 		clientOut.flush();
 		c = new ConnectionHandler(serverSide, rooms, users);
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "To connect type: \"connect [username]\"");
 		assertEquals(c.username, "test1");
@@ -137,7 +137,7 @@ public class ConnectionHandlerTest
 		Thread runner = new Thread(c);
 		runner.start();
 
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "Connected");
 	}
@@ -171,7 +171,7 @@ public class ConnectionHandlerTest
 			}
 		};
 		connector.start();
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "To connect type: \"connect [username]\"");
 		clientSide.close();
@@ -186,7 +186,7 @@ public class ConnectionHandlerTest
 		clientOut.println("connect test1");
 		clientOut.flush();
 		c = new ConnectionHandler(serverSide, rooms, users);
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "To connect type: \"connect [username]\"");
 		assertEquals(c.username, "test1");
@@ -194,13 +194,13 @@ public class ConnectionHandlerTest
 		Thread runner = new Thread(c);
 		runner.start();
 
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "Connected");
 		
 		c.updateQueue("someTestData");
 
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "someTestData");
 		assertFalse(handlerIn.ready());
@@ -213,7 +213,7 @@ public class ConnectionHandlerTest
 		clientOut.println("connect test1");
 		clientOut.flush();
 		c = new ConnectionHandler(serverSide, rooms, users);
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "To connect type: \"connect [username]\"");
 		assertEquals(c.username, "test1");
@@ -221,7 +221,7 @@ public class ConnectionHandlerTest
 		Thread runner = new Thread(c);
 		runner.start();
 
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "Connected");
 		
@@ -243,7 +243,7 @@ public class ConnectionHandlerTest
 		for(Thread t : threadList)
 			t.join();
 		
-		pause(1000, true);
+		pause(500, true);
 		for(int i = 0; i<8000; i++)
 		{
 			assertTrue(clientIn.ready());
@@ -259,7 +259,7 @@ public class ConnectionHandlerTest
 		clientOut.println("connect test1");
 		clientOut.flush();
 		c = new ConnectionHandler(serverSide, rooms, users);
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "To connect type: \"connect [username]\"");
 		assertEquals(c.username, "test1");
@@ -267,7 +267,7 @@ public class ConnectionHandlerTest
 		Thread runner = new Thread(c);
 		runner.start();
 
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "Connected");
 		
@@ -283,7 +283,7 @@ public class ConnectionHandlerTest
 		clientOut.println("connect test1");
 		clientOut.flush();
 		c = new ConnectionHandler(serverSide, rooms, users);
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "To connect type: \"connect [username]\"");
 		assertEquals(c.username, "test1");
@@ -291,14 +291,14 @@ public class ConnectionHandlerTest
 		Thread runner = new Thread(c);
 		runner.start();
 
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "Connected");
 		assertFalse(clientIn.ready());
 		
 		clientOut.println("junk data");
 		clientOut.flush();
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "Unrecognized Command junk data");
 		assertFalse(clientIn.ready());
@@ -311,7 +311,7 @@ public class ConnectionHandlerTest
 		clientOut.println("connect test1");
 		clientOut.flush();
 		c = new ConnectionHandler(serverSide, rooms, users);
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "To connect type: \"connect [username]\"");
 		assertEquals(c.username, "test1");
@@ -320,7 +320,7 @@ public class ConnectionHandlerTest
 		Thread runner = new Thread(c);
 		runner.start();
 
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "Connected");
 		assertEquals(clientIn.readLine(), "serverUserList test1");
@@ -329,7 +329,7 @@ public class ConnectionHandlerTest
 		//send test data and check response
 		clientOut.println("disconnect test1");
 		clientOut.flush();
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "disconnectedServerSent");
 		assertFalse(clientIn.ready());
@@ -350,7 +350,7 @@ public class ConnectionHandlerTest
 		clientOut.println("connect test1");
 		clientOut.flush();
 		c = new ConnectionHandler(serverSide, rooms, users);
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "To connect type: \"connect [username]\"");
 		assertEquals(c.username, "test1");
@@ -359,7 +359,7 @@ public class ConnectionHandlerTest
 		Thread runner = new Thread(c);
 		runner.start();
 
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "Connected");
 		assertEquals(clientIn.readLine(), "serverUserList test1");
@@ -368,7 +368,7 @@ public class ConnectionHandlerTest
 		//send test data and check response
 		clientOut.println("make room1");
 		clientOut.flush();
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "serverRoomList room1");
 		assertEquals(clientIn.readLine(), "connectedRoom room1");
@@ -381,7 +381,7 @@ public class ConnectionHandlerTest
 		assertFalse(serverSide.isClosed());
 		assertTrue(c.getConsumer().isAlive());
 		c.updateQueue("should be sent");
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "should be sent");
 		assertFalse(clientIn.ready());
@@ -398,7 +398,7 @@ public class ConnectionHandlerTest
 		clientOut.println("connect test1");
 		clientOut.flush();
 		c = new ConnectionHandler(serverSide, rooms, users);
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "To connect type: \"connect [username]\"");
 		assertEquals(c.username, "test1");
@@ -407,7 +407,7 @@ public class ConnectionHandlerTest
 		Thread runner = new Thread(c);
 		runner.start();
 
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "Connected");
 		assertEquals(clientIn.readLine(), "serverUserList test1");
@@ -416,7 +416,7 @@ public class ConnectionHandlerTest
 		//send test data and check response
 		clientOut.println("make room1");
 		clientOut.flush();
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "serverRoomList oldRoom room1");
 		assertEquals(clientIn.readLine(), "connectedRoom room1");
@@ -429,7 +429,7 @@ public class ConnectionHandlerTest
 		assertFalse(serverSide.isClosed());
 		assertTrue(c.getConsumer().isAlive());
 		c.updateQueue("should be sent");
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "should be sent");
 		assertFalse(clientIn.ready());
@@ -446,7 +446,7 @@ public class ConnectionHandlerTest
 		clientOut.println("connect test1");
 		clientOut.flush();
 		c = new ConnectionHandler(serverSide, rooms, users);
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "To connect type: \"connect [username]\"");
 		assertEquals(c.username, "test1");
@@ -455,7 +455,7 @@ public class ConnectionHandlerTest
 		Thread runner = new Thread(c);
 		runner.start();
 
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "Connected");
 		assertEquals(clientIn.readLine(), "serverUserList test1");
@@ -464,7 +464,7 @@ public class ConnectionHandlerTest
 		//send test data and check response
 		clientOut.println("make room1");
 		clientOut.flush();
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "invalidRoom room1 room already exists");
 		assertFalse(clientIn.ready());
@@ -475,7 +475,7 @@ public class ConnectionHandlerTest
 		assertFalse(serverSide.isClosed());
 		assertTrue(c.getConsumer().isAlive());
 		c.updateQueue("should be sent");
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "should be sent");
 		assertFalse(clientIn.ready());
@@ -492,7 +492,7 @@ public class ConnectionHandlerTest
 		clientOut.println("connect test1");
 		clientOut.flush();
 		c = new ConnectionHandler(serverSide, rooms, users);
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "To connect type: \"connect [username]\"");
 		assertEquals(c.username, "test1");
@@ -501,7 +501,7 @@ public class ConnectionHandlerTest
 		Thread runner = new Thread(c);
 		runner.start();
 
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "Connected");
 		assertEquals(clientIn.readLine(), "serverUserList test1");
@@ -510,7 +510,7 @@ public class ConnectionHandlerTest
 		//send test data and check response
 		clientOut.println("join room1");
 		clientOut.flush();
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "connectedRoom room1");
 		assertEquals(clientIn.readLine(), "chatUserList room1 dude test1");
@@ -522,7 +522,7 @@ public class ConnectionHandlerTest
 		assertFalse(serverSide.isClosed());
 		assertTrue(c.getConsumer().isAlive());
 		c.updateQueue("should be sent");
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "should be sent");
 		assertFalse(clientIn.ready());
@@ -538,7 +538,7 @@ public class ConnectionHandlerTest
 		clientOut.println("connect test1");
 		clientOut.flush();
 		c = new ConnectionHandler(serverSide, rooms, users);
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "To connect type: \"connect [username]\"");
 		assertEquals(c.username, "test1");
@@ -547,13 +547,13 @@ public class ConnectionHandlerTest
 		Thread runner = new Thread(c);
 		runner.start();
 
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "Connected");
 		assertEquals(clientIn.readLine(), "serverUserList test1");
 		assertFalse(clientIn.ready());
 		new ChatRoom("room1", rooms, c);
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "serverRoomList room1");
 		assertEquals(clientIn.readLine(), "connectedRoom room1");
@@ -562,7 +562,7 @@ public class ConnectionHandlerTest
 		//send test data and check response
 		clientOut.println("join room1");
 		clientOut.flush();
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "invalidRoom room1 User already in Chatroom");
 		assertFalse(clientIn.ready());
@@ -573,7 +573,7 @@ public class ConnectionHandlerTest
 		assertFalse(serverSide.isClosed());
 		assertTrue(c.getConsumer().isAlive());
 		c.updateQueue("should be sent");
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "should be sent");
 		assertFalse(clientIn.ready());
@@ -588,7 +588,7 @@ public class ConnectionHandlerTest
 		clientOut.println("connect test1");
 		clientOut.flush();
 		c = new ConnectionHandler(serverSide, rooms, users);
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "To connect type: \"connect [username]\"");
 		assertEquals(c.username, "test1");
@@ -597,13 +597,13 @@ public class ConnectionHandlerTest
 		Thread runner = new Thread(c);
 		runner.start();
 
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "Connected");
 		assertEquals(clientIn.readLine(), "serverUserList test1");
 		assertFalse(clientIn.ready());
 		new ChatRoom("room1", rooms, c);
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "serverRoomList room1");
 		assertEquals(clientIn.readLine(), "connectedRoom room1");
@@ -612,7 +612,7 @@ public class ConnectionHandlerTest
 		//send test data and check response
 		clientOut.println("join room2");
 		clientOut.flush();
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "invalidRoom room2 Room name does not exist");
 		assertFalse(clientIn.ready());
@@ -623,7 +623,7 @@ public class ConnectionHandlerTest
 		assertFalse(serverSide.isClosed());
 		assertTrue(c.getConsumer().isAlive());
 		c.updateQueue("should be sent");
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "should be sent");
 		assertFalse(clientIn.ready());
@@ -638,7 +638,7 @@ public class ConnectionHandlerTest
 		clientOut.println("connect test1");
 		clientOut.flush();
 		c = new ConnectionHandler(serverSide, rooms, users);
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "To connect type: \"connect [username]\"");
 		assertEquals(c.username, "test1");
@@ -647,14 +647,14 @@ public class ConnectionHandlerTest
 		Thread runner = new Thread(c);
 		runner.start();
 
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "Connected");
 		assertEquals(clientIn.readLine(), "serverUserList test1");
 		assertFalse(clientIn.ready());
 		ChatRoom room1 = new ChatRoom("room1", rooms, new ConnectionHandler("dude"));
 		room1.addUser(c);
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "serverRoomList room1");
 		assertEquals(clientIn.readLine(), "connectedRoom room1");
@@ -664,7 +664,7 @@ public class ConnectionHandlerTest
 		//send test data and check response
 		clientOut.println("exit room1");
 		clientOut.flush();
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "disconnectedRoom room1");
 		assertFalse(clientIn.ready());
@@ -675,7 +675,7 @@ public class ConnectionHandlerTest
 		assertFalse(serverSide.isClosed());
 		assertTrue(c.getConsumer().isAlive());
 		c.updateQueue("should be sent");
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "should be sent");
 		assertFalse(clientIn.ready());
@@ -691,7 +691,7 @@ public class ConnectionHandlerTest
 		clientOut.println("connect test1");
 		clientOut.flush();
 		c = new ConnectionHandler(serverSide, rooms, users);
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "To connect type: \"connect [username]\"");
 		assertEquals(c.username, "test1");
@@ -700,14 +700,14 @@ public class ConnectionHandlerTest
 		Thread runner = new Thread(c);
 		runner.start();
 
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "Connected");
 		assertEquals(clientIn.readLine(), "serverUserList test1");
 		assertFalse(clientIn.ready());
 		new ChatRoom("room1", rooms, new ConnectionHandler("dude"));
 		//room1.addUser(c);
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "serverRoomList room1");
 		//assertEquals(clientIn.readLine(), "connectedRoom room1");
@@ -717,7 +717,7 @@ public class ConnectionHandlerTest
 		//send test data and check response
 		clientOut.println("exit room1");
 		clientOut.flush();
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "invalidRoom room1 user not connected to room");
 		assertFalse(clientIn.ready());
@@ -728,7 +728,7 @@ public class ConnectionHandlerTest
 		assertFalse(serverSide.isClosed());
 		assertTrue(c.getConsumer().isAlive());
 		c.updateQueue("should be sent");
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "should be sent");
 		assertFalse(clientIn.ready());
@@ -744,7 +744,7 @@ public class ConnectionHandlerTest
 		clientOut.println("connect test1");
 		clientOut.flush();
 		c = new ConnectionHandler(serverSide, rooms, users);
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "To connect type: \"connect [username]\"");
 		assertEquals(c.username, "test1");
@@ -753,7 +753,7 @@ public class ConnectionHandlerTest
 		Thread runner = new Thread(c);
 		runner.start();
 
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "Connected");
 		assertEquals(clientIn.readLine(), "serverUserList test1");
@@ -761,7 +761,7 @@ public class ConnectionHandlerTest
 		ConnectionHandler dude = new ConnectionHandler("dude");
 		ChatRoom room1 = new ChatRoom("room1", rooms, dude);
 		room1.addUser(c);
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "serverRoomList room1");
 		assertEquals(clientIn.readLine(), "connectedRoom room1");
@@ -772,7 +772,7 @@ public class ConnectionHandlerTest
 		//send test data and check response
 		clientOut.println("message room1 test message");
 		clientOut.flush();
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "message room1 test1 test message");
 		assertFalse(clientIn.ready());
@@ -783,7 +783,7 @@ public class ConnectionHandlerTest
 		assertFalse(serverSide.isClosed());
 		assertTrue(c.getConsumer().isAlive());
 		c.updateQueue("should be sent");
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "should be sent");
 		assertFalse(clientIn.ready());
@@ -801,7 +801,7 @@ public class ConnectionHandlerTest
 		clientOut.println("connect test1");
 		clientOut.flush();
 		c = new ConnectionHandler(serverSide, rooms, users);
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "To connect type: \"connect [username]\"");
 		assertEquals(c.username, "test1");
@@ -810,7 +810,7 @@ public class ConnectionHandlerTest
 		Thread runner = new Thread(c);
 		runner.start();
 
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "Connected");
 		assertEquals(clientIn.readLine(), "serverUserList test1");
@@ -818,7 +818,7 @@ public class ConnectionHandlerTest
 		ConnectionHandler dude = new ConnectionHandler("dude");
 		ChatRoom room1 = new ChatRoom("room1", rooms, dude);
 		room1.addUser(c);
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "serverRoomList room1");
 		assertEquals(clientIn.readLine(), "connectedRoom room1");
@@ -829,7 +829,7 @@ public class ConnectionHandlerTest
 		//send test data and check response
 		clientOut.println("disconnect test1");
 		clientOut.flush();
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "disconnectedServerSent");
 		assertFalse(clientIn.ready());
@@ -840,7 +840,7 @@ public class ConnectionHandlerTest
 		assertTrue(serverSide.isClosed());
 		assertFalse(c.getConsumer().isAlive());
 		c.updateQueue("should not be sent");
-		pause(100, true);
+		pause(50, true);
 		assertFalse(clientIn.ready());
 		//assertEquals(clientIn.readLine(), "should be sent");
 		//assertFalse(clientIn.ready());
@@ -859,7 +859,7 @@ public class ConnectionHandlerTest
 		clientOut.println("connect test1");
 		clientOut.flush();
 		c = new ConnectionHandler(serverSide, rooms, users);
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "To connect type: \"connect [username]\"");
 		assertEquals(c.username, "test1");
@@ -868,7 +868,7 @@ public class ConnectionHandlerTest
 		Thread runner = new Thread(c);
 		runner.start();
 
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "Connected");
 		assertEquals(clientIn.readLine(), "serverUserList test1");
@@ -876,7 +876,7 @@ public class ConnectionHandlerTest
 		ConnectionHandler dude = new ConnectionHandler("dude");
 		ChatRoom room1 = new ChatRoom("room1", rooms, dude);
 		room1.addUser(c);
-		pause(100, true);
+		pause(50, true);
 		assertTrue(clientIn.ready());
 		assertEquals(clientIn.readLine(), "serverRoomList room1");
 		assertEquals(clientIn.readLine(), "connectedRoom room1");
@@ -886,7 +886,7 @@ public class ConnectionHandlerTest
 		
 		//send test data and check response
 		clientSide.close();
-		pause(100, true);
+		pause(50, true);
 		assertFalse(clientIn.ready());
 		
 		//check state
@@ -895,7 +895,7 @@ public class ConnectionHandlerTest
 		assertTrue(serverSide.isClosed());
 		assertFalse(c.getConsumer().isAlive());
 		c.updateQueue("should not be sent");
-		pause(100, true);
+		pause(50, true);
 		assertFalse(clientIn.ready());
 		//assertEquals(clientIn.readLine(), "should be sent");
 		//assertFalse(clientIn.ready());
