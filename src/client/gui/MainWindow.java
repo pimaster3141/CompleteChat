@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.*;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -121,10 +122,8 @@ public class MainWindow extends JFrame {
             }
             setOpaque(false);
             
+            //Making the label
             name = new JLabel() {
-                /**
-				 * 
-				 */
 				private static final long serialVersionUID = 1L;
 
 				public String getText() {
@@ -135,17 +134,35 @@ public class MainWindow extends JFrame {
             
             add(name);
             
-            JButton exit = new JButton("x");
+            //making the button
+            ImageIcon close = makeIcon("crossoff.png");
+            ImageIcon rolloverClose = makeIcon("crosson.png");
+            
+            System.out.println(close);
+            JButton exit = new JButton(close);
             exit.setContentAreaFilled(false);
-            exit.setPreferredSize(new Dimension(17, 17));
+            exit.setPreferredSize(new Dimension(12, 12));
             exit.setFocusable(false);
-            exit.setForeground(Color.RED);
+            exit.setBorder(BorderFactory.createEtchedBorder());
+            exit.setBorderPainted(false);
+            exit.setRolloverIcon(rolloverClose);
             exit.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent event) {
                     closeTab(ChatTabComponent.this, ChatTabComponent.this.chatroom);
                 }
             });
             add(exit);
+        }
+    }
+    
+    //Makes the icon for the button
+    private ImageIcon makeIcon(String path) {
+        URL imgURL = getClass().getResource(path);
+        if (imgURL != null) {
+            return new ImageIcon(imgURL);
+        } else {
+            System.err.println("path couldn't be found: " + path);
+            return null;
         }
     }
     
