@@ -2,8 +2,6 @@ package client.gui;
 
 import java.awt.Dimension;
 import java.awt.Font;
-import java.util.HashMap;
-
 import javax.swing.*;
 import javax.swing.event.*;
 
