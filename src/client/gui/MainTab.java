@@ -117,10 +117,10 @@ public class MainTab extends JPanel{
                 .addComponent(makeChat)
                 .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup()
-                                .addComponent(userLabel)
+                                .addComponent(roomLabel)
                                 .addComponent(chatScroll))
                         .addGroup(layout.createParallelGroup()
-                                .addComponent(roomLabel)
+                                .addComponent(userLabel)
                                 .addComponent(userScroll)
                                 )
                         )
@@ -140,6 +140,6 @@ public class MainTab extends JPanel{
         Font welcomeFont = new Font("MONOSPACED", Font.PLAIN, 13);
         welcome.setText("Have fun chatting " + username);
         welcome.setFont(welcomeFont);
-        welcome.setForeground(Color.CYAN);
+        welcome.setForeground(Color.MAGENTA);
     }
 }
