@@ -11,12 +11,15 @@ import client.ChatRoomClient;
 
 /**
  * Class representing the history of a user's chat. Contains a list with all chatrooms
- * the user has joined prior to the opening of a the history tab. In order to view the 
- * history of a chat joined after the tab has been opened, a new History Tab must be
- * made. Selecting a chatroom on the list causes the text pane to display the history
+ * the user has joined. Joining another chatroom after opening the history tab causes
+ * the history tab to update with that new chatroom included. 
+ * 
+ * Selecting a chatroom on the list causes the text pane to display the history
  * of that chatroom up until the user closed the chatroom. If the user is still in the
  * chatroom, the history will also update itself to remain consistent with the open 
- * chatroom.
+ * chatroom. Rejoining the chatroom will once again start updating the history with
+ * messages. Creating a new chatroom with the exact same name as an old, closed 
+ * chatroom counts as rejoining that conversation, and history continues as appropriate.
  *
  */
 public class HistoryTab extends JPanel{
