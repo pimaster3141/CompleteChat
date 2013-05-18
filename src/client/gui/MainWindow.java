@@ -5,6 +5,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -394,5 +396,4 @@ public class MainWindow extends JFrame {
     public Client getClient() {
         return client;
     }
-    
 }

@@ -1,7 +1,6 @@
 package server.lists;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import static server.TestHelpers.pause;
 
 import java.io.IOException;
@@ -23,6 +22,7 @@ public class UserListTest
 	private ConnectionHandler one;
 	private ConnectionHandler two;
 	private ConnectionHandler three;
+	private ConnectionHandler sameName;
 
 	/**
 	 * Sets up the test fixture.
@@ -40,6 +40,7 @@ public class UserListTest
 		one = new ConnectionHandler("one");
 		two = new ConnectionHandler("two");
 		three = new ConnectionHandler("three");
+		sameName = new ConnectionHandler("one");
 	}
 
 	// test to see if we can add a user properly
@@ -77,34 +78,43 @@ public class UserListTest
 		output = buffer.poll();
 		assertEquals(output, "one");
 		output = buffer.poll();
-		assertEquals(output, "two one");
+		assertEquals(output, "one two");
 		output = buffer.poll();
-		assertEquals(output, "two one three");
+		assertEquals(output, "one three two");
 		output = buffer.poll();
 		assertEquals(output, null);
 
 		buffer = two.getQueue();
 		output = buffer.poll();
-		assertEquals(output, "two one");
+		assertEquals(output, "one two");
 		output = buffer.poll();
-		assertEquals(output, "two one three");
+		assertEquals(output, "one three two");
 		output = buffer.poll();
 		assertEquals(output, null);
 
 		buffer = three.getQueue();
 		output = buffer.poll();
-		assertEquals(output, "two one three");
+		assertEquals(output, "one three two");
 		output = buffer.poll();
 		assertEquals(output, null);
 	}
 
 	// tests to see if multiple additions of same user fails
-	@Test(expected = IOException.class)
-	public void addFailure() throws IOException
+	@Test
+	public void addFailure()
 	{
-		list.add(one);
-		list.add(one);
-		fail();
+		try
+		{
+			list.add(one);
+			list.add(sameName);
+			fail();
+		}
+		catch (IOException e)
+		{
+			assertEquals(e.getMessage(), "Username Already Exists");
+			assertFalse(list.getMap().containsValue(sameName));
+			assertTrue(list.getMap().containsValue(one));
+		}
 	}
 
 	// tests removing a user from the list, also checks if all clients are
@@ -126,13 +136,13 @@ public class UserListTest
 
 		buffer = one.getQueue();
 		output = buffer.poll();
-		assertEquals(output, "two one");
+		assertEquals(output, "one two");
 		output = buffer.poll();
 		assertEquals(output, null);
 
 		buffer = two.getQueue();
 		output = buffer.poll();
-		assertEquals(output, "two one");
+		assertEquals(output, "one two");
 		output = buffer.poll();
 		assertEquals(output, null);
 
@@ -166,7 +176,7 @@ public class UserListTest
 		list.add(three);
 
 		String output = list.getList();
-		assertEquals(output, "two one three");
+		assertEquals(output, "one three two");
 	}
 
 	// tests the getList method on an emtpy list

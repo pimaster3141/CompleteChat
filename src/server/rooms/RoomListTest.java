@@ -88,9 +88,9 @@ public class RoomListTest
 		output = buffer.poll();
 		assertEquals(output, "serverRoomList one");
 		output = buffer.poll();
-		assertEquals(output, "serverRoomList two one");
+		assertEquals(output, "serverRoomList one two");
 		output = buffer.poll();
-		assertEquals(output, "serverRoomList two one three");
+		assertEquals(output, "serverRoomList one three two");
 		output = buffer.poll();
 		assertEquals(output, null);
 	}
@@ -122,7 +122,7 @@ public class RoomListTest
 
 		buffer = client.getQueue();
 		output = buffer.poll();
-		assertEquals(output, "serverRoomList two one");
+		assertEquals(output, "serverRoomList one two");
 		output = buffer.poll();
 		assertEquals(output, null);
 	}

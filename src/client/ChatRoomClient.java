@@ -29,7 +29,7 @@ public class ChatRoomClient {
         messageHistory.add(message);
         SimpleAttributeSet userStyle = new SimpleAttributeSet();
         StyleConstants.setBold(userStyle, true);
-        if (message.getUsername()==myUsername) {
+        if (message.getUsername().equals(myUsername)) {
             StyleConstants.setForeground(userStyle, Color.blue);
         }
         displayedMessages.insertString(displayedMessages.getLength(), message.getUsername() + ": ", userStyle);

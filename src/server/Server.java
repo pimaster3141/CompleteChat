@@ -108,13 +108,44 @@ public class Server
 	{
 		return serverSocket;
 	}
+	
+	/*
+	 * determines if a string is an integer
+	 */
+	private static boolean isInteger(String s) 
+	{
+	    try 
+	    { 
+	        Integer.parseInt(s); 
+	    } catch(NumberFormatException e) 
+	    { 
+	        return false; 
+	    }
+	    return true;
+	}
 
 	/**
 	 * Start a chat server.
 	 */
 	public static void main(String[] args) throws IOException
 	{
-		Server server = new Server(10000);
-		server.serve();
+		System.out.println();
+		int port = -1;
+		if(args.length == 0)
+			port = 10000;
+		else if (args.length == 2 &&  args[0].equals("-p") && isInteger(args[1]))
+			port = Integer.parseInt(args[1]);
+		else
+			System.out.println("USAGE: [-p PORT]");
+		
+		if(port >= 0 && port <= 65535)
+		{
+			System.out.println("Starting Server on port " + port);
+			Server server = new Server(10000);
+			server.serve();
+		}
+		else
+			System.out.println("   PORT should be betweeen [0, 65535]");
+		return;
 	}
 }

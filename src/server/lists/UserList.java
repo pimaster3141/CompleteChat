@@ -3,6 +3,8 @@ package server.lists;
 import static server.TestHelpers.pause;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -97,8 +99,15 @@ public abstract class UserList
 		if (size() <= 0)
 			return "";
 		StringBuilder output = new StringBuilder("");
+		ArrayList<String> copy = new ArrayList<String>();
 		for (String usersString : users.keySet())
-			output.append(usersString + " ");
+		{
+			String s = new String(usersString);
+			copy.add(s);
+		}
+		Collections.sort(copy);
+		for (String s : copy)
+			output.append(s + " ");
 		return output.substring(0, output.length() - 1);
 	}
 
