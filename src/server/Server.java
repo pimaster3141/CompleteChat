@@ -93,8 +93,8 @@ public class Server
 			catch (IOException kill)
 			{
 				// really... this shouldnt ever be ran... really... unless
-				// something FUBAR happened.
-				System.err.println("Something really fucked up just happened, but we're just going to pretend it didnt happen... but now im dead.");
+				// something FUBAR happened.... like the world dying... or the serverSocket being closed
+				System.err.println("Oh noez the server was closed spontaneously!");
 				break;
 			}
 	}
