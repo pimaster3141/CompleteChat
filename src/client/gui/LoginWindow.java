@@ -32,7 +32,7 @@ public class LoginWindow extends JDialog implements PropertyChangeListener{
     //Constructor for the login window. Takes in the parent frame that the popup opesn over
     public LoginWindow (JFrame parent) {
         super(parent, true); //turns on window modality
-        welcome = new JLabel("Welcome to GuiChat!");
+        welcome = new JLabel("Welcome to Complete Chat!");
         username = new JTextField(20);
         usernameLabel = new JLabel("Username");
         ipAddress = new JTextField(20);

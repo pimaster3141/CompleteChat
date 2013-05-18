@@ -1,5 +1,6 @@
 package client.gui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.*;
@@ -30,21 +31,30 @@ public class MainTab extends JPanel{
 	
 	private static final long serialVersionUID = 1L;
 	private final JLabel uiChat;
+	private final JLabel welcome;
     private final JButton makeChat;
+    private final JLabel roomLabel;
     private final JList chatRoomList;
+    private final JLabel userLabel;
     private final JList userList;
     private final MainWindow main;
     
     public MainTab(MainWindow main) {
         Font TitleFont = new Font("SANS_SERIF", Font.BOLD, 24);
-        uiChat = new JLabel("UIChat");
+        Font LabelFont = new Font("SANS_SERIF", Font.BOLD, 16);
+        uiChat = new JLabel("Complete Chat");
         uiChat.setFont(TitleFont);
         makeChat = new JButton("New ChatRoom");
+        roomLabel = new JLabel(" Chatrooms");
+        roomLabel.setFont(LabelFont);
         chatRoomList = new JList(new DefaultListModel());
+        userLabel = new JLabel(" Users");
+        userLabel.setFont(LabelFont);
         userList = new JList(new DefaultListModel());
         setName("Main Window");
         this.main = main;
         main.setListModels(userList, chatRoomList);
+        welcome = new JLabel();
         
         chatRoomList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane chatScroll = new JScrollPane (chatRoomList);
@@ -92,19 +102,29 @@ public class MainTab extends JPanel{
         //organizing components
         layout.setVerticalGroup(layout.createSequentialGroup()
                 .addComponent(uiChat)
+                .addComponent(welcome)
                 .addComponent(makeChat)
+                .addGroup(layout.createParallelGroup()
+                        .addComponent(userLabel)
+                        .addComponent(roomLabel))
                 .addGroup(layout.createParallelGroup()
                         .addComponent(userScroll)
                         .addComponent(chatScroll))
                 );
         layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
                 .addComponent(uiChat)
+                .addComponent(welcome)
                 .addComponent(makeChat)
                 .addGroup(layout.createSequentialGroup()
-                        .addComponent(chatScroll)
-                        .addComponent(userScroll))
-                );
-        
+                        .addGroup(layout.createParallelGroup()
+                                .addComponent(userLabel)
+                                .addComponent(chatScroll))
+                        .addGroup(layout.createParallelGroup()
+                                .addComponent(roomLabel)
+                                .addComponent(userScroll)
+                                )
+                        )
+                );       
     }
     
     //Checks to make sure a chatname is valid
@@ -114,5 +134,12 @@ public class MainTab extends JPanel{
             return true;
         }
         return false;
-    }    
+    }
+    
+    public void setUsername(String username) {
+        Font welcomeFont = new Font("MONOSPACED", Font.PLAIN, 13);
+        welcome.setText("Have fun chatting " + username);
+        welcome.setFont(welcomeFont);
+        welcome.setForeground(Color.CYAN);
+    }
 }

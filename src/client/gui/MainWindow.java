@@ -34,6 +34,7 @@ public class MainWindow extends JFrame {
     private final JMenu file;
     private final JMenuItem getHistory;
     private final JMenuItem logout;
+    private final MainTab mainTab;
     private Client client = null;
     
     private DefaultListModel allUsers;
@@ -50,6 +51,7 @@ public class MainWindow extends JFrame {
         allRooms = new DefaultListModel();
         connectedRoomsHistory = new HashMap<String,ChatRoomClient>();
         connectedRoomsCurrent = new HashMap<String, ChatRoomClient>();
+        this.setTitle("Complete Chat");
         
         menuBar.add(file);
         file.add(getHistory);
@@ -58,8 +60,9 @@ public class MainWindow extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         
         tabs = new JTabbedPane();
-        tabs.addTab("Main Window", new MainTab(this));
-        this.add(tabs);
+        mainTab = new MainTab(this);
+        tabs.addTab("Main Window", mainTab);
+        add(tabs);
         
         getHistory.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -167,8 +170,10 @@ public class MainWindow extends JFrame {
     }
     
     //Sets the window's client
+    //Also gets username from client to set a label in maintab
     public void setClient(Client c) {
         client = c;
+        mainTab.setUsername(c.getUsername());
     }
     
     /**
