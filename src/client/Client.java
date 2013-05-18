@@ -84,7 +84,15 @@ public class Client {
         } catch(IOException e) {
             main.quit();
         } finally {
-            // TODO Maybe do stuff to cleanly close the in and out?
+        	try
+			{
+            	in.close();
+            	out.close();
+				socket.close();
+			}
+			catch (IOException ignore)
+			{
+			}
         }
         System.err.println("clinet consumer terminated....");
     }
