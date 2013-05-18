@@ -8,6 +8,13 @@ import java.beans.*;
 import java.io.IOException;
 import java.util.regex.Pattern;
 
+/**
+ * Class representing the login window for the chat. Opens upon application start. While the
+ * login window is open, it is impossible to interact with the chat at all until a valid username,
+ * ip address and port number is given. This includes trying to use the application's title bar. 
+ * Closing the login window closes the application.
+ *
+ */
 public class LoginWindow extends JDialog implements PropertyChangeListener{
 	private static final long serialVersionUID = 1L;
 	private final JLabel welcome;
@@ -22,9 +29,10 @@ public class LoginWindow extends JDialog implements PropertyChangeListener{
     private String btnString = "Submit";
     private Client c = null;
 
+    //Constructor for the login window. Takes in the parent frame that the popup opesn over
     public LoginWindow (JFrame parent) {
-        super(parent, true);
-        welcome = new JLabel("Welcome to GuiChat!");
+        super(parent, true); //turns on window modality
+        welcome = new JLabel("Welcome to Complete Chat!");
         username = new JTextField(20);
         usernameLabel = new JLabel("Username");
         ipAddress = new JTextField(20);
@@ -85,6 +93,10 @@ public class LoginWindow extends JDialog implements PropertyChangeListener{
         loginPane.addPropertyChangeListener(this);
     }
     
+    /**
+     * Sets up the propertyChangeEvent on the login window so that it will make a client object
+     * and then close. Or it will just close because the user closed it. 
+     */
     public void propertyChange(PropertyChangeEvent e) {
         String prop = e.getPropertyName();
         if (isVisible() && (e.getSource() == loginPane) && (JOptionPane.VALUE_PROPERTY.equals(prop) 
@@ -126,8 +138,9 @@ public class LoginWindow extends JDialog implements PropertyChangeListener{
                 setVisible(false);
             }
         }
-    }
+    }   
     
+    //Makes sure that the username is valid in terms of syntax
     private boolean isValidUsername(String Username) {
         String regex = "\\p{Graph}+";
         if (Pattern.matches(regex, Username) && Username.length() < 20) {
@@ -136,6 +149,12 @@ public class LoginWindow extends JDialog implements PropertyChangeListener{
         return false;
     }
     
+    /**
+     * Launches the login window and then returns the client object created by the
+     * window's input. If the user closes the window, null will be returned, prompting
+     * the application to shutdown.
+     * @return Client object to be used by the gui to talk to the server
+     */
     public Client getClient() {
         c = null; //reset client to make sure it starts as null
         pack();
