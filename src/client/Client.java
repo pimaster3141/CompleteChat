@@ -9,11 +9,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.awt.event.ActionEvent;
-
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-import javax.swing.text.BadLocationException;
 
 public class Client {
     private final String username;

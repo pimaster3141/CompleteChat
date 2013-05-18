@@ -9,6 +9,16 @@ import javax.swing.event.*;
 
 import client.ChatRoomClient;
 
+/**
+ * Class representing the history of a user's chat. Contains a list with all chatrooms
+ * the user has joined prior to the opening of a the history tab. In order to view the 
+ * history of a chat joined after the tab has been opened, a new History Tab must be
+ * made. Selecting a chatroom on the list causes the text pane to display the history
+ * of that chatroom up until the user closed the chatroom. If the user is still in the
+ * chatroom, the history will also update itself to remain consistent with the open 
+ * chatroom.
+ *
+ */
 public class HistoryTab extends JPanel{
 	private static final long serialVersionUID = 1L;
 	private final JLabel history;
@@ -16,6 +26,11 @@ public class HistoryTab extends JPanel{
     private final JList pastChats;
     private final HashMap<String, ChatRoomClient> roomMapping;
     
+    /**
+     * Constructor for the History Tab.
+     * @param connectedRoomsHistory A hashmap of chatroom names to the matching ChatRoomClient.
+     * Should contain all chatrooms connected to ever during this user session.
+     */
     public HistoryTab(HashMap<String, ChatRoomClient> connectedRoomsHistory) {
         Font TitleFont = new Font("SANS_SERIF", Font.BOLD, 18);
         history = new JLabel("History");
