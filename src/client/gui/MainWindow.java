@@ -6,8 +6,6 @@ import java.awt.Dimension;
 import java.awt.event.*;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -37,10 +35,11 @@ public class MainWindow extends JFrame {
     private final MainTab mainTab;
     private Client client = null;
     
-    private DefaultListModel allUsers;
+    private final DefaultListModel allUsers;
     private final HashMap<String, ChatRoomClient> connectedRoomsHistory;
     private final HashMap<String, ChatRoomClient> connectedRoomsCurrent;
-    private DefaultListModel allRooms;
+    private final DefaultListModel allRooms;
+    private final DefaultListModel historyRooms;
     
     public MainWindow() {
         menuBar = new JMenuBar();
@@ -51,6 +50,7 @@ public class MainWindow extends JFrame {
         allRooms = new DefaultListModel();
         connectedRoomsHistory = new HashMap<String,ChatRoomClient>();
         connectedRoomsCurrent = new HashMap<String, ChatRoomClient>();
+        historyRooms = new DefaultListModel();
         this.setTitle("Complete Chat");
         
         menuBar.add(file);
@@ -66,7 +66,7 @@ public class MainWindow extends JFrame {
         
         getHistory.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                HistoryTab t = new HistoryTab(connectedRoomsHistory);
+                HistoryTab t = new HistoryTab(historyRooms);
                 addCloseableTab("History", t);
             }    
         });
@@ -326,10 +326,10 @@ public class MainWindow extends JFrame {
                         addCloseableTab(c, new ChatTab(c, MainWindow.this));
                     }
                 } else {
-                    
                         ChatRoomClient chat = new ChatRoomClient(c, client.getUsername());
                         connectedRoomsCurrent.put(c, chat);
                         connectedRoomsHistory.put(c, chat);
+                        historyRooms.addElement(chat);
                         addCloseableTab(c, new ChatTab(c, MainWindow.this));
                 }
             }

@@ -24,24 +24,17 @@ public class HistoryTab extends JPanel{
 	private final JLabel history;
     private final JTextPane convoHistory;
     private final JList pastChats;
-    private final HashMap<String, ChatRoomClient> roomMapping;
     
     /**
      * Constructor for the History Tab.
      * @param connectedRoomsHistory A hashmap of chatroom names to the matching ChatRoomClient.
      * Should contain all chatrooms connected to ever during this user session.
      */
-    public HistoryTab(HashMap<String, ChatRoomClient> connectedRoomsHistory) {
+    public HistoryTab(DefaultListModel pastChatModel) {
         Font TitleFont = new Font("SANS_SERIF", Font.BOLD, 18);
         history = new JLabel("History");
         history.setFont(TitleFont);
         convoHistory = new JTextPane();
-        roomMapping = connectedRoomsHistory;
-        DefaultListModel pastChatModel = new DefaultListModel();
-        String[] roomNames = connectedRoomsHistory.keySet().toArray(new String[0]);
-        for (int i = 0; i<roomNames.length; i++) {
-            pastChatModel.add(i, roomNames[i]);
-        }
         pastChats = new JList(pastChatModel);
         setName("History");
         
@@ -56,7 +49,7 @@ public class HistoryTab extends JPanel{
         pastChats.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent e) {
                 if (!e.getValueIsAdjusting() && pastChats.getSelectedValue() != null) {
-                    ChatRoomClient chatroom = roomMapping.get(pastChats.getSelectedValue());
+                    ChatRoomClient chatroom = (ChatRoomClient) pastChats.getSelectedValue();
                     convoHistory.setStyledDocument(chatroom.getDoc());
                 }
             }
