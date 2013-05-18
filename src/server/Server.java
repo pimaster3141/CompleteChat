@@ -110,6 +110,27 @@ public class Server
 	}
 	
 	/*
+	 * returns the list of all users - for testing only
+	 * 
+	 * @return ServerUserList - list of all the users
+	 */
+	public ServerUserList getUsers()
+	{
+		return users;
+	}
+	
+	/*
+	 * returns the ist o fall the rooms - for testing only
+	 * 
+	 * @return
+	 * RoomList - list of all the rooms
+	 */
+	public RoomList getRooms()
+	{
+		return rooms;
+	}
+	
+	/*
 	 * determines if a string is an integer
 	 */
 	private static boolean isInteger(String s) 

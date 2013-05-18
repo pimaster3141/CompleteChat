@@ -50,6 +50,7 @@ public class ConnectionHandler implements Runnable
 		out = new PrintWriter(socket.getOutputStream(), true);
 		// prompt for username
 		out.println("To connect type: \"connect [username]\"");
+		out.flush();
 
 		// parse username
 		String input = in.readLine();
