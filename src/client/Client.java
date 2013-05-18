@@ -10,12 +10,27 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * This is the Client class that maintains the connection
+ * between the client and the server.  It has the username
+ * of the user, the socket, and the input/output streams.
+ */
 public class Client {
     private final String username;
     private final Socket socket;
     private final PrintWriter out;
     private final BufferedReader in;    
 
+    /**
+     * Constructor for a client.  Performs the handshake between
+     * the server and the user to achieve a valid connection and
+     * a valid client.
+     * @param username
+     * @param IPAddress
+     * @param port
+     * @throws IOException If the username is invalid or if logging
+     *      in was unsuccessful
+     */
     public Client(String username, String IPAddress, int port) throws IOException {
         this.username = username;
         try
@@ -53,6 +68,11 @@ public class Client {
         System.err.println("Client connected");
     }
 
+    /**
+     * Reads the next line from the input buffer
+     * @return The next line String from the input buffer
+     * @throws IOException Disconnected from server
+     */
     public String readBuffer() throws IOException {
         try {
             return in.readLine();
@@ -61,6 +81,10 @@ public class Client {
         }
     }
 
+    /**
+     * Sends the output String
+     * @param output String to be sent to the server
+     */
     public void send(String output) {
         out.println(output);
         out.flush();
@@ -68,10 +92,18 @@ public class Client {
         return;
     }
     
+    /**
+     * @return The username that is using the client
+     */
     public String getUsername() {
         return username;
     }
     
+    /**
+     * The thread to begin the loop reading from the input and sends
+     * it to the parser
+     * @param main
+     */
     public void start(MainWindow main) {
         try {
             System.out.println("About to start loop");
@@ -86,12 +118,14 @@ public class Client {
         } finally {
             // TODO Maybe do stuff to cleanly close the in and out?
         }
-        System.err.println("clinet consumer terminated....");
+        System.err.println("client consumer terminated....");
     }
     
     /**
-     * 
-     * @param command
+     * Parses the input and calls the correct command by using
+     * the grammar specified
+     * @param input The String input to be parsed
+     * @param main The MainWindow
      */
     private void parseInput(String input, MainWindow main) {
         System.out.println(input);
